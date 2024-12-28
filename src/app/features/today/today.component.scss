@@ -1,0 +1,18 @@
+.today {
+  h2 {
+    margin-bottom: 20px;
+    font-size: 22px;
+    color: #333;
+  }
+
+  .habit-item {
+    display: flex;
+    flex-direction: column; /* Replace @extend */
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid #eaeaea;
+    border-radius: 5px;
+    background: #fefefe;
+    margin-bottom: 10px;
+  }
+}

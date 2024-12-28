@@ -1,0 +1,16 @@
+<div class="today">
+  <h2>Today's Habits</h2>
+  <div *ngFor="let habit of todayHabits" class="habit-item">
+    <p>{{ habit.name }} - Streak: {{ habit.streak }}</p>
+    <div *ngIf="habit.goalType === 'binary'">
+      <button (click)="markHabitComplete(habit)">Mark as Done</button>
+    </div>
+    <div *ngIf="habit.goalType === 'numeric'">
+      <input type="number" #progressInput placeholder="Add Progress" />
+      <button (click)="updateNumericProgress(habit, +progressInput.value)">
+        Update
+      </button>
+    </div>
+  </div>
+  <button class="fab" routerLink="/add-habit">+</button>
+</div>

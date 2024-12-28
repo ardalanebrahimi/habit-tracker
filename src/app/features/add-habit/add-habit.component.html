@@ -1,0 +1,17 @@
+<div class="add-habit">
+  <h2>Add New Habit</h2>
+  <input [(ngModel)]="habitName" placeholder="Habit Name" />
+  <select [(ngModel)]="frequency">
+    <option value="daily">Daily</option>
+    <option value="weekly">Weekly</option>
+    <option value="monthly">Monthly</option>
+  </select>
+  <select [(ngModel)]="goalType">
+    <option value="binary">Binary (Done/Not Done)</option>
+    <option value="numeric">Numeric (e.g., 2 Liters of Water)</option>
+  </select>
+  <div *ngIf="goalType === 'numeric'">
+    <input [(ngModel)]="targetValue" type="number" placeholder="Target Value" />
+  </div>
+  <button (click)="addHabit()">Add Habit</button>
+</div>

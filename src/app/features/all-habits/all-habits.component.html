@@ -1,0 +1,7 @@
+<div class="all-habits">
+  <h2>All Habits</h2>
+  <div *ngFor="let habit of allHabits" class="habit-item">
+    <p>{{ habit.name }} - Streak: {{ habit.streak }}</p>
+    <p>Status: {{ habit.logs.length ? "Completed" : "Not Completed" }}</p>
+  </div>
+</div>
