@@ -6,10 +6,17 @@
     <a (click)="setView('done')">See Done</a>
   </div>
 
+  <div
+    *ngIf="filteredHabits.length === 0 && currentView === 'remaining'"
+    class="done-message"
+  >
+    <p>🎉 Great job! You've completed all your tasks for today! 🎉</p>
+    <p>Enjoy your day or keep up the streak tomorrow! 🌟</p>
+  </div>
+
   <div *ngFor="let habit of filteredHabits" class="habit-item">
     <p>{{ habit.name }} - Streak: {{ habit.streak }}</p>
 
-    <!-- Binary Task -->
     <div *ngIf="habit.goalType === 'binary'" class="binary-controls">
       <button
         class="check-button"
@@ -27,7 +34,6 @@
       </button>
     </div>
 
-    <!-- Numeric Task -->
     <div *ngIf="habit.goalType === 'numeric'" class="numeric-controls">
       <div class="progress-container">
         <div
