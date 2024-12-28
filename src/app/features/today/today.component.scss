@@ -5,14 +5,87 @@
     color: #333;
   }
 
+  .view-options {
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #007bff;
+
+    a {
+      cursor: pointer;
+      text-decoration: none;
+      color: #007bff;
+      transition: color 0.2s;
+
+      &:hover {
+        color: #0056b3;
+      }
+    }
+  }
+
   .habit-item {
     display: flex;
-    flex-direction: column; /* Replace @extend */
+    flex-direction: column;
     gap: 10px;
     padding: 10px;
     border: 1px solid #eaeaea;
     border-radius: 5px;
     background: #fefefe;
     margin-bottom: 10px;
+  }
+
+  .check-button,
+  .undo-button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #007bff;
+    cursor: pointer;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #0056b3;
+    }
+  }
+
+  .numeric-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .numeric-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    button {
+      padding: 5px 10px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #0056b3;
+      }
+    }
+  }
+
+  .progress-container {
+    width: 100%;
+    height: 10px;
+    background-color: #eaeaea;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .progress-bar {
+    height: 100%;
+    background-color: #007bff;
+    transition: width 0.3s ease;
   }
 }

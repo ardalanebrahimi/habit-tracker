@@ -1,16 +1,47 @@
 <div class="today">
   <h2>Today's Habits</h2>
-  <div *ngFor="let habit of todayHabits" class="habit-item">
+  <div class="view-options">
+    <a (click)="setView('remaining')">See Remaining</a> |
+    <a (click)="setView('all')">See All</a> |
+    <a (click)="setView('done')">See Done</a>
+  </div>
+
+  <div *ngFor="let habit of filteredHabits" class="habit-item">
     <p>{{ habit.name }} - Streak: {{ habit.streak }}</p>
-    <div *ngIf="habit.goalType === 'binary'">
-      <button (click)="markHabitComplete(habit)">Mark as Done</button>
-    </div>
-    <div *ngIf="habit.goalType === 'numeric'">
-      <input type="number" #progressInput placeholder="Add Progress" />
-      <button (click)="updateNumericProgress(habit, +progressInput.value)">
-        Update
+
+    <!-- Binary Task -->
+    <div *ngIf="habit.goalType === 'binary'" class="binary-controls">
+      <button
+        class="check-button"
+        *ngIf="!isHabitDoneToday(habit)"
+        (click)="markHabitComplete(habit)"
+      >
+        ✔
+      </button>
+      <button
+        class="undo-button"
+        *ngIf="isHabitDoneToday(habit)"
+        (click)="undoHabitDoneToday(habit)"
+      >
+        ✖
       </button>
     </div>
+
+    <!-- Numeric Task -->
+    <div *ngIf="habit.goalType === 'numeric'" class="numeric-controls">
+      <div class="progress-container">
+        <div
+          class="progress-bar"
+          [style.width.%]="getProgressPercentage(habit)"
+        ></div>
+      </div>
+      <div class="numeric-buttons">
+        <button (click)="decrementProgress(habit)">-</button>
+        <span>{{ habit.currentValue || 0 }} / {{ habit.targetValue }}</span>
+        <button (click)="incrementProgress(habit)">+</button>
+      </div>
+    </div>
   </div>
+
   <button class="fab" routerLink="/add-habit">+</button>
 </div>
