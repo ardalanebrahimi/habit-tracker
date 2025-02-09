@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HabitsService } from '../habits.service';
+import { HabitsService } from '../../services/habits.service';
 import { Habit } from '../habit.model';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Habit } from './habit.model';
+import { Habit } from '../features/habit.model';
 
 @Injectable({
   providedIn: 'root',

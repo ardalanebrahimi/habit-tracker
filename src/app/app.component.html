@@ -5,6 +5,9 @@
       <a routerLink="/today" (click)="toggleMenu()">Today's Habits</a>
       <a routerLink="/habits" (click)="toggleMenu()">All Habits</a>
       <a routerLink="/stats" (click)="toggleMenu()">Statistics</a>
+      <a *ngIf="!authService.getToken()" routerLink="/login">Login</a>
+      <a *ngIf="!authService.getToken()" routerLink="/register">Register</a>
+      <a *ngIf="authService.getToken()" (click)="logout()">Logout</a>
     </div>
   </nav>
   <router-outlet></router-outlet>

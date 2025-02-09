@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { HabitsService } from '../habits.service';
+import { HabitsService } from '../../services/habits.service';
 import { Habit } from '../habit.model';
 import { v4 as uuidv4 } from 'uuid';
 import { CommonModule } from '@angular/common';
