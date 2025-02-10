@@ -57,3 +57,34 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+## Build for Android
+
+To build and deploy the app for Android devices:
+
+### Steps:
+
+1. **Build the production version of the app:**
+
+   ```bash
+   ng build --configuration production
+   ```
+
+   This generates the production-ready web app in the `dist/` folder.
+
+2. **Copy the build to Capacitor:**
+
+   ```bash
+   npx cap copy
+   ```
+
+3. **Open the Android project in Android Studio:**
+
+   ```bash
+   npx cap open android
+   ```
+
+4. **Build and Run the App**:
+   - In Android Studio, click `Run` to install and run the app on an emulator or connected device.
+
+---
