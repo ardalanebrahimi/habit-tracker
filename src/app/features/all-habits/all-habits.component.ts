@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HabitsService } from '../../services/habits.service';
-import { Habit } from '../habit.model';
 import { CommonModule } from '@angular/common';
+import { Habit } from '../../models/habit.model';
 
 @Component({
   selector: 'app-all-habits',
@@ -12,10 +12,26 @@ import { CommonModule } from '@angular/common';
 })
 export class AllHabitsComponent implements OnInit {
   allHabits: Habit[] = [];
+  isLoading = true;
+  errorMessage: string | null = null;
 
   constructor(private habitsService: HabitsService) {}
 
   ngOnInit(): void {
-    this.allHabits = this.habitsService.getHabits();
+    this.fetchHabits();
+  }
+
+  private fetchHabits(): void {
+    this.habitsService.getHabits().subscribe({
+      next: (habits) => {
+        this.allHabits = habits;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.errorMessage = 'Failed to load habits. Please try again later.';
+        this.isLoading = false;
+        console.error('Error fetching habits:', err);
+      },
+    });
   }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HabitsService } from '../../services/habits.service';
-import { Habit } from '../habit.model';
+import { Habit } from '../../models/habit.model';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -15,12 +15,29 @@ export class TodayComponent implements OnInit {
   todayHabits: Habit[] = [];
   filteredHabits: Habit[] = [];
   currentView: 'remaining' | 'all' | 'done' = 'remaining';
+  isLoading = true;
+  errorMessage: string | null = null;
 
   constructor(private habitsService: HabitsService) {}
 
   ngOnInit(): void {
-    this.todayHabits = this.habitsService.getTodayHabits();
-    this.filterHabits();
+    this.fetchTodayHabits();
+  }
+
+  private fetchTodayHabits(): void {
+    this.isLoading = true;
+    this.habitsService.getTodayHabits().subscribe({
+      next: (habits) => {
+        this.todayHabits = habits;
+        this.filterHabits();
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.errorMessage = "Failed to load today's habits. Please try again.";
+        console.error("Error fetching today's habits:", err);
+        this.isLoading = false;
+      },
+    });
   }
 
   isHabitDoneToday(habit: Habit): boolean {
@@ -29,44 +46,45 @@ export class TodayComponent implements OnInit {
   }
 
   markHabitComplete(habit: Habit): void {
-    const today = new Date().toISOString().split('T')[0];
     if (!this.isHabitDoneToday(habit)) {
-      habit.logs.push({ date: today, value: 1 });
-      habit.streak++;
-      this.habitsService.updateHabit(habit);
+      this.habitsService.markHabitComplete(habit.id).subscribe({
+        next: () => this.fetchTodayHabits(),
+        error: (err) => console.error('Error marking habit as complete:', err),
+      });
     }
-    this.filterHabits();
   }
 
   undoHabitDoneToday(habit: Habit): void {
-    const today = new Date().toISOString().split('T')[0];
-    habit.logs = habit.logs.filter((log) => log.date !== today);
-    habit.streak = this.habitsService.calculateStreak(habit); // Recalculate streak
-    this.habitsService.updateHabit(habit);
-    this.filterHabits();
+    habit.logs = habit.logs.filter(
+      (log) => log.date !== new Date().toISOString().split('T')[0]
+    );
+    this.habitsService.updateHabit(habit).subscribe({
+      next: () => this.fetchTodayHabits(),
+      error: (err) => console.error('Error undoing habit:', err),
+    });
   }
 
   incrementProgress(habit: Habit): void {
     habit.currentValue = (habit.currentValue || 0) + 1;
     if (habit.currentValue >= (habit.targetValue || 0)) {
-      const today = new Date().toISOString().split('T')[0];
-      habit.logs.push({ date: today, value: habit.currentValue });
-      habit.streak++;
+      this.markHabitComplete(habit);
+    } else {
+      this.habitsService.updateHabit(habit).subscribe({
+        next: () => this.fetchTodayHabits(),
+        error: (err) => console.error('Error updating numeric progress:', err),
+      });
     }
-    this.habitsService.updateHabit(habit);
-    this.filterHabits();
   }
 
   decrementProgress(habit: Habit): void {
     if (habit.currentValue && habit.currentValue > 0) {
       habit.currentValue--;
       if (habit.currentValue < (habit.targetValue || 0)) {
-        const today = new Date().toISOString().split('T')[0];
-        habit.logs = habit.logs.filter((log) => log.date !== today);
-        habit.streak = this.habitsService.calculateStreak(habit); // Recalculate streak
+        this.habitsService.updateHabit(habit).subscribe({
+          next: () => this.fetchTodayHabits(),
+          error: (err) => console.error('Error decrementing progress:', err),
+        });
       }
-      this.habitsService.updateHabit(habit);
-      this.filterHabits();
     }
   }
 

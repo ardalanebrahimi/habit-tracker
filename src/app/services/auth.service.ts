@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = environment.apiUrl; // Load from environment
+  private apiUrl = `${environment.apiUrl}/user`;
   constructor(private http: HttpClient) {}
 
   register(user: any): Observable<any> {

@@ -1,87 +1,38 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { Habit } from '../features/habit.model';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { Habit } from '../models/habit.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HabitsService {
-  private STORAGE_KEY = 'habits';
-  private habitsSubject = new BehaviorSubject<Habit[]>(
-    this.getHabitsFromStorage()
-  );
-  habits$ = this.habitsSubject.asObservable(); // Observable for reactive updates
+  private apiUrl = `${environment.apiUrl}/habits`;
 
-  // Fetch habits from localStorage
-  private getHabitsFromStorage(): Habit[] {
-    const habits = localStorage.getItem(this.STORAGE_KEY);
-    return habits ? JSON.parse(habits) : [];
+  constructor(private http: HttpClient) {}
+
+  getHabits(): Observable<Habit[]> {
+    return this.http.get<Habit[]>(this.apiUrl);
   }
 
-  // Save habits to localStorage
-  private saveHabitsToStorage(habits: Habit[]): void {
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(habits));
+  getTodayHabits(): Observable<Habit[]> {
+    return this.http.get<Habit[]>(`${this.apiUrl}/today`);
   }
 
-  // Get all habits
-  getHabits(): Habit[] {
-    return this.habitsSubject.getValue();
+  addHabit(habit: Habit): Observable<Habit> {
+    return this.http.post<Habit>(this.apiUrl, habit);
   }
 
-  // Add a new habit
-  addHabit(habit: Habit): void {
-    const habits = [...this.getHabits(), habit];
-    this.saveHabitsToStorage(habits);
-    this.habitsSubject.next(habits); // Notify subscribers
+  updateHabit(habit: Habit): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${habit.id}`, habit);
   }
 
-  // Update an existing habit
-  updateHabit(updatedHabit: Habit): void {
-    const habits = this.getHabits().map((habit) =>
-      habit.id === updatedHabit.id ? updatedHabit : habit
-    );
-    this.saveHabitsToStorage(habits);
-    this.habitsSubject.next(habits); // Notify subscribers
+  deleteHabit(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  // Delete a habit
-  deleteHabit(id: string): void {
-    const habits = this.getHabits().filter((habit) => habit.id !== id);
-    this.saveHabitsToStorage(habits);
-    this.habitsSubject.next(habits); // Notify subscribers
-  }
-
-  // Calculate streak for a binary habit
-  calculateStreak(habit: Habit): number {
-    const today = new Date().toISOString().split('T')[0];
-    const logs = habit.logs || [];
-    if (!logs.some((log) => log.date === today)) {
-      return habit.streak; // No progress today
-    }
-    // Calculate streak based on consecutive days
-    return logs.reduce((streak, log, index, array) => {
-      if (index === 0) return 1; // Start streak
-      const currentDate = new Date(log.date);
-      const prevDate = new Date(array[index - 1].date);
-      prevDate.setDate(prevDate.getDate() + 1);
-      return currentDate.toISOString() === prevDate.toISOString()
-        ? streak + 1
-        : streak;
-    }, 0);
-  }
-
-  // Get habits due today based on frequency
-  getTodayHabits(): Habit[] {
-    const today = new Date();
-    return this.getHabits().filter((habit) => {
-      if (habit.frequency === 'daily') return true;
-      if (habit.frequency === 'weekly') {
-        return today.getDay() === 1; // Monday
-      }
-      if (habit.frequency === 'monthly') {
-        return today.getDate() === 1; // First day of the month
-      }
-      return false;
-    });
+  markHabitComplete(id?: string): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/${id}/complete`, {});
   }
 }
