@@ -1,20 +1,33 @@
 .today {
-  h2 {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+
+  .page-header {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
     margin-bottom: 20px;
-    font-size: 22px;
-    color: #333;
   }
 
   .view-options {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
     margin-bottom: 20px;
-    font-size: 14px;
-    color: #007bff;
 
     a {
-      cursor: pointer;
-      text-decoration: none;
+      font-size: 14px;
+      font-weight: bold;
       color: #007bff;
+      text-decoration: none;
+      cursor: pointer;
       transition: color 0.2s;
+
+      &.active {
+        text-decoration: underline;
+        color: #0056b3;
+      }
 
       &:hover {
         color: #0056b3;
@@ -26,10 +39,10 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    padding: 10px;
-    border: 1px solid #eaeaea;
-    border-radius: 5px;
-    background: #fefefe;
+    padding: 12px;
+    border-radius: 8px;
+    background: #f9f9f9;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     margin-bottom: 10px;
   }
 
@@ -39,38 +52,38 @@
     justify-content: space-between;
     gap: 10px;
 
-    p {
-      margin: 0;
+    .habit-name {
+      flex-grow: 1;
       font-size: 16px;
-      flex: 1; /* Fills available space between buttons */
+      font-weight: bold;
     }
   }
 
   .icon-button {
     border: none;
-    background: #007bff;
-    color: #fff;
     font-size: 16px;
     padding: 5px 10px;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: transform 0.1s ease, background-color 0.3s;
 
-    &:hover {
-      opacity: 0.9;
+    &:active {
+      transform: scale(0.95);
     }
 
     &.check {
       background: #28a745;
+      color: #fff;
     }
 
     &.undo {
       background: #dc3545;
+      color: #fff;
     }
 
     &.plus,
     &.minus {
-      width: 35px; /* Ensures consistent size */
+      width: 35px;
       height: 35px;
       display: flex;
       align-items: center;
@@ -85,12 +98,11 @@
   }
 
   .progress-container {
-    flex: 1;
+    flex-grow: 1;
     height: 10px;
     background-color: #eaeaea;
     border-radius: 5px;
     overflow: hidden;
-    position: relative;
   }
 
   .progress-bar {
@@ -104,26 +116,43 @@
     color: #333;
     white-space: nowrap;
   }
+
   .done-message {
     text-align: center;
-    background: #eafaf1; /* Light green background */
-    color: #28a745; /* Success green color */
+    background: #eafaf1;
+    color: #28a745;
     padding: 20px;
     border-radius: 8px;
     margin-bottom: 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     font-size: 18px;
     line-height: 1.6;
+  }
 
-    p {
-      margin-bottom: 10px;
-      font-weight: bold;
+  .fab {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s ease;
+
+    &:hover {
+      background: #0056b3;
     }
 
-    .emoji {
-      font-size: 24px;
-      margin-bottom: 10px;
-      display: block;
+    &:active {
+      transform: scale(0.9);
     }
   }
 }

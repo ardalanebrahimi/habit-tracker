@@ -1,9 +1,22 @@
 <div class="today">
-  <h2>Today's Habits</h2>
+  <div class="page-header">
+    <h2>📅 Today's Habits</h2>
+  </div>
+
   <div class="view-options">
-    <a (click)="setView('remaining')">See Remaining</a> |
-    <a (click)="setView('all')">See All</a> |
-    <a (click)="setView('done')">See Done</a>
+    <a
+      (click)="setView('remaining')"
+      [class.active]="currentView === 'remaining'"
+      >See Remaining</a
+    >
+    |
+    <a (click)="setView('all')" [class.active]="currentView === 'all'"
+      >See All</a
+    >
+    |
+    <a (click)="setView('done')" [class.active]="currentView === 'done'"
+      >See Done</a
+    >
   </div>
 
   <div
@@ -32,6 +45,9 @@
         ✖
       </button>
 
+      <!-- Habit Name -->
+      <p class="habit-name">{{ habit.name }}</p>
+
       <!-- Numeric Task Buttons -->
       <button
         *ngIf="habit.goalType === 'numeric'"
@@ -40,9 +56,6 @@
       >
         +
       </button>
-
-      <p>{{ habit.name }}</p>
-
       <button
         *ngIf="habit.goalType === 'numeric'"
         class="icon-button minus"

@@ -1,31 +1,75 @@
-.burger-menu {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 0;
+.app-container {
+  position: relative;
 }
 
-.burger-menu button {
+/* Backdrop to close menu */
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9;
+}
+
+/* Sidebar Menu */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px; /* Hidden initially */
+  width: 250px;
+  height: 100%;
+  background: #ffffff;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 20px;
+  transition: left 0.3s ease-in-out;
+  z-index: 10;
+  padding-top: 60px; /* Make space for menu button */
+  left: -250px; /* Hide by default */
+}
+
+/* Open Sidebar */
+.sidebar.open {
+  left: 0;
+}
+
+/* Sidebar Links */
+.sidebar a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  padding: 10px 0;
+  transition: color 0.3s;
+}
+
+.sidebar a:hover {
+  color: #007bff;
+}
+
+/* Close Button */
+.close-btn {
+  align-self: flex-end;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+/* Menu Button */
+.menu-btn {
+  position: fixed;
+  top: 15px;
+  left: 15px;
   font-size: 24px;
   background: none;
   border: none;
   cursor: pointer;
+  z-index: 11;
   color: #333;
-}
-
-.menu {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.menu a {
-  text-decoration: none;
-  color: #007bff;
-  font-weight: bold;
-  transition: color 0.2s;
-}
-
-.menu a:hover {
-  color: #0056b3;
+  z-index: 1001; /* Ensures it stays above other content */
 }

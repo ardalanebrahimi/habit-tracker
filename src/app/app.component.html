@@ -1,14 +1,27 @@
 <div class="app-container">
-  <nav class="burger-menu">
-    <button (click)="toggleMenu()">☰</button>
-    <div class="menu" *ngIf="menuOpen">
-      <a routerLink="/today" (click)="toggleMenu()">Today's Habits</a>
-      <a routerLink="/habits" (click)="toggleMenu()">All Habits</a>
-      <a routerLink="/stats" (click)="toggleMenu()">Statistics</a>
-      <a *ngIf="!authService.getToken()" routerLink="/login">Login</a>
-      <a *ngIf="!authService.getToken()" routerLink="/register">Register</a>
-      <a *ngIf="authService.getToken()" (click)="logout()">Logout</a>
-    </div>
+  <!-- Backdrop to close menu when clicking outside -->
+  <div class="backdrop" *ngIf="menuOpen" (click)="closeMenu()"></div>
+
+  <!-- Sidebar Menu -->
+  <nav class="sidebar" [class.open]="menuOpen">
+    <button class="close-btn" (click)="closeMenu()">✖</button>
+    <a routerLink="/today" (click)="closeMenu()">Today's Habits</a>
+    <a routerLink="/habits" (click)="closeMenu()">All Habits</a>
+    <a routerLink="/stats" (click)="closeMenu()">Statistics</a>
+    <a *ngIf="!authService.getToken()" routerLink="/login" (click)="closeMenu()"
+      >Login</a
+    >
+    <a
+      *ngIf="!authService.getToken()"
+      routerLink="/register"
+      (click)="closeMenu()"
+      >Register</a
+    >
+    <a *ngIf="authService.getToken()" (click)="logout()">Logout</a>
   </nav>
+
+  <!-- Menu Button -->
+  <button class="menu-btn" (click)="toggleMenu()">☰</button>
+
   <router-outlet></router-outlet>
 </div>
