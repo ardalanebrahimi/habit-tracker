@@ -1,37 +1,41 @@
 import { inject } from '@angular/core';
 import {
   HttpInterceptorFn,
+  HttpErrorResponse,
   HttpRequest,
   HttpHandler,
-  HttpEvent,
-  HttpErrorResponse,
 } from '@angular/common/http';
-import { Observable, catchError, throwError } from 'rxjs';
-import { Router } from '@angular/router';
+import { AuthService } from './auth.service';
+import { catchError, switchMap, throwError } from 'rxjs';
 
-export const AuthInterceptor: HttpInterceptorFn = (
-  req,
-  next
-): Observable<HttpEvent<any>> => {
-  const token = localStorage.getItem('accessToken'); // 🔒 Get token
-  const router = inject(Router); // 🔄 Inject Router for redirection
+export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
+  const authService = inject(AuthService);
+  const token = authService.getToken();
 
   if (token) {
     req = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`,
-      },
+      setHeaders: { Authorization: `Bearer ${token}` },
     });
   }
 
   return next(req).pipe(
-    catchError((error: HttpErrorResponse) => {
-      if (error.status === 401) {
-        console.warn('⚠️ Unauthorized! Logging out...');
-        localStorage.removeItem('accessToken'); // ❌ Remove invalid token
-        router.navigate(['/login']); // 🔄 Redirect to login page
+    catchError((error) => {
+      if (error instanceof HttpErrorResponse && error.status === 401) {
+        return authService.refreshToken().pipe(
+          switchMap(() => {
+            const newToken = authService.getToken();
+            req = req.clone({
+              setHeaders: { Authorization: `Bearer ${newToken}` },
+            });
+            return next(req);
+          }),
+          catchError((refreshError) => {
+            authService.logout(); // Logout on refresh failure
+            return throwError(() => refreshError);
+          })
+        );
       }
-      return throwError(() => error); // 🚨 Re-throw the error
+      return throwError(() => error);
     })
   );
 };

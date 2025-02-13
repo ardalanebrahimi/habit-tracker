@@ -34,13 +34,8 @@ export class LoginComponent {
   onSubmit(): void {
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.value).subscribe({
-        next: (res) => {
-          this.authService.saveToken(res.accessToken);
-          this.router.navigate(['/']);
-        },
-        error: () => {
-          this.errorMessage = 'Invalid email or password';
-        },
+        next: () => this.router.navigate(['/']), // Redirect to home after login
+        error: () => (this.errorMessage = 'Invalid email or password'),
       });
     }
   }
