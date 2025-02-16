@@ -3,9 +3,8 @@ import {
   HttpInterceptorFn,
   HttpErrorResponse,
   HttpRequest,
-  HttpHandler,
 } from '@angular/common/http';
-import { AuthService } from './auth.service';
+import { AuthService } from '../services/auth.service';
 import { catchError, switchMap, throwError } from 'rxjs';
 
 export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
