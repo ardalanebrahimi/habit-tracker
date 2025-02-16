@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { Habit } from '../models/habit.model';
+import { HabitWithProgressDTO } from '../models/habit-with-progress-dto.model';
 
 @Injectable({
   providedIn: 'root',
@@ -12,27 +12,43 @@ export class HabitsService {
 
   constructor(private http: HttpClient) {}
 
-  getHabits(): Observable<Habit[]> {
-    return this.http.get<Habit[]>(this.apiUrl);
+  /**
+   * ✅ Fetch all habits for statistics & tracking
+   */
+  getAllHabits(): Observable<HabitWithProgressDTO[]> {
+    return this.http.get<HabitWithProgressDTO[]>(`${this.apiUrl}/all`);
   }
 
-  getTodayHabits(): Observable<Habit[]> {
-    return this.http.get<Habit[]>(`${this.apiUrl}/today`);
+  /**
+   * ✅ Fetch today's habits only
+   */
+  getTodayHabits(): Observable<HabitWithProgressDTO[]> {
+    return this.http.get<HabitWithProgressDTO[]>(`${this.apiUrl}/today`);
   }
 
-  addHabit(habit: Habit): Observable<Habit> {
-    return this.http.post<Habit>(this.apiUrl, habit);
+  /**
+   * ✅ Add a new habit
+   */
+  addHabit(habit: HabitWithProgressDTO): Observable<HabitWithProgressDTO> {
+    return this.http.post<HabitWithProgressDTO>(this.apiUrl, habit);
   }
 
-  updateHabit(habit: Habit): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${habit.id}`, habit);
-  }
-
+  /**
+   * ✅ Delete a habit
+   */
   deleteHabit(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  markHabitComplete(id?: string): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/${id}/complete`, {});
+  /**
+   * ✅ Increase or decrease habit progress
+   * @param id Habit ID
+   * @param decrease Set to `true` to decrease, otherwise increases (+1)
+   */
+  updateHabitProgress(
+    id?: string,
+    decrease: boolean = false
+  ): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/${id}/complete`, { decrease });
   }
 }

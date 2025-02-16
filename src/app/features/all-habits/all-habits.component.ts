@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HabitsService } from '../../services/habits.service';
 import { CommonModule } from '@angular/common';
-import { Habit } from '../../models/habit.model';
+import { HabitWithProgressDTO } from '../../models/habit-with-progress-dto.model';
 
 @Component({
   selector: 'app-all-habits',
@@ -11,7 +11,7 @@ import { Habit } from '../../models/habit.model';
   styleUrls: ['./all-habits.component.scss'],
 })
 export class AllHabitsComponent implements OnInit {
-  allHabits: Habit[] = [];
+  allHabits: HabitWithProgressDTO[] = [];
   isLoading = true;
   errorMessage: string | null = null;
 
@@ -22,7 +22,7 @@ export class AllHabitsComponent implements OnInit {
   }
 
   private fetchHabits(): void {
-    this.habitsService.getHabits().subscribe({
+    this.habitsService.getAllHabits().subscribe({
       next: (habits) => {
         this.allHabits = habits;
         this.isLoading = false;

@@ -1,19 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { HabitsService } from '../../services/habits.service';
-import { Habit } from '../../models/habit.model';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { HabitWithProgressDTO } from '../../models/habit-with-progress-dto.model';
 
 @Component({
   selector: 'app-today',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule],
   templateUrl: './today.component.html',
   styleUrls: ['./today.component.scss'],
 })
 export class TodayComponent implements OnInit {
-  todayHabits: Habit[] = [];
-  filteredHabits: Habit[] = [];
+  todayHabits: HabitWithProgressDTO[] = [];
+  filteredHabits: HabitWithProgressDTO[] = [];
   currentView: 'remaining' | 'all' | 'done' = 'remaining';
   isLoading = true;
   errorMessage: string | null = null;
@@ -24,6 +23,9 @@ export class TodayComponent implements OnInit {
     this.fetchTodayHabits();
   }
 
+  /**
+   * ✅ Fetch today's habits and filter based on completion status
+   */
   private fetchTodayHabits(): void {
     this.isLoading = true;
     this.habitsService.getTodayHabits().subscribe({
@@ -40,73 +42,85 @@ export class TodayComponent implements OnInit {
     });
   }
 
-  isHabitDoneToday(habit: Habit): boolean {
-    const today = new Date().toISOString().split('T')[0];
-    return habit.logs.some((log) => log.date === today);
-  }
-
-  markHabitComplete(habit: Habit): void {
-    if (!this.isHabitDoneToday(habit)) {
-      this.habitsService.markHabitComplete(habit.id).subscribe({
+  /**
+   * ✅ Mark binary habit as completed
+   */
+  markHabitComplete(habit: HabitWithProgressDTO): void {
+    if (!habit.isCompleted) {
+      this.habitsService.updateHabitProgress(habit.id!, false).subscribe({
         next: () => this.fetchTodayHabits(),
         error: (err) => console.error('Error marking habit as complete:', err),
       });
     }
   }
 
-  undoHabitDoneToday(habit: Habit): void {
-    habit.logs = habit.logs.filter(
-      (log) => log.date !== new Date().toISOString().split('T')[0]
-    );
-    this.habitsService.updateHabit(habit).subscribe({
+  /**
+   * ✅ Undo completion of a binary habit
+   */
+  undoHabitDoneToday(habit: HabitWithProgressDTO): void {
+    this.habitsService.updateHabitProgress(habit.id!, true).subscribe({
       next: () => this.fetchTodayHabits(),
       error: (err) => console.error('Error undoing habit:', err),
     });
   }
 
-  incrementProgress(habit: Habit): void {
-    habit.currentValue = (habit.currentValue || 0) + 1;
-    if (habit.currentValue >= (habit.targetValue || 0)) {
-      this.markHabitComplete(habit);
-    } else {
-      this.habitsService.updateHabit(habit).subscribe({
+  /**
+   * ✅ Increase numeric progress
+   */
+  incrementProgress(habit: HabitWithProgressDTO): void {
+    if (!habit.isCompleted) {
+      this.habitsService.updateHabitProgress(habit.id!, false).subscribe({
         next: () => this.fetchTodayHabits(),
-        error: (err) => console.error('Error updating numeric progress:', err),
+        error: (err) => console.error('Error increasing progress:', err),
       });
     }
   }
 
-  decrementProgress(habit: Habit): void {
-    if (habit.currentValue && habit.currentValue > 0) {
-      habit.currentValue--;
-      if (habit.currentValue < (habit.targetValue || 0)) {
-        this.habitsService.updateHabit(habit).subscribe({
-          next: () => this.fetchTodayHabits(),
-          error: (err) => console.error('Error decrementing progress:', err),
-        });
-      }
-    }
+  /**
+   * ✅ Decrease numeric progress
+   */
+  decrementProgress(habit: HabitWithProgressDTO): void {
+    this.habitsService.updateHabitProgress(habit.id!, true).subscribe({
+      next: () => this.fetchTodayHabits(),
+      error: (err) => console.error('Error decreasing progress:', err),
+    });
   }
 
-  getProgressPercentage(habit: Habit): number {
+  /**
+   * ✅ Get the progress percentage for numeric habits
+   */
+  getProgressPercentage(habit: HabitWithProgressDTO): number {
     if (!habit.targetValue) return 0;
     return Math.min(((habit.currentValue || 0) / habit.targetValue) * 100, 100);
   }
 
+  /**
+   * ✅ Check if a binary habit is completed
+   */
+  isHabitDoneToday(habit: HabitWithProgressDTO): boolean {
+    return habit.isCompleted ?? false;
+  }
+
+  /**
+   * ✅ Filter habits based on the selected view (remaining, done, all)
+   */
   filterHabits(): void {
     if (this.currentView === 'remaining') {
       this.filteredHabits = this.todayHabits.filter(
-        (habit) => !this.isHabitDoneToday(habit)
+        (habit) => !habit.isCompleted
       );
     } else if (this.currentView === 'done') {
-      this.filteredHabits = this.todayHabits.filter((habit) =>
-        this.isHabitDoneToday(habit)
+      this.filteredHabits = this.todayHabits.filter(
+        (habit) => habit.isCompleted
       );
     } else {
       this.filteredHabits = [...this.todayHabits];
     }
   }
 
+  /**
+   * ✅ Set the habit filter view
+   */
   setView(view: 'remaining' | 'all' | 'done'): void {
     this.currentView = view;
     this.filterHabits();

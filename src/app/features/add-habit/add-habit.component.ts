@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HabitsService } from '../../services/habits.service';
-import { Habit } from '../../models/habit.model';
+import { CreateHabitDTO } from '../../models/create-habit-dto.model';
 
 @Component({
   selector: 'app-add-habit',
@@ -31,16 +31,11 @@ export class AddHabitComponent {
     this.isLoading = true;
     this.errorMessage = null;
 
-    const newHabit: Habit = {
-      id: undefined,
+    const newHabit: CreateHabitDTO = {
       name: this.habitName.trim(),
       frequency: this.frequency,
       goalType: this.goalType,
       targetValue: this.goalType === 'numeric' ? this.targetValue : undefined,
-      currentValue: 0,
-      streak: 0,
-      logs: [],
-      createdAt: new Date(),
     };
 
     this.habitsService.addHabit(newHabit).subscribe({

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HabitsService } from '../../services/habits.service';
 import { CommonModule } from '@angular/common';
-import { Habit } from '../../models/habit.model';
+import { HabitWithProgressDTO } from '../../models/habit-with-progress-dto.model';
 
 @Component({
   selector: 'app-stats',
@@ -24,15 +24,15 @@ export class StatsComponent implements OnInit {
   }
 
   private fetchHabits(): void {
-    this.habitsService.getHabits().subscribe({
-      next: (habits: Habit[]) => {
+    this.habitsService.getAllHabits().subscribe({
+      next: (habits: HabitWithProgressDTO[]) => {
         this.totalHabits = habits.length;
         this.completedHabits = habits.filter(
-          (habit) => habit.logs.length > 0
-        ).length;
-        this.averageStreak = habits.length
-          ? habits.reduce((sum, habit) => sum + habit.streak, 0) / habits.length
-          : 0;
+          (habit) => (habit.currentValue ?? 0) >= (habit.targetValue ?? 0)
+        ).length; // TODO: Move to backend
+        // this.averageStreak = habits.length
+        //   ? habits.reduce((sum, habit) => sum + habit.streak, 0) / habits.length
+        //   : 0;
         this.isLoading = false;
       },
       error: (err) => {
