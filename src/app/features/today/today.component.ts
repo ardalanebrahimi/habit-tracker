@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { HabitsService } from '../../services/habits.service';
 import { CommonModule } from '@angular/common';
 import { HabitWithProgressDTO } from '../../models/habit-with-progress-dto.model';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-today',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './today.component.html',
   styleUrls: ['./today.component.scss'],
 })
