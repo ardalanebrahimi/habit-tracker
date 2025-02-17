@@ -34,4 +34,21 @@ export class AllHabitsComponent implements OnInit {
       },
     });
   }
+
+  deleteHabit(habit: HabitWithProgressDTO): void {
+    if (
+      confirm(
+        `Are you sure you want to delete "${habit.name}"? This action is permanent.`
+      )
+    ) {
+      this.habitsService.deleteHabit(habit.id!).subscribe({
+        next: () => {
+          this.allHabits = this.allHabits.filter((h) => h.id !== habit.id);
+        },
+        error: (err) => {
+          console.error('Error deleting habit:', err);
+        },
+      });
+    }
+  }
 }

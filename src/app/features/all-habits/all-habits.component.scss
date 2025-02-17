@@ -56,4 +56,19 @@
       }
     }
   }
+
+  .delete-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+
+    &:hover {
+      background: #b02a37;
+    }
+  }
 }
