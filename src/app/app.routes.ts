@@ -5,6 +5,7 @@ import { StatsComponent } from './features/stats/stats.component';
 import { AddHabitComponent } from './features/add-habit/add-habit.component';
 import { LoginComponent } from './features/auth/login/login.component';
 import { RegisterComponent } from './features/auth/register/register.component';
+import { ArchivedHabitsComponent } from './features/archived-habits.component/archived-habits.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'today', pathMatch: 'full' },
@@ -14,5 +15,6 @@ export const routes: Routes = [
   { path: 'add-habit', component: AddHabitComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: '**', redirectTo: 'login' }, // Default to login if route not foun
+  { path: 'archived-habits', component: ArchivedHabitsComponent },
+  { path: '**', redirectTo: 'login' }, // Default to login if route not foun{ path: 'archived-habits', component: ArchivedHabitsComponent }
 ];

@@ -51,4 +51,21 @@ export class AllHabitsComponent implements OnInit {
       });
     }
   }
+
+  archiveHabit(habit: HabitWithProgressDTO): void {
+    if (
+      confirm(
+        `Are you sure you want to archive "${habit.name}"? This cannot be undone.`
+      )
+    ) {
+      this.habitsService.archiveHabit(habit.id!).subscribe({
+        next: () => {
+          this.allHabits = this.allHabits.filter((h) => h.id !== habit.id);
+        },
+        error: (err) => {
+          console.error('Error archiving habit:', err);
+        },
+      });
+    }
+  }
 }

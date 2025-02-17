@@ -51,4 +51,16 @@ export class HabitsService {
   ): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/${id}/complete`, { decrease });
   }
+
+  archiveHabit(id: string): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${id}/archive`, {});
+  }
+
+  getActiveHabits(): Observable<HabitWithProgressDTO[]> {
+    return this.http.get<HabitWithProgressDTO[]>(`${this.apiUrl}/active`);
+  }
+
+  getArchivedHabits(): Observable<HabitWithProgressDTO[]> {
+    return this.http.get<HabitWithProgressDTO[]>(`${this.apiUrl}/archived`);
+  }
 }
