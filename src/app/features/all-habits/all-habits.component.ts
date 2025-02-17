@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HabitsService } from '../../services/habits.service';
 import { CommonModule } from '@angular/common';
 import { HabitWithProgressDTO } from '../../models/habit-with-progress-dto.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-all-habits',
@@ -15,14 +16,15 @@ export class AllHabitsComponent implements OnInit {
   isLoading = true;
   errorMessage: string | null = null;
 
-  constructor(private habitsService: HabitsService) {}
+  constructor(private habitsService: HabitsService, private router: Router) {}
 
   ngOnInit(): void {
     this.fetchHabits();
   }
 
   private fetchHabits(): void {
-    this.habitsService.getAllHabits().subscribe({
+    this.isLoading = true;
+    this.habitsService.getActiveHabits().subscribe({
       next: (habits) => {
         this.allHabits = habits;
         this.isLoading = false;
@@ -30,16 +32,13 @@ export class AllHabitsComponent implements OnInit {
       error: (err) => {
         this.errorMessage = 'Failed to load habits. Please try again later.';
         this.isLoading = false;
-        console.error('Error fetching habits:', err);
       },
     });
   }
 
   deleteHabit(habit: HabitWithProgressDTO): void {
     if (
-      confirm(
-        `Are you sure you want to delete "${habit.name}"? This action is permanent.`
-      )
+      confirm(`Are you sure you want to permanently delete "${habit.name}"?`)
     ) {
       this.habitsService.deleteHabit(habit.id!).subscribe({
         next: () => {
@@ -67,5 +66,9 @@ export class AllHabitsComponent implements OnInit {
         },
       });
     }
+  }
+
+  goToArchived(): void {
+    this.router.navigate(['/archived-habits']);
   }
 }

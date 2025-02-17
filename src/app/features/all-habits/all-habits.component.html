@@ -12,23 +12,22 @@
 
   <div *ngFor="let habit of allHabits" class="habit-item">
     <p class="habit-title">{{ habit.name }}</p>
-    <p class="habit-streak">🔥 Streak: {{ 0 }} days</p>
+    <p class="habit-streak">🔥 Streak: {{ habit.streak }} days</p>
     <p class="habit-status">
       Status:
-      <span
-        [class.completed]="
-          (habit.currentValue ?? 0) >= (habit.targetValue ?? 0)
-        "
-        >{{
-          (habit.currentValue ?? 0) >= (habit.targetValue ?? 0)
-            ? "Completed"
-            : "Not Completed"
-        }}</span
-      >
+      <span [class.completed]="habit.isCompleted">
+        {{ habit.isCompleted ? "Completed" : "Not Completed" }}
+      </span>
     </p>
     <button class="delete-btn" (click)="deleteHabit(habit)">🗑️ Delete</button>
     <button class="archive-btn" (click)="archiveHabit(habit)">
       📦 Archive
+    </button>
+  </div>
+
+  <div class="page-footer">
+    <button class="archived-btn" (click)="goToArchived()">
+      📦 View Archived Habits
     </button>
   </div>
 </div>

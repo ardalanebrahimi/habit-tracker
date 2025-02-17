@@ -34,4 +34,21 @@ export class ArchivedHabitsComponent implements OnInit {
       },
     });
   }
+
+  deleteArchivedHabit(habit: HabitWithProgressDTO): void {
+    if (
+      confirm(`Are you sure you want to permanently delete "${habit.name}"?`)
+    ) {
+      this.habitsService.deleteHabit(habit.id!).subscribe({
+        next: () => {
+          this.archivedHabits = this.archivedHabits.filter(
+            (h) => h.id !== habit.id
+          );
+        },
+        error: (err) => {
+          console.error('Error deleting archived habit:', err);
+        },
+      });
+    }
+  }
 }
