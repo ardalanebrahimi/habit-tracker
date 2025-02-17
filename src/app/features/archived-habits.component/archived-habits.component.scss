@@ -1,0 +1,42 @@
+.archived-btn {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-bottom: 10px;
+
+  &:hover {
+    background: #0056b3;
+  }
+}
+
+.delete-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+
+  &:hover {
+    background: #c82333;
+  }
+}
+
+.back-link {
+  display: block;
+  margin-bottom: 15px;
+  font-size: 14px;
+  text-decoration: none;
+  color: #007bff;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
