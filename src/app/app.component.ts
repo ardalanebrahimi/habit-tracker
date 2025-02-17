@@ -1,8 +1,7 @@
-import { Component, HostListener } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, ChangeDetectorRef, HostListener } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from './services/auth.service';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { LoadingService } from './services/loading.service';
 
@@ -20,9 +19,16 @@ export class AppComponent {
   constructor(
     public authService: AuthService,
     private router: Router,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private cdr: ChangeDetectorRef
   ) {
     this.isLoading$ = this.loadingService.isLoading.asObservable();
+  }
+
+  ngAfterViewInit() {
+    this.isLoading$.subscribe(() => {
+      this.cdr.detectChanges(); // ✅ Force UI update to avoid ExpressionChangedAfterItHasBeenCheckedError
+    });
   }
 
   toggleMenu() {
