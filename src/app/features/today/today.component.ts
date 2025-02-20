@@ -69,12 +69,10 @@ export class TodayComponent implements OnInit {
    * ✅ Increase numeric progress
    */
   incrementProgress(habit: HabitWithProgressDTO): void {
-    if (!habit.isCompleted) {
-      this.habitsService.updateHabitProgress(habit.id!, false).subscribe({
-        next: () => this.fetchTodayHabits(),
-        error: (err) => console.error('Error increasing progress:', err),
-      });
-    }
+    this.habitsService.updateHabitProgress(habit.id!, false).subscribe({
+      next: () => this.fetchTodayHabits(),
+      error: (err) => console.error('Error increasing progress:', err),
+    });
   }
 
   /**
