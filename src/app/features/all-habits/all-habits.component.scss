@@ -56,34 +56,44 @@
       }
     }
   }
-
-  .delete-btn {
-    background: #dc3545;
-    color: white;
+  .btn {
     border: none;
     padding: 5px 10px;
     font-size: 14px;
     border-radius: 5px;
     cursor: pointer;
     transition: background 0.3s;
+    margin: 8px;
+  }
+
+  /* Specific button styles */
+  .delete-btn {
+    @extend .btn;
+    background: #dc3545;
+    color: white;
 
     &:hover {
       background: #b02a37;
     }
   }
 
-  .archive-btn {
-    background: #ffc107;
+  .archived-btn {
+    @extend .btn;
+    background: #d2d2d2;
     color: black;
-    border: none;
-    padding: 5px 10px;
-    font-size: 14px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s;
 
     &:hover {
-      background: #e0a800;
+      background: #515352;
+    }
+  }
+
+  .edit-btn {
+    @extend .btn;
+    background: #11ea43;
+    color: black;
+
+    &:hover {
+      background: #05c131;
     }
   }
 }

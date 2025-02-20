@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { HabitsService } from '../../services/habits.service';
 import { CommonModule } from '@angular/common';
 import { HabitWithProgressDTO } from '../../models/habit-with-progress-dto.model';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-all-habits',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './all-habits.component.html',
   styleUrls: ['./all-habits.component.scss'],
 })

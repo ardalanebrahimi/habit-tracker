@@ -19,14 +19,19 @@
         {{ habit.isCompleted ? "Completed" : "Not Completed" }}
       </span>
     </p>
-    <button class="delete-btn" (click)="deleteHabit(habit)">🗑️ Delete</button>
-    <button class="archive-btn" (click)="archiveHabit(habit)">
+    <button class="btn edit-btn" [routerLink]="['/edit-habit', habit.id]">
+      ✏️ Edit
+    </button>
+    <button class="btn delete-btn" (click)="deleteHabit(habit)">
+      🗑️ Delete
+    </button>
+    <button class="btn archive-btn" (click)="archiveHabit(habit)">
       📦 Archive
     </button>
   </div>
 
   <div class="page-footer">
-    <button class="archived-btn" (click)="goToArchived()">
+    <button class="btn archived-btn" (click)="goToArchived()">
       📦 View Archived Habits
     </button>
   </div>

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { HabitWithProgressDTO } from '../models/habit-with-progress-dto.model';
+import { CreateHabitDTO } from '../models/create-habit-dto.model';
 
 @Injectable({
   providedIn: 'root',
@@ -29,7 +30,7 @@ export class HabitsService {
   /**
    * ✅ Add a new habit
    */
-  addHabit(habit: HabitWithProgressDTO): Observable<HabitWithProgressDTO> {
+  addHabit(habit: CreateHabitDTO): Observable<HabitWithProgressDTO> {
     return this.http.post<HabitWithProgressDTO>(this.apiUrl, habit);
   }
 
@@ -62,5 +63,12 @@ export class HabitsService {
 
   getArchivedHabits(): Observable<HabitWithProgressDTO[]> {
     return this.http.get<HabitWithProgressDTO[]>(`${this.apiUrl}/archived`);
+  }
+
+  updateHabit(
+    id: string,
+    habit: HabitWithProgressDTO
+  ): Observable<HabitWithProgressDTO> {
+    return this.http.put<HabitWithProgressDTO>(`${this.apiUrl}/${id}`, habit);
   }
 }
