@@ -26,9 +26,9 @@ export class EditHabitComponent implements OnInit {
   ngOnInit(): void {
     this.habitId = this.route.snapshot.paramMap.get('id');
     if (this.habitId) {
-      this.habitsService.getAllHabits().subscribe({
-        next: (habits) => {
-          this.habit = habits.find((h) => h.id === this.habitId) ?? null;
+      this.habitsService.getHabitById(this.habitId).subscribe({
+        next: (res) => {
+          this.habit = res ?? null;
           if (!this.habit) {
             this.errorMessage = 'Habit not found.';
           }

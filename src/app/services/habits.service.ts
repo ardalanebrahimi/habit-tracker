@@ -20,6 +20,9 @@ export class HabitsService {
     return this.http.get<HabitWithProgressDTO[]>(`${this.apiUrl}/all`);
   }
 
+  getHabitById(id: string): Observable<HabitWithProgressDTO> {
+    return this.http.get<HabitWithProgressDTO>(`${this.apiUrl}/${id}`);
+  }
   /**
    * ✅ Fetch today's habits only
    */
