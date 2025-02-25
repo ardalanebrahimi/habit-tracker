@@ -19,7 +19,9 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error) => {
-      if (error instanceof HttpErrorResponse && error.status === 401) {
+      if (error.error?.message === 'Invalid or expired refresh token.')
+        authService.logout();
+      else if (error instanceof HttpErrorResponse && error.status === 401) {
         return authService.refreshToken().pipe(
           switchMap(() => {
             const newToken = authService.getToken();
