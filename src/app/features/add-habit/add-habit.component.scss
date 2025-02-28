@@ -1,35 +1,73 @@
-.add-habit {
+.wizard-container {
   max-width: 600px;
-  margin: 0 auto;
+  margin: auto;
   padding: 20px;
-  background: #fff;
-  border-radius: 8px;
+  background: white;
+  border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
 input,
-select {
-  display: block;
+select,
+textarea {
   width: 100%;
-  margin-bottom: 15px;
   padding: 10px;
-  font-size: 14px;
-  border: 1px solid #eaeaea;
+  margin: 10px 0;
+  border: 1px solid #ddd;
   border-radius: 5px;
+  font-size: 14px;
 }
 
 button {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  color: white;
-  background-color: #007bff;
+  padding: 10px 20px;
+  margin: 10px;
   border: none;
   border-radius: 5px;
+  font-size: 16px;
   cursor: pointer;
-  transition: background-color 0.3s;
+}
 
-  &:hover {
-    background-color: #0056b3;
-  }
+button.primary {
+  background-color: #007bff;
+  color: white;
+}
+
+button.primary:hover {
+  background-color: #0056b3;
+}
+
+button.secondary {
+  background-color: #ddd;
+}
+
+button.secondary:hover {
+  background-color: #bbb;
+}
+
+.radio-group {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.radio-group label {
+  margin: 0 10px;
+  cursor: pointer;
+}
+
+.summary {
+  text-align: left;
+  width: 100%;
+}
+
+.summary-item {
+  margin-bottom: 10px;
+  font-size: 16px;
 }

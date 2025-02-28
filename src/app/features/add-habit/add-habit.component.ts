@@ -13,40 +13,49 @@ import { CreateHabitDTO } from '../../models/create-habit-dto.model';
   styleUrls: ['./add-habit.component.scss'],
 })
 export class AddHabitComponent {
-  habitName = '';
-  frequency: 'daily' | 'weekly' | 'monthly' = 'daily';
-  goalType: 'binary' | 'numeric' = 'binary';
-  targetValue?: number;
+  step = 1;
+  habit: CreateHabitDTO = {
+    name: '',
+    description: '',
+    frequency: 'daily',
+    goalType: 'binary',
+    targetType: 'ongoing',
+  };
+
+  minDate = new Date().toISOString().split('T')[0];
+
   isLoading = false;
   errorMessage: string | null = null;
 
   constructor(private habitsService: HabitsService, private router: Router) {}
 
-  addHabit(): void {
-    if (!this.habitName.trim()) {
-      this.errorMessage = 'Habit name cannot be empty.';
-      return;
-    }
+  nextStep(): void {
+    this.step++;
+  }
 
+  previousStep(): void {
+    this.step--;
+  }
+
+  addHabit(): void {
     this.isLoading = true;
     this.errorMessage = null;
 
-    const newHabit: CreateHabitDTO = {
-      name: this.habitName.trim(),
-      frequency: this.frequency,
-      goalType: this.goalType,
-      targetValue: this.goalType === 'numeric' ? this.targetValue : undefined,
-    };
+    if (this.habit.startDate) {
+      this.habit.startDate = new Date(this.habit.startDate).toISOString();
+    }
+    if (this.habit.endDate) {
+      this.habit.endDate = new Date(this.habit.endDate).toISOString();
+    }
 
-    this.habitsService.addHabit(newHabit).subscribe({
+    this.habitsService.addHabit(this.habit).subscribe({
       next: () => {
         this.isLoading = false;
-        this.router.navigate(['/today']); // Navigate back to today's habits
+        this.router.navigate(['/today']);
       },
-      error: (err) => {
+      error: () => {
         this.isLoading = false;
         this.errorMessage = 'Failed to add habit. Please try again.';
-        console.error('Error adding habit:', err);
       },
     });
   }

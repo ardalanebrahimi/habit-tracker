@@ -1,20 +1,186 @@
-<div class="page-header">
-  <h2>Add New Habit</h2>
-</div>
-
-<div class="add-habit">
-  <input [(ngModel)]="habitName" placeholder="Habit Name" />
-  <select [(ngModel)]="frequency">
-    <option value="daily">Daily</option>
-    <option value="weekly">Weekly</option>
-    <option value="monthly">Monthly</option>
-  </select>
-  <select [(ngModel)]="goalType">
-    <option value="binary">Binary (Done/Not Done)</option>
-    <option value="numeric">Numeric (e.g., 2 Liters of Water)</option>
-  </select>
-  <div *ngIf="goalType === 'numeric'">
-    <input [(ngModel)]="targetValue" type="number" placeholder="Target Value" />
+<div class="wizard-container">
+  <div class="page-header">
+    <h2>Create a New Habit</h2>
   </div>
-  <button (click)="addHabit()">Add Habit</button>
+
+  <!-- ✅ Step 1: Name & Description -->
+  <div *ngIf="step === 1" class="step">
+    <h3>Step 1: Habit Name & Description</h3>
+    <input [(ngModel)]="habit.name" placeholder="Habit Name" required />
+    <textarea
+      [(ngModel)]="habit.description"
+      placeholder="Describe your habit (optional)"
+    ></textarea>
+    <p *ngIf="!habit.name && errorMessage" class="error">
+      ⚠ Habit name is required
+    </p>
+    <button class="primary" (click)="nextStep()" [disabled]="!habit.name">
+      Next
+    </button>
+  </div>
+
+  <!-- ✅ Step 2: Frequency & Type -->
+  <div *ngIf="step === 2" class="step">
+    <h3>Step 2: Set Frequency & Type</h3>
+    <select [(ngModel)]="habit.frequency">
+      <option value="daily">Daily</option>
+      <option value="weekly">Weekly</option>
+      <option value="monthly">Monthly</option>
+    </select>
+    <select [(ngModel)]="habit.goalType">
+      <option value="binary">Binary (Done/Not Done)</option>
+      <option value="numeric">Numeric (e.g., 2 Liters of Water)</option>
+    </select>
+    <input
+      *ngIf="habit.goalType === 'numeric'"
+      [(ngModel)]="habit.targetValue"
+      type="number"
+      placeholder="Target Value"
+      min="1"
+    />
+    <p
+      *ngIf="
+        habit.goalType === 'numeric' &&
+        (!habit.targetValue || habit.targetValue < 1)
+      "
+      class="error"
+    >
+      ⚠ Please enter a valid target
+    </p>
+    <button class="secondary" (click)="previousStep()">Back</button>
+    <button
+      class="primary"
+      (click)="nextStep()"
+      [disabled]="
+        habit.goalType === 'numeric' &&
+        (!habit.targetValue || habit.targetValue < 1)
+      "
+    >
+      Next
+    </button>
+  </div>
+
+  <!-- ✅ Step 3: Define Target -->
+  <div *ngIf="step === 3" class="step">
+    <h3>Step 3: Define Target</h3>
+    <div class="radio-group">
+      <label>
+        <input
+          type="radio"
+          name="target"
+          [(ngModel)]="habit.targetType"
+          value="ongoing"
+        />
+        Ongoing
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="target"
+          [(ngModel)]="habit.targetType"
+          value="streak"
+        />
+        Streak Target
+        <input
+          *ngIf="habit.targetType === 'streak'"
+          type="number"
+          [(ngModel)]="habit.streakTarget"
+          min="1"
+          placeholder="Days"
+        />
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="target"
+          [(ngModel)]="habit.targetType"
+          value="endDate"
+        />
+        End Date
+        <input
+          *ngIf="habit.targetType === 'endDate'"
+          type="date"
+          [(ngModel)]="habit.endDate"
+          [min]="minDate"
+        />
+      </label>
+    </div>
+
+    <p
+      *ngIf="habit.targetType === 'streak' && !habit.streakTarget"
+      class="error"
+    >
+      ⚠ Please enter a streak target
+    </p>
+
+    <p *ngIf="habit.targetType === 'endDate' && !habit.endDate" class="error">
+      ⚠ Please select an end date
+    </p>
+
+    <button class="secondary" (click)="previousStep()">Back</button>
+    <button
+      class="primary"
+      (click)="nextStep()"
+      [disabled]="
+        (habit.targetType === 'streak' && !habit.streakTarget) ||
+        (habit.targetType === 'endDate' && !habit.endDate)
+      "
+    >
+      Next
+    </button>
+  </div>
+
+  <!-- ✅ Step 4: Summary & Start -->
+  <div *ngIf="step === 4" class="step">
+    <h3>Final Step: Summary</h3>
+    <div class="summary">
+      <p><strong>Name:</strong> {{ habit.name }}</p>
+      <p>
+        <strong>Description:</strong>
+        {{ habit.description || "No description" }}
+      </p>
+      <p><strong>Frequency:</strong> {{ habit.frequency }}</p>
+      <p><strong>Type:</strong> {{ habit.goalType }}</p>
+      <p *ngIf="habit.goalType === 'numeric'">
+        <strong>Target:</strong> {{ habit.targetValue }}
+      </p>
+      <p *ngIf="habit.targetType === 'streak'">
+        <strong>Streak Target:</strong> {{ habit.streakTarget }} days
+      </p>
+      <p *ngIf="habit.targetType === 'endDate'">
+        <strong>End Date:</strong> {{ habit.endDate }}
+      </p>
+    </div>
+
+    <label>
+      <input type="radio" [(ngModel)]="habit.startDate" [value]="null" /> Start
+      Immediately
+    </label>
+    <label>
+      <input type="radio" [(ngModel)]="habit.startDate" value="scheduled" />
+      Start on:
+      <input
+        *ngIf="habit.startDate === 'scheduled'"
+        type="date"
+        [(ngModel)]="habit.startDate"
+        [min]="minDate"
+      />
+    </label>
+
+    <p
+      *ngIf="habit.startDate === 'scheduled' && !habit.startDate"
+      class="error"
+    >
+      ⚠ Please select a start date
+    </p>
+
+    <button class="secondary" (click)="previousStep()">Back</button>
+    <button
+      class="primary"
+      (click)="addHabit()"
+      [disabled]="habit.startDate === 'scheduled' && !habit.startDate"
+    >
+      Start Habit
+    </button>
+  </div>
 </div>
