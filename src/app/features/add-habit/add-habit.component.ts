@@ -26,6 +26,7 @@ export class AddHabitComponent {
 
   isLoading = false;
   errorMessage: string | null = null;
+  startType?: string;
 
   constructor(private habitsService: HabitsService, private router: Router) {}
 
