@@ -29,21 +29,14 @@
 
   <div *ngFor="let habit of filteredHabits" class="habit-item">
     <div class="habit-header">
-      <!-- Binary Task Buttons -->
-      <button
-        class="icon-button check"
-        *ngIf="!isHabitDoneToday(habit) && habit.goalType === 'binary'"
-        (click)="markHabitComplete(habit)"
-      >
-        ✔
-      </button>
-      <button
-        class="icon-button undo"
-        *ngIf="isHabitDoneToday(habit) && habit.goalType === 'binary'"
-        (click)="undoHabitDoneToday(habit)"
-      >
-        ✖
-      </button>
+      <!-- Binary Task Checkbox -->
+      <label class="checkbox-container" *ngIf="habit.goalType === 'binary'">
+        <input
+          type="checkbox"
+          [checked]="isHabitDoneToday(habit)"
+          (change)="toggleHabitCompletion(habit, $event)"
+        />
+      </label>
 
       <!-- Habit Name -->
       <p class="habit-name">{{ habit.name }}</p>

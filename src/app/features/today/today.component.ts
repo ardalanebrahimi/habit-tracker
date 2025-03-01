@@ -43,26 +43,20 @@ export class TodayComponent implements OnInit {
     });
   }
 
-  /**
-   * ✅ Mark binary habit as completed
-   */
-  markHabitComplete(habit: HabitWithProgressDTO): void {
-    if (!habit.isCompleted) {
+  toggleHabitCompletion(habit: HabitWithProgressDTO, event: Event): void {
+    const isChecked = (event.target as HTMLInputElement).checked; // ✅ Type assertion fixes error
+
+    if (isChecked) {
       this.habitsService.updateHabitProgress(habit.id!, false).subscribe({
         next: () => this.fetchTodayHabits(),
         error: (err) => console.error('Error marking habit as complete:', err),
       });
+    } else {
+      this.habitsService.updateHabitProgress(habit.id!, true).subscribe({
+        next: () => this.fetchTodayHabits(),
+        error: (err) => console.error('Error undoing habit:', err),
+      });
     }
-  }
-
-  /**
-   * ✅ Undo completion of a binary habit
-   */
-  undoHabitDoneToday(habit: HabitWithProgressDTO): void {
-    this.habitsService.updateHabitProgress(habit.id!, true).subscribe({
-      next: () => this.fetchTodayHabits(),
-      error: (err) => console.error('Error undoing habit:', err),
-    });
   }
 
   /**
