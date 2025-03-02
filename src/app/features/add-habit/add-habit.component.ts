@@ -20,6 +20,7 @@ export class AddHabitComponent {
     frequency: 'daily',
     goalType: 'binary',
     targetType: 'ongoing',
+    allowedGaps: 1,
   };
 
   minDate = new Date().toISOString().split('T')[0];

@@ -116,6 +116,17 @@
     <p *ngIf="habit.targetType === 'endDate' && !habit.endDate" class="error">
       ⚠ Please select an end date
     </p>
+    <!-- ✅ Allowed Gaps (Only for Daily Habits) -->
+    <div *ngIf="habit.frequency === 'daily'">
+      <h4>Allowed Gaps</h4>
+      <p>You can miss up to this many days before the streak breaks.</p>
+      <input
+        type="number"
+        [(ngModel)]="habit.allowedGaps"
+        min="0"
+        placeholder="Allowed Gaps"
+      />
+    </div>
 
     <button class="secondary" (click)="previousStep()">Back</button>
     <button
