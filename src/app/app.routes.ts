@@ -7,6 +7,7 @@ import { LoginComponent } from './features/auth/login/login.component';
 import { RegisterComponent } from './features/auth/register/register.component';
 import { ArchivedHabitsComponent } from './features/archived-habits.component/archived-habits.component';
 import { EditHabitComponent } from './features/edit-habit/edit-habit.component';
+import { ConnectionsComponent } from './features/connections/connections/connections.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'today', pathMatch: 'full' },
@@ -18,5 +19,6 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'archived-habits', component: ArchivedHabitsComponent },
   { path: 'edit-habit/:id', component: EditHabitComponent },
-  { path: '**', redirectTo: 'login' }, // Default to login if route not found
+  { path: 'connections', component: ConnectionsComponent },
+  { path: '**', redirectTo: 'login' },
 ];

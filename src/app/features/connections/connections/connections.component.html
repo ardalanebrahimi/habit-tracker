@@ -1,0 +1,13 @@
+<div class="connections-container">
+  <h2>My Connections</h2>
+
+  <div *ngIf="isLoading">Loading...</div>
+
+  <ul *ngIf="!isLoading && connections.length > 0">
+    <li *ngFor="let user of connections">
+      {{ user.userName }}
+    </li>
+  </ul>
+
+  <p *ngIf="!isLoading && connections.length === 0">No connections found.</p>
+</div>
