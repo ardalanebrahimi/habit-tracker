@@ -14,4 +14,14 @@ export class ConnectionsService {
   getConnections(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/list`);
   }
+
+  // ✅ Search Users by Username
+  searchUsers(username: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/search?username=${username}`);
+  }
+
+  // ✅ Send Connection Request
+  sendRequest(ConnectedUserId: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/request`, { ConnectedUserId });
+  }
 }
