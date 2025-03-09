@@ -24,4 +24,20 @@ export class ConnectionsService {
   sendRequest(ConnectedUserId: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/request`, { ConnectedUserId });
   }
+
+  getIncomingRequests(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/incoming`);
+  }
+
+  getSentRequests(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/sent`);
+  }
+
+  acceptRequest(requestId: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/accept/${requestId}`, {});
+  }
+
+  rejectRequest(requestId: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/reject/${requestId}`, {});
+  }
 }

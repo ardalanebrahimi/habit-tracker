@@ -8,7 +8,8 @@ import { RegisterComponent } from './features/auth/register/register.component';
 import { ArchivedHabitsComponent } from './features/archived-habits.component/archived-habits.component';
 import { EditHabitComponent } from './features/edit-habit/edit-habit.component';
 import { ConnectionsComponent } from './features/connections/connections/connections.component';
-import { SearchUsersComponent } from './connections/search-users/search-users.component';
+import { SearchUsersComponent } from './features/connections/search-users/search-users.component';
+import { ConnectionRequestsComponent } from './features/connections/connection-requests/connection-requests.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'today', pathMatch: 'full' },
@@ -20,6 +21,7 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'archived-habits', component: ArchivedHabitsComponent },
   { path: 'edit-habit/:id', component: EditHabitComponent },
+  { path: 'connection-requests', component: ConnectionRequestsComponent },
   { path: 'connections', component: ConnectionsComponent },
   { path: 'search-users', component: SearchUsersComponent },
 

@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ConnectionsService } from '../../../services/connections.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-connections',
   templateUrl: './connections.component.html',
   styleUrls: ['./connections.component.scss'],
+  imports: [CommonModule],
 })
 export class ConnectionsComponent implements OnInit {
   connections: any[] = [];

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ConnectionsService } from '../../services/connections.service';
+import { ConnectionsService } from '../../../services/connections.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
