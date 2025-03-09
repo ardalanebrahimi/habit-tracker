@@ -3,12 +3,12 @@ import { ConnectionsService } from '../../../services/connections.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-connections',
-  templateUrl: './connections.component.html',
-  styleUrls: ['./connections.component.scss'],
+  selector: 'app-connections-list',
+  templateUrl: './connections-list.component.html',
+  styleUrls: ['./connections-list.component.scss'],
   imports: [CommonModule],
 })
-export class ConnectionsComponent implements OnInit {
+export class ConnectionsListComponent implements OnInit {
   connections: any[] = [];
   isLoading = true;
 
