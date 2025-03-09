@@ -7,9 +7,6 @@ import { LoginComponent } from './features/auth/login/login.component';
 import { RegisterComponent } from './features/auth/register/register.component';
 import { ArchivedHabitsComponent } from './features/archived-habits.component/archived-habits.component';
 import { EditHabitComponent } from './features/edit-habit/edit-habit.component';
-import { ConnectionsListComponent } from './features/connections/connections-list/connections-list.component';
-import { SearchUsersComponent } from './features/connections/search-users/search-users.component';
-import { ConnectionRequestsComponent } from './features/connections/connection-requests/connection-requests.component';
 import { ConnectionsComponent } from './features/connections/connections.component';
 
 export const routes: Routes = [

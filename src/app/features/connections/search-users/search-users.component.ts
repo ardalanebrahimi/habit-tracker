@@ -16,19 +16,20 @@ export class SearchUsersComponent {
 
   constructor(private connectionsService: ConnectionsService) {}
 
-  search() {
-    if (!this.searchQuery.trim()) {
-      this.message = 'Please enter a username.';
-      return;
+  onSearchInput(): void {
+    if (this.searchQuery.length >= 3) {
+      this.searchUsers();
     }
+  }
 
+  searchUsers(): void {
     this.connectionsService.searchUsers(this.searchQuery).subscribe({
       next: (results) => {
         this.users = results;
         this.message = results.length ? '' : 'No users found.';
       },
       error: () => {
-        this.message = 'Error searching users. Try again.';
+        this.message = 'Error searching users.';
       },
     });
   }
@@ -39,14 +40,8 @@ export class SearchUsersComponent {
         this.message = 'Connection request sent!';
       },
       error: () => {
-        this.message = 'Error sending request. Try again.';
+        this.message = 'Error sending request.';
       },
     });
-  }
-
-  onSearchInput(): void {
-    if (this.searchQuery.length >= 3) {
-      this.search();
-    }
   }
 }

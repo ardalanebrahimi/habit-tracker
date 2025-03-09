@@ -1,12 +1,10 @@
-<div class="search-container">
-  <h2>Find Users</h2>
+<div class="content">
   <input
     type="text"
     [(ngModel)]="searchQuery"
     (input)="onSearchInput()"
     placeholder="Search users..."
   />
-
   <p *ngIf="message">{{ message }}</p>
 
   <ul *ngIf="users.length">

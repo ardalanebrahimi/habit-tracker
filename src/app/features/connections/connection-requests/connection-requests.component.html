@@ -1,10 +1,8 @@
-<div class="connection-container">
-  <h2>Connection Requests</h2>
-
+<div class="content">
   <h3>Incoming Requests</h3>
   <p *ngIf="incomingRequests.length === 0">No incoming requests.</p>
   <div *ngFor="let request of incomingRequests" class="request-card">
-    <p>{{ request.userName }} ({{ request.email }})</p>
+    <span>{{ request.userName }}</span>
     <button (click)="acceptRequest(request.id)" class="accept-btn">
       Accept
     </button>
@@ -16,8 +14,6 @@
   <h3>Sent Requests</h3>
   <p *ngIf="sentRequests.length === 0">No sent requests.</p>
   <div *ngFor="let request of sentRequests" class="request-card">
-    <p>{{ request.userName }} ({{ request.email }}) - Pending</p>
+    <span>{{ request.userName }} - Pending</span>
   </div>
-
-  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
 </div>
