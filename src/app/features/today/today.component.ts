@@ -118,4 +118,36 @@ export class TodayComponent implements OnInit {
     this.currentView = view;
     this.filterHabits();
   }
+
+  /**
+   * Get the appropriate period text for the streak display
+   */
+  getStreakPeriod(frequency: 'daily' | 'weekly' | 'monthly'): string {
+    switch (frequency) {
+      case 'daily':
+        return 'days';
+      case 'weekly':
+        return 'weeks';
+      case 'monthly':
+        return 'months';
+      default:
+        return 'days';
+    }
+  }
+
+  /**
+   * Get the appropriate period text for progress display
+   */
+  getProgressPeriod(frequency: 'daily' | 'weekly' | 'monthly'): string {
+    switch (frequency) {
+      case 'daily':
+        return 'times today';
+      case 'weekly':
+        return 'times this week';
+      case 'monthly':
+        return 'times this month';
+      default:
+        return 'times';
+    }
+  }
 }

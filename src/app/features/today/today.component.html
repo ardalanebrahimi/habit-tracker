@@ -43,7 +43,7 @@
 
       <!-- Streak Display -->
       <span class="streak-badge" *ngIf="habit.streak !== undefined">
-        🔥 {{ habit.streak }} days
+        🔥 {{ habit.streak }} {{ getStreakPeriod(habit.frequency) }}
       </span>
 
       <!-- Numeric Task Buttons -->
@@ -72,7 +72,8 @@
         ></div>
       </div>
       <span class="progress-text"
-        >{{ habit.currentValue || 0 }} / {{ habit.targetValue }}</span
+        >{{ habit.currentValue || 0 }} / {{ habit.targetValue }}
+        {{ getProgressPeriod(habit.frequency) }}</span
       >
     </div>
   </div>
