@@ -1,5 +1,25 @@
 <div class="connections-container">
-  <div class="tab-menu">
+  <div class="page-header">
+    <h2>🤝 Connections</h2>
+  </div>
+
+  <div class="view-options">
+    <a (click)="activeTab = 'list'" [class.active]="activeTab === 'list'"
+      >Your Connections</a
+    >
+    |
+    <a
+      (click)="activeTab = 'requests'"
+      [class.active]="activeTab === 'requests'"
+      >Requests</a
+    >
+    |
+    <a (click)="activeTab = 'search'" [class.active]="activeTab === 'search'"
+      >Find Users</a
+    >
+  </div>
+
+  <!-- <div class="tab-menu">
     <button [class.active]="activeTab === 'list'" (click)="activeTab = 'list'">
       Your Connections
     </button>
@@ -15,7 +35,7 @@
     >
       Find Users
     </button>
-  </div>
+  </div> -->
 
   <ng-container *ngIf="activeTab === 'list'">
     <app-connections-list></app-connections-list>
