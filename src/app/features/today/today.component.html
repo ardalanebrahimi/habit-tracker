@@ -41,6 +41,11 @@
       <!-- Habit Name -->
       <p class="habit-name">{{ habit.name }}</p>
 
+      <!-- Streak Display -->
+      <span class="streak-badge" *ngIf="habit.streak !== undefined">
+        🔥 {{ habit.streak }} days
+      </span>
+
       <!-- Numeric Task Buttons -->
       <button
         *ngIf="habit.goalType === 'numeric'"
