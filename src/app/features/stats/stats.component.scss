@@ -15,6 +15,7 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
+    margin-bottom: 30px;
   }
 
   .stat-item {
@@ -36,6 +37,31 @@
       font-size: 20px;
       font-weight: bold;
       color: #007bff;
+    }
+  }
+
+  .add-habit-section {
+    margin-top: 20px;
+
+    .add-habit-btn {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 25px;
+      font-weight: 500;
+      transition: background-color 0.3s, transform 0.1s;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+      &:hover {
+        background-color: #0056b3;
+        transform: translateY(-1px);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
     }
   }
 }
