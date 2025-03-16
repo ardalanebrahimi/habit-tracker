@@ -1,10 +1,18 @@
 <div class="wizard-container">
   <div class="page-header">
-    <h2>Create a New Habit</h2>
+    <h2>{{ pageTitle }}</h2>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading">Loading...</div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
   </div>
 
   <!-- ✅ Step 1: Name & Description -->
-  <div *ngIf="step === 1" class="step">
+  <div *ngIf="!isLoading && step === 1" class="step">
     <h3>Step 1: Habit Name & Description</h3>
     <input [(ngModel)]="habit.name" placeholder="Habit Name" required />
     <textarea
@@ -20,7 +28,7 @@
   </div>
 
   <!-- ✅ Step 2: Frequency & Type -->
-  <div *ngIf="step === 2" class="step">
+  <div *ngIf="!isLoading && step === 2" class="step">
     <h3>Step 2: Set Frequency & Type</h3>
     <select [(ngModel)]="habit.frequency">
       <option value="daily">Daily</option>
@@ -61,7 +69,7 @@
   </div>
 
   <!-- ✅ Step 3: Define Target -->
-  <div *ngIf="step === 3" class="step">
+  <div *ngIf="!isLoading && step === 3" class="step">
     <h3>Step 3: Define Target</h3>
     <div class="radio-group">
       <label>
@@ -116,6 +124,7 @@
     <p *ngIf="habit.targetType === 'endDate' && !habit.endDate" class="error">
       ⚠ Please select an end date
     </p>
+
     <!-- ✅ Allowed Gaps (Only for Daily Habits) -->
     <div *ngIf="habit.frequency === 'daily'">
       <h4>Allowed Gaps</h4>
@@ -142,7 +151,7 @@
   </div>
 
   <!-- ✅ Step 4: Summary & Start -->
-  <div *ngIf="step === 4" class="step">
+  <div *ngIf="!isLoading && step === 4" class="step">
     <h3>Final Step: Summary</h3>
     <div class="summary">
       <p><strong>Name:</strong> {{ habit.name }}</p>
@@ -163,35 +172,34 @@
       </p>
     </div>
 
-    <label>
-      <input type="radio" [(ngModel)]="startType" value="Immediate" /> Start
-      Immediately
-    </label>
-    <label>
-      <input type="radio" [(ngModel)]="startType" value="scheduled" />
-      Start on:
-      <input
-        *ngIf="startType === 'scheduled'"
-        type="date"
-        [(ngModel)]="habit.startDate"
-        [min]="minDate"
-      />
-    </label>
+    <div *ngIf="!isEditMode">
+      <label>
+        <input type="radio" [(ngModel)]="startType" value="Immediate" /> Start
+        Immediately
+      </label>
+      <label>
+        <input type="radio" [(ngModel)]="startType" value="scheduled" />
+        Start on:
+        <input
+          *ngIf="startType === 'scheduled'"
+          type="date"
+          [(ngModel)]="habit.startDate"
+          [min]="minDate"
+        />
+      </label>
 
-    <p
-      *ngIf="habit.startDate === 'scheduled' && !habit.startDate"
-      class="error"
-    >
-      ⚠ Please select a start date
-    </p>
+      <p *ngIf="startType === 'scheduled' && !habit.startDate" class="error">
+        ⚠ Please select a start date
+      </p>
+    </div>
 
     <button class="secondary" (click)="previousStep()">Back</button>
     <button
       class="primary"
-      (click)="addHabit()"
-      [disabled]="habit.startDate === 'scheduled' && !habit.startDate"
+      (click)="saveHabit()"
+      [disabled]="!isEditMode && startType === 'scheduled' && !habit.startDate"
     >
-      Start Habit
+      {{ isEditMode ? "Save Changes" : "Start Habit" }}
     </button>
   </div>
 </div>
