@@ -83,10 +83,20 @@
       </div>
     </div>
 
-    <!-- History Chart Placeholder -->
+    <!-- History -->
     <div class="history-section">
-      <h3>History</h3>
-      <p class="placeholder">History chart coming soon...</p>
+      <h3>History (Last 7 Days)</h3>
+      <div class="chart-container">
+        <div class="chart">
+          <div class="chart-bars">
+            <div class="bar-container" *ngFor="let data of chartData">
+              <div class="bar" [style.height.%]="data.percentage"></div>
+              <div class="bar-value">{{ data.value }}</div>
+              <div class="bar-label">{{ data.day }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="bottom-actions">
