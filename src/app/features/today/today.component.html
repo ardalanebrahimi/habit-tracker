@@ -39,7 +39,9 @@
       </label>
 
       <!-- Habit Name -->
-      <p class="habit-name">{{ habit.name }}</p>
+      <p class="habit-name" [routerLink]="['/habit', habit.id]">
+        {{ habit.name }}
+      </p>
 
       <!-- Streak Display -->
       <span class="streak-badge" *ngIf="habit.streak !== undefined">

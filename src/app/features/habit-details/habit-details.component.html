@@ -1,0 +1,98 @@
+<div class="habit-details">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading">Loading...</div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Habit Details -->
+  <div *ngIf="habit && !isLoading" class="content">
+    <div class="top-actions">
+      <button class="back-btn" routerLink="/habits">←</button>
+      <div class="action-buttons">
+        <button
+          class="btn icon-btn edit-btn"
+          (click)="editHabit()"
+          title="Edit"
+        >
+          ✏️
+        </button>
+        <button
+          class="btn icon-btn delete-btn"
+          (click)="deleteHabit()"
+          title="Delete"
+        >
+          🗑️
+        </button>
+      </div>
+    </div>
+
+    <div class="page-header">
+      <h2>{{ habit.name }}</h2>
+    </div>
+
+    <!-- Basic Info -->
+    <div class="info-section">
+      <h3>Basic Information</h3>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="label">Frequency:</span>
+          <span class="value">{{ habit.frequency }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Type:</span>
+          <span class="value">{{ habit.goalType }}</span>
+        </div>
+        <div class="info-item" *ngIf="habit.goalType === 'numeric'">
+          <span class="label">Target Value:</span>
+          <span class="value">{{ habit.targetValue }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-section">
+      <h3>Progress</h3>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="label">Current Streak:</span>
+          <span class="value streak">🔥 {{ habit.streak }} days</span>
+        </div>
+        <div class="info-item" *ngIf="habit.goalType === 'numeric'">
+          <span class="label">Current Progress:</span>
+          <span class="value"
+            >{{ habit.currentValue || 0 }} / {{ habit.targetValue }}</span
+          >
+          <div class="progress-bar-container">
+            <div
+              class="progress-bar"
+              [style.width.%]="
+                ((habit.currentValue || 0) / (habit.targetValue || 1)) * 100
+              "
+            ></div>
+          </div>
+        </div>
+        <div class="info-item">
+          <span class="label">Status:</span>
+          <span class="value" [class.completed]="habit.isCompleted">
+            {{ habit.isCompleted ? "Completed" : "Not Completed" }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- History Chart Placeholder -->
+    <div class="history-section">
+      <h3>History</h3>
+      <p class="placeholder">History chart coming soon...</p>
+    </div>
+
+    <div class="bottom-actions">
+      <button class="btn archive-btn" (click)="archiveHabit()">
+        📦 Archive Habit
+      </button>
+    </div>
+  </div>
+</div>
