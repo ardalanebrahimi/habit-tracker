@@ -4,19 +4,66 @@
   </div>
 
   <div class="stats-container">
-    <div class="stat-item">
-      <span class="stat-label">Total Habits</span>
-      <span class="stat-value">{{ totalHabits }}</span>
+    <!-- Overall Stats -->
+    <div class="stats-section">
+      <h3>Overall Progress</h3>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-label">Total Habits</span>
+          <span class="stat-value">{{ totalHabits }}</span>
+        </div>
+      </div>
     </div>
 
-    <div class="stat-item">
-      <span class="stat-label">Completed Habits</span>
-      <span class="stat-value">{{ completedHabits }}</span>
+    <!-- Completion Stats -->
+    <div class="stats-section">
+      <h3>Today's Progress</h3>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-label">Completed Today</span>
+          <span class="stat-value">{{ completedToday }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Completion Rate</span>
+          <span class="stat-value">{{ completionRate }}%</span>
+        </div>
+      </div>
     </div>
 
-    <div class="stat-item">
-      <span class="stat-label">🔥 Avg. Streak</span>
-      <span class="stat-value">{{ averageStreak | number : "1.0-0" }}</span>
+    <!-- Streak Stats -->
+    <div class="stats-section">
+      <h3>Streak Statistics</h3>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-label">Best Streak</span>
+          <span class="stat-value">🔥 {{ bestStreak }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Average Streak</span>
+          <span class="stat-value"
+            >🔥 {{ averageStreak | number : "1.0-0" }}</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Habit Types -->
+    <div class="stats-section">
+      <h3>Habit Types</h3>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-label">Daily Habits</span>
+          <span class="stat-value">{{ dailyHabits }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Weekly Habits</span>
+          <span class="stat-value">{{ weeklyHabits }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Monthly Habits</span>
+          <span class="stat-value">{{ monthlyHabits }}</span>
+        </div>
+      </div>
     </div>
   </div>
 

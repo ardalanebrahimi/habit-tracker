@@ -12,8 +12,13 @@ import { HabitWithProgressDTO } from '../../models/habit-with-progress-dto.model
 })
 export class StatsComponent implements OnInit {
   totalHabits: number = 0;
-  completedHabits: number = 0;
+  completedToday: number = 0;
+  completionRate: number = 0;
+  bestStreak: number = 0;
   averageStreak: number = 0;
+  dailyHabits: number = 0;
+  weeklyHabits: number = 0;
+  monthlyHabits: number = 0;
   isLoading = true;
   errorMessage: string | null = null;
 
@@ -24,15 +29,10 @@ export class StatsComponent implements OnInit {
   }
 
   private fetchHabits(): void {
+    this.isLoading = true;
     this.habitsService.getAllHabits().subscribe({
       next: (habits: HabitWithProgressDTO[]) => {
-        this.totalHabits = habits.length;
-        this.completedHabits = habits.filter(
-          (habit) => (habit.currentValue ?? 0) >= (habit.targetValue ?? 0)
-        ).length; // TODO: Move to backend
-        // this.averageStreak = habits.length
-        //   ? habits.reduce((sum, habit) => sum + habit.streak, 0) / habits.length
-        //   : 0;
+        this.calculateStats(habits);
         this.isLoading = false;
       },
       error: (err) => {
@@ -41,5 +41,29 @@ export class StatsComponent implements OnInit {
         this.isLoading = false;
       },
     });
+  }
+
+  private calculateStats(habits: HabitWithProgressDTO[]): void {
+    // Overall stats
+    this.totalHabits = habits.length;
+
+    // Today's progress
+    this.completedToday = habits.filter((h) => h.isCompleted).length;
+    this.completionRate =
+      this.totalHabits > 0
+        ? Math.round((this.completedToday / this.totalHabits) * 100)
+        : 0;
+
+    // Streak stats
+    this.bestStreak = Math.max(...habits.map((h) => h.streak));
+    this.averageStreak =
+      habits.length > 0
+        ? habits.reduce((sum, h) => sum + h.streak, 0) / habits.length
+        : 0;
+
+    // Habit types
+    this.dailyHabits = habits.filter((h) => h.frequency === 'daily').length;
+    this.weeklyHabits = habits.filter((h) => h.frequency === 'weekly').length;
+    this.monthlyHabits = habits.filter((h) => h.frequency === 'monthly').length;
   }
 }
