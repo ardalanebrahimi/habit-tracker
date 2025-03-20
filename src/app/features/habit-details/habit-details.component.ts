@@ -56,34 +56,84 @@ export class HabitDetailsComponent implements OnInit {
   }
 
   private updateChartData(): void {
-    // Generate last 7 days dates
-    const dates = Array.from({ length: 7 }, (_, i) => {
+    if (!this.habit) return;
+
+    // Get the appropriate key based on habit frequency
+    const getKey = (date: Date): number => {
+      switch (this.habit?.frequency) {
+        case 'daily':
+          return parseInt(date.toISOString().slice(0, 10).replace(/-/g, ''));
+        case 'weekly':
+          const weekYear = date.getFullYear();
+          const week = Math.ceil(
+            (date.getTime() - new Date(weekYear, 0, 4).getTime()) /
+              (7 * 24 * 60 * 60 * 1000)
+          );
+          return weekYear * 100 + week;
+        case 'monthly':
+          return date.getFullYear() * 100 + (date.getMonth() + 1);
+        default:
+          return 0;
+      }
+    };
+
+    // Generate last 7 periods based on frequency
+    const periods = Array.from({ length: 7 }, (_, i) => {
       const date = new Date();
-      date.setDate(date.getDate() - i);
-      return date.toLocaleDateString('en-US', { weekday: 'short' });
+      switch (this.habit?.frequency) {
+        case 'daily':
+          date.setDate(date.getDate() - i);
+          return {
+            date,
+            key: getKey(date),
+            label: date.toLocaleDateString('en-US', { weekday: 'short' }),
+          };
+        case 'weekly':
+          date.setDate(date.getDate() - i * 7);
+          return {
+            date,
+            key: getKey(date),
+            label: `W${Math.ceil(
+              (date.getTime() - new Date(date.getFullYear(), 0, 4).getTime()) /
+                (7 * 24 * 60 * 60 * 1000)
+            )}`,
+          };
+        case 'monthly':
+        default:
+          date.setMonth(date.getMonth() - i);
+          return {
+            date,
+            key: getKey(date),
+            label: date.toLocaleDateString('en-US', { month: 'short' }),
+          };
+      }
     }).reverse();
 
-    // Generate random completion data for demonstration
-    const values = Array.from({ length: 7 }, () => {
-      if (this.habit?.goalType === 'numeric') {
-        return Math.floor(Math.random() * (this.habit.targetValue || 10));
-      } else {
-        return Math.random() > 0.5 ? 1 : 0;
-      }
+    // Map logs to chart data
+    this.chartData = periods.map((period) => {
+      const log = this.habit?.recentLogs?.find((log) => {
+        switch (this.habit?.frequency) {
+          case 'daily':
+            return log.dailyKey === period.key;
+          case 'weekly':
+            return log.weeklyKey === period.key;
+          case 'monthly':
+          default:
+            return log.monthlyKey === period.key;
+        }
+      });
+
+      const value = log?.value || 0;
+      const target =
+        log?.target ||
+        (this.habit?.goalType === 'binary' ? 1 : this.habit?.targetValue || 1);
+
+      return {
+        day: period.label,
+        value: value,
+        percentage: (value / target) * 100,
+      };
     });
-
-    // Calculate max value for percentage calculation
-    const maxValue =
-      this.habit?.goalType === 'numeric'
-        ? this.habit.targetValue || Math.max(...values)
-        : 1;
-
-    // Format data for chart
-    this.chartData = dates.map((day, index) => ({
-      day,
-      value: values[index],
-      percentage: (values[index] / maxValue) * 100,
-    }));
   }
 
   editHabit(): void {

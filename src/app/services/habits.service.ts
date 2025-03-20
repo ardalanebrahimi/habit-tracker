@@ -20,8 +20,8 @@ export class HabitsService {
     return this.http.get<HabitWithProgressDTO[]>(`${this.apiUrl}/all`);
   }
 
-  getHabitById(id: string): Observable<CreateHabitDTO> {
-    return this.http.get<CreateHabitDTO>(`${this.apiUrl}/${id}`);
+  getHabitById(id: string): Observable<HabitWithProgressDTO> {
+    return this.http.get<HabitWithProgressDTO>(`${this.apiUrl}/${id}`);
   }
   /**
    * ✅ Fetch today's habits only
@@ -70,7 +70,7 @@ export class HabitsService {
 
   updateHabit(
     id: string,
-    habit: HabitWithProgressDTO
+    habit: CreateHabitDTO
   ): Observable<HabitWithProgressDTO> {
     return this.http.put<HabitWithProgressDTO>(`${this.apiUrl}/${id}`, habit);
   }

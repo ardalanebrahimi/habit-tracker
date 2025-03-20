@@ -58,7 +58,16 @@
       <div class="info-grid">
         <div class="info-item">
           <span class="label">Current Streak:</span>
-          <span class="value streak">🔥 {{ habit.streak }} days</span>
+          <span class="value streak"
+            >🔥 {{ habit.streak }}
+            {{
+              habit.frequency === "daily"
+                ? "days"
+                : habit.frequency === "weekly"
+                ? "weeks"
+                : "months"
+            }}</span
+          >
         </div>
         <div class="info-item" *ngIf="habit.goalType === 'numeric'">
           <span class="label">Current Progress:</span>
@@ -85,13 +94,22 @@
 
     <!-- History -->
     <div class="history-section">
-      <h3>History (Last 7 Days)</h3>
+      <h3>
+        History (Last 7
+        {{
+          habit.frequency === "daily"
+            ? "Days"
+            : habit.frequency === "weekly"
+            ? "Weeks"
+            : "Months"
+        }})
+      </h3>
       <div class="chart-container">
         <div class="chart">
           <div class="chart-bars">
             <div class="bar-container" *ngFor="let data of chartData">
-              <div class="bar" [style.height.%]="data.percentage"></div>
               <div class="bar-value">{{ data.value }}</div>
+              <div class="bar" [style.height.%]="data.percentage"></div>
               <div class="bar-label">{{ data.day }}</div>
             </div>
           </div>

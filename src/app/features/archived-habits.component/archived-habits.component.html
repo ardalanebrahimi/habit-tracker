@@ -10,7 +10,16 @@
 
   <div *ngFor="let habit of archivedHabits" class="habit-item">
     <p class="habit-title">{{ habit.name }}</p>
-    <p class="habit-streak">🔥 Streak: {{ habit.streak }} days</p>
+    <p class="habit-streak">
+      🔥 Streak: {{ habit.streak }}
+      {{
+        habit.frequency === "daily"
+          ? "days"
+          : habit.frequency === "weekly"
+          ? "weeks"
+          : "months"
+      }}
+    </p>
     <button class="delete-btn" (click)="deleteArchivedHabit(habit)">
       🗑️ Delete
     </button>
