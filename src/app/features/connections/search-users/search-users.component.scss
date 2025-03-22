@@ -40,3 +40,31 @@ li {
     background: #0056b3;
   }
 }
+
+.invite-section {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 6px;
+  margin-top: 15px;
+  text-align: center;
+
+  p {
+    margin: 5px 0;
+    color: #666;
+  }
+}
+
+.invite-btn {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-weight: 500;
+
+  &:hover {
+    background: #218838;
+  }
+}

@@ -13,4 +13,10 @@
       <button class="add-btn" (click)="sendRequest(user.id)">Add</button>
     </li>
   </ul>
+
+  <div *ngIf="showInviteMessage" class="invite-section">
+    <p>No users found with that username.</p>
+    <p>Would you like to invite them to join Habit Tracker?</p>
+    <app-share-button *ngIf="shareData" [share]="shareData"></app-share-button>
+  </div>
 </div>
