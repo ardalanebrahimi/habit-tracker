@@ -40,4 +40,12 @@ export class ConnectionsService {
   rejectRequest(requestId: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/reject/${requestId}`, {});
   }
+
+  // Request friends to check a habit
+  requestHabitCheck(habitId: string, userIds: string[]): Observable<any> {
+    return this.http.post(`${this.apiUrl}/check-request`, {
+      habitId,
+      userIds,
+    });
+  }
 }

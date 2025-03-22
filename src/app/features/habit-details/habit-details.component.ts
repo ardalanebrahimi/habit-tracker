@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { HabitsService } from '../../services/habits.service';
+import { ConnectionsService } from '../../services/connections.service';
 import { HabitWithProgressDTO } from '../../models/habit-with-progress-dto.model';
 
 interface ChartDataPoint {
@@ -22,9 +23,13 @@ export class HabitDetailsComponent implements OnInit {
   isLoading = true;
   errorMessage: string | null = null;
   chartData: ChartDataPoint[] = [];
+  connections: any[] = [];
+  showCheckRequestModal = false;
+  selectedConnections: string[] = [];
 
   constructor(
     private habitsService: HabitsService,
+    private connectionsService: ConnectionsService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
@@ -38,6 +43,7 @@ export class HabitDetailsComponent implements OnInit {
     }
 
     this.loadHabitDetails(habitId);
+    this.loadConnections();
   }
 
   private loadHabitDetails(habitId: string): void {
@@ -53,6 +59,51 @@ export class HabitDetailsComponent implements OnInit {
         console.error('Error loading habit:', err);
       },
     });
+  }
+
+  private loadConnections(): void {
+    this.connectionsService.getConnections().subscribe({
+      next: (connections) => {
+        this.connections = connections;
+      },
+      error: (err) => {
+        console.error('Error loading connections:', err);
+      },
+    });
+  }
+
+  toggleCheckRequestModal(): void {
+    this.showCheckRequestModal = !this.showCheckRequestModal;
+    if (this.showCheckRequestModal) {
+      this.selectedConnections = [];
+    }
+  }
+
+  toggleConnectionSelection(userId: string): void {
+    const index = this.selectedConnections.indexOf(userId);
+    if (index === -1) {
+      this.selectedConnections.push(userId);
+    } else {
+      this.selectedConnections.splice(index, 1);
+    }
+  }
+
+  sendCheckRequest(): void {
+    if (!this.habit?.id || this.selectedConnections.length === 0) return;
+
+    this.connectionsService
+      .requestHabitCheck(this.habit.id, this.selectedConnections)
+      .subscribe({
+        next: () => {
+          this.showCheckRequestModal = false;
+          this.selectedConnections = [];
+          // You might want to show a success message here
+        },
+        error: (err) => {
+          this.errorMessage = 'Failed to send check request';
+          console.error('Error sending check request:', err);
+        },
+      });
   }
 
   private updateChartData(): void {

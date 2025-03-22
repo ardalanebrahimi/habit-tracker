@@ -13,6 +13,13 @@
       <button class="back-btn" routerLink="/habits">←</button>
       <div class="action-buttons">
         <button
+          class="btn icon-btn check-btn"
+          (click)="toggleCheckRequestModal()"
+          title="Ask friends to check"
+        >
+          👥
+        </button>
+        <button
           class="btn icon-btn edit-btn"
           (click)="editHabit()"
           title="Edit"
@@ -121,6 +128,37 @@
       <button class="btn archive-btn" (click)="archiveHabit()">
         📦 Archive Habit
       </button>
+    </div>
+  </div>
+
+  <!-- Check Request Modal -->
+  <div *ngIf="showCheckRequestModal" class="modal-overlay">
+    <div class="modal-content">
+      <h3>Ask Friends to Check Your Habit</h3>
+      <div class="connections-list">
+        <div *ngFor="let connection of connections" class="connection-item">
+          <label>
+            <input
+              type="checkbox"
+              [checked]="selectedConnections.includes(connection.id)"
+              (change)="toggleConnectionSelection(connection.id)"
+            />
+            {{ connection.userName }}
+          </label>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn cancel-btn" (click)="toggleCheckRequestModal()">
+          Cancel
+        </button>
+        <button
+          class="btn send-btn"
+          (click)="sendCheckRequest()"
+          [disabled]="selectedConnections.length === 0"
+        >
+          Send Request
+        </button>
+      </div>
     </div>
   </div>
 </div>
