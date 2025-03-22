@@ -6,6 +6,7 @@ import {
   ShareButtonComponent,
   ShareData,
 } from '../share-button/share-button.component';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-search-users',
@@ -19,8 +20,14 @@ export class SearchUsersComponent {
   message: string = '';
   showInviteMessage: boolean = false;
   shareData: ShareData | null = null;
+  currentUsername: string = '';
 
-  constructor(private connectionsService: ConnectionsService) {}
+  constructor(
+    private connectionsService: ConnectionsService,
+    private authService: AuthService
+  ) {
+    this.currentUsername = this.authService.getCurrentUser()?.userName || '';
+  }
 
   onSearchInput(): void {
     if (this.searchQuery.length >= 3) {
@@ -38,7 +45,7 @@ export class SearchUsersComponent {
         if (this.showInviteMessage) {
           this.shareData = {
             title: 'Join me on Habit Tracker!',
-            text: `Hey! I'm using Habit Tracker to build better habits. Join me on the app and let's support each other!\n\nOnce you install the app, you can find me by searching for my username: ${this.searchQuery}`,
+            text: `Hey! I'm using Habit Tracker to build better habits. Join me on the app and let's support each other!\n\nOnce you install the app, you can find me by searching for my username: ${this.currentUsername}`,
             url: 'https://play.google.com/store/apps/details?id=com.habittracker.app',
           };
         }

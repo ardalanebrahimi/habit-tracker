@@ -8,6 +8,11 @@
 
     <!-- Show only if logged in -->
     <ng-container *ngIf="authService.getToken(); else guestMenu">
+      <div class="user-info">
+        <span class="user-name">{{
+          authService.getCurrentUser()?.userName
+        }}</span>
+      </div>
       <a routerLink="/today" (click)="closeMenu()">Today's Habits</a>
       <a routerLink="/habits" (click)="closeMenu()">All Habits</a>
       <a routerLink="/stats" (click)="closeMenu()">Statistics</a>

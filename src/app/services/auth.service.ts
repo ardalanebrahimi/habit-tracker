@@ -4,6 +4,18 @@ import { Observable, tap, BehaviorSubject } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 
+interface User {
+  id: string;
+  userName: string;
+  email: string;
+}
+
+interface AuthResponse {
+  accessToken: string;
+  refreshToken: string;
+  userName: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -20,20 +32,14 @@ export class AuthService {
 
   login(credentials: any): Observable<any> {
     return this.http
-      .post<{ accessToken: string; refreshToken: string }>(
-        `${this.apiUrl}/login`,
-        credentials
-      )
-      .pipe(
-        tap((res) => {
-          this.saveTokens(res.accessToken, res.refreshToken);
-        })
-      );
+      .post<AuthResponse>(`${this.apiUrl}/login`, credentials)
+      .pipe(tap((res) => this.saveAuthResponse(res)));
   }
 
   logout() {
     this.accessToken = null;
     localStorage.removeItem('refreshToken');
+    localStorage.removeItem('userName');
     this.isAuthenticated.next(false);
     this.router.navigate(['/login']);
   }
@@ -46,15 +52,8 @@ export class AuthService {
     }
 
     return this.http
-      .post<{ accessToken: string; refreshToken: string }>(
-        `${this.apiUrl}/refresh`,
-        { refreshToken }
-      )
-      .pipe(
-        tap((tokens) => {
-          this.saveTokens(tokens.accessToken, tokens.refreshToken);
-        })
-      );
+      .post<AuthResponse>(`${this.apiUrl}/refresh`, { refreshToken })
+      .pipe(tap((res) => this.saveAuthResponse(res)));
   }
 
   getToken(): string | null {
@@ -65,9 +64,15 @@ export class AuthService {
     return this.isAuthenticated.asObservable();
   }
 
-  private saveTokens(accessToken: string, refreshToken: string) {
-    this.accessToken = accessToken;
-    localStorage.setItem('refreshToken', refreshToken);
+  getCurrentUser(): { userName: string } | null {
+    const userName = localStorage.getItem('userName');
+    return userName ? { userName } : null;
+  }
+
+  private saveAuthResponse(response: AuthResponse) {
+    this.accessToken = response.accessToken;
+    localStorage.setItem('refreshToken', response.refreshToken);
+    localStorage.setItem('userName', response.userName);
     this.isAuthenticated.next(true);
   }
 }
