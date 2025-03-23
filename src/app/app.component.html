@@ -17,6 +17,19 @@
       <a routerLink="/habits" (click)="closeMenu()">All Habits</a>
       <a routerLink="/stats" (click)="closeMenu()">Statistics</a>
       <a routerLink="/connections" (click)="closeMenu()">Connections</a>
+      <a
+        routerLink="/notifications"
+        (click)="closeMenu()"
+        class="notifications-link"
+      >
+        Notifications
+        <span
+          *ngIf="(unreadCount$ | async) ?? 0 > 0"
+          class="notification-badge"
+        >
+          {{ unreadCount$ | async }}
+        </span>
+      </a>
       <a (click)="logout()">Logout</a>
     </ng-container>
 

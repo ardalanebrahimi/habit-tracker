@@ -1,9 +1,15 @@
-import { Component, ChangeDetectorRef, HostListener } from '@angular/core';
+import {
+  Component,
+  ChangeDetectorRef,
+  HostListener,
+  OnInit,
+} from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from './services/auth.service';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { LoadingService } from './services/loading.service';
+import { NotificationService } from './services/notification.service';
 
 @Component({
   selector: 'app-root',
@@ -12,17 +18,28 @@ import { LoadingService } from './services/loading.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   menuOpen = false;
   isLoading$: Observable<boolean>;
+  unreadCount$: Observable<number>;
 
   constructor(
     public authService: AuthService,
     private router: Router,
     private loadingService: LoadingService,
+    private notificationService: NotificationService,
     private cdr: ChangeDetectorRef
   ) {
     this.isLoading$ = this.loadingService.isLoading.asObservable();
+    this.unreadCount$ = this.notificationService.getUnreadCount();
+  }
+
+  ngOnInit(): void {
+    // Load initial notification count
+    this.notificationService.getNotifications().subscribe((notifications) => {
+      const unreadCount = notifications.filter((n) => !n.read).length;
+      this.notificationService.updateUnreadCount(unreadCount);
+    });
   }
 
   ngAfterViewInit() {

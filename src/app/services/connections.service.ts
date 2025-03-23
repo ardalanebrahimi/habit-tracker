@@ -21,8 +21,8 @@ export class ConnectionsService {
   }
 
   // ✅ Send Connection Request
-  sendRequest(ConnectedUserId: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/request`, { ConnectedUserId });
+  requestConnection(userId: string): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/request/${userId}`, {});
   }
 
   getIncomingRequests(): Observable<any> {
@@ -33,12 +33,12 @@ export class ConnectionsService {
     return this.http.get(`${this.apiUrl}/sent`);
   }
 
-  acceptRequest(requestId: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/accept/${requestId}`, {});
+  acceptRequest(requestId: string): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/accept/${requestId}`, {});
   }
 
-  rejectRequest(requestId: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/reject/${requestId}`, {});
+  rejectRequest(requestId: string): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/reject/${requestId}`, {});
   }
 
   // Request friends to check a habit
@@ -47,5 +47,14 @@ export class ConnectionsService {
       habitId,
       userIds,
     });
+  }
+
+  respondToConnectionRequest(
+    connectionId: string,
+    accept: boolean
+  ): Observable<void> {
+    return accept
+      ? this.acceptRequest(connectionId)
+      : this.rejectRequest(connectionId);
   }
 }

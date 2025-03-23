@@ -57,7 +57,7 @@ export class SearchUsersComponent {
   }
 
   sendRequest(userId: string) {
-    this.connectionsService.sendRequest(userId).subscribe({
+    this.connectionsService.requestConnection(userId).subscribe({
       next: () => {
         this.message = 'Connection request sent!';
       },

@@ -1,0 +1,74 @@
+<div class="notifications">
+  <div class="notifications-header">
+    <h2>Notifications</h2>
+    <button
+      class="mark-all-read-btn"
+      (click)="markAllAsRead()"
+      [disabled]="!hasUnreadNotifications"
+    >
+      Mark all as read
+    </button>
+  </div>
+
+  <div class="notifications-list">
+    <div
+      *ngFor="let notification of notifications"
+      class="notification-item"
+      [class.unread]="!notification.read"
+    >
+      <div class="notification-icon">
+        {{ notificationService.getNotificationIcon(notification.type) }}
+      </div>
+      <div class="notification-content">
+        <div class="notification-title">{{ notification.title }}</div>
+        <div class="notification-message">{{ notification.message }}</div>
+        <div class="notification-time">
+          {{ notification.timestamp | date : "short" }}
+        </div>
+        <div class="notification-actions" *ngIf="!notification.read">
+          <ng-container [ngSwitch]="notification.type">
+            <!-- Connection Request -->
+            <ng-container *ngSwitchCase="'ConnectionRequest'">
+              <button
+                class="action-btn accept-btn"
+                (click)="handleConnectionRequest(notification, true)"
+              >
+                Accept
+              </button>
+              <button
+                class="action-btn reject-btn"
+                (click)="handleConnectionRequest(notification, false)"
+              >
+                Reject
+              </button>
+            </ng-container>
+
+            <!-- Habit Check Request -->
+            <ng-container *ngSwitchCase="'HabitCheckRequest'">
+              <button
+                class="action-btn check-btn"
+                (click)="navigateToHabitCheck(notification)"
+              >
+                Check Habit
+              </button>
+            </ng-container>
+
+            <!-- Progress Update -->
+            <ng-container *ngSwitchCase="'ProgressUpdate'">
+              <button
+                class="action-btn view-btn"
+                (click)="navigateToHabitDetails(notification)"
+              >
+                View Progress
+              </button>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="notifications.length === 0" class="no-notifications">
+      No notifications
+    </div>
+  </div>
+</div>

@@ -97,7 +97,6 @@ export class HabitDetailsComponent implements OnInit {
         next: () => {
           this.showCheckRequestModal = false;
           this.selectedConnections = [];
-          // You might want to show a success message here
         },
         error: (err) => {
           this.errorMessage = 'Failed to send check request';
