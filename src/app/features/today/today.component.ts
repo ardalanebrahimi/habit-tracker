@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { HabitsService } from '../../services/habits.service';
 import { CommonModule } from '@angular/common';
+import { HabitCardComponent } from '../habit-card/habit-card.component';
 import { HabitWithProgressDTO } from '../../models/habit-with-progress-dto.model';
 import { RouterModule } from '@angular/router';
+import { HabitsService } from '../../services/habits.service';
 
 @Component({
   selector: 'app-today',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, HabitCardComponent, RouterModule],
   templateUrl: './today.component.html',
   styleUrls: ['./today.component.scss'],
 })
@@ -27,7 +28,7 @@ export class TodayComponent implements OnInit {
   /**
    * ✅ Fetch today's habits and filter based on completion status
    */
-  private fetchTodayHabits(): void {
+  fetchTodayHabits(): void {
     this.isLoading = true;
     this.habitsService.getTodayHabits().subscribe({
       next: (habits) => {
@@ -40,42 +41,6 @@ export class TodayComponent implements OnInit {
         console.error("Error fetching today's habits:", err);
         this.isLoading = false;
       },
-    });
-  }
-
-  toggleHabitCompletion(habit: HabitWithProgressDTO, event: Event): void {
-    const isChecked = (event.target as HTMLInputElement).checked; // ✅ Type assertion fixes error
-
-    if (isChecked) {
-      this.habitsService.updateHabitProgress(habit.id!, false).subscribe({
-        next: () => this.fetchTodayHabits(),
-        error: (err) => console.error('Error marking habit as complete:', err),
-      });
-    } else {
-      this.habitsService.updateHabitProgress(habit.id!, true).subscribe({
-        next: () => this.fetchTodayHabits(),
-        error: (err) => console.error('Error undoing habit:', err),
-      });
-    }
-  }
-
-  /**
-   * ✅ Increase numeric progress
-   */
-  incrementProgress(habit: HabitWithProgressDTO): void {
-    this.habitsService.updateHabitProgress(habit.id!, false).subscribe({
-      next: () => this.fetchTodayHabits(),
-      error: (err) => console.error('Error increasing progress:', err),
-    });
-  }
-
-  /**
-   * ✅ Decrease numeric progress
-   */
-  decrementProgress(habit: HabitWithProgressDTO): void {
-    this.habitsService.updateHabitProgress(habit.id!, true).subscribe({
-      next: () => this.fetchTodayHabits(),
-      error: (err) => console.error('Error decreasing progress:', err),
     });
   }
 

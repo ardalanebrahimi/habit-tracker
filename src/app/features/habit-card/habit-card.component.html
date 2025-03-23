@@ -1,0 +1,47 @@
+<div class="habit-header">
+  <!-- Binary Task Checkbox -->
+  <label class="checkbox-container" *ngIf="habit.goalType === 'binary'">
+    <input
+      type="checkbox"
+      [checked]="isHabitDoneToday()"
+      (change)="toggleHabitCompletion($event)"
+    />
+  </label>
+
+  <!-- Habit Name -->
+  <p class="habit-name" [routerLink]="['/habit', habit.id]">
+    {{ habit.name }}
+  </p>
+
+  <!-- Streak Display -->
+  <span class="streak-badge" *ngIf="habit.streak !== undefined">
+    🔥 {{ habit.streak }} {{ getStreakPeriod() }}
+  </span>
+
+  <!-- Numeric Task Buttons -->
+  <button
+    *ngIf="habit.goalType === 'numeric'"
+    class="icon-button plus"
+    (click)="incrementProgress()"
+  >
+    +
+  </button>
+  <button
+    *ngIf="habit.goalType === 'numeric'"
+    class="icon-button minus"
+    (click)="decrementProgress()"
+  >
+    -
+  </button>
+</div>
+
+<!-- Numeric Task Progress Bar -->
+<div *ngIf="habit.goalType === 'numeric'" class="progress-row">
+  <div class="progress-container">
+    <div class="progress-bar" [style.width.%]="getProgressPercentage()"></div>
+  </div>
+  <span class="progress-text"
+    >{{ habit.currentValue || 0 }} / {{ habit.targetValue }}
+    {{ getProgressPeriod() }}</span
+  >
+</div>

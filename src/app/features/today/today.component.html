@@ -27,58 +27,12 @@
     <p>Enjoy your day or keep up the streak tomorrow! 🌟</p>
   </div>
 
-  <div *ngFor="let habit of filteredHabits" class="habit-item">
-    <div class="habit-header">
-      <!-- Binary Task Checkbox -->
-      <label class="checkbox-container" *ngIf="habit.goalType === 'binary'">
-        <input
-          type="checkbox"
-          [checked]="isHabitDoneToday(habit)"
-          (change)="toggleHabitCompletion(habit, $event)"
-        />
-      </label>
-
-      <!-- Habit Name -->
-      <p class="habit-name" [routerLink]="['/habit', habit.id]">
-        {{ habit.name }}
-      </p>
-
-      <!-- Streak Display -->
-      <span class="streak-badge" *ngIf="habit.streak !== undefined">
-        🔥 {{ habit.streak }} {{ getStreakPeriod(habit.frequency) }}
-      </span>
-
-      <!-- Numeric Task Buttons -->
-      <button
-        *ngIf="habit.goalType === 'numeric'"
-        class="icon-button plus"
-        (click)="incrementProgress(habit)"
-      >
-        +
-      </button>
-      <button
-        *ngIf="habit.goalType === 'numeric'"
-        class="icon-button minus"
-        (click)="decrementProgress(habit)"
-      >
-        -
-      </button>
-    </div>
-
-    <!-- Numeric Task Progress Bar -->
-    <div *ngIf="habit.goalType === 'numeric'" class="progress-row">
-      <div class="progress-container">
-        <div
-          class="progress-bar"
-          [style.width.%]="getProgressPercentage(habit)"
-        ></div>
-      </div>
-      <span class="progress-text"
-        >{{ habit.currentValue || 0 }} / {{ habit.targetValue }}
-        {{ getProgressPeriod(habit.frequency) }}</span
-      >
-    </div>
-  </div>
+  <app-habit-card
+    class="habit-item"
+    *ngFor="let habit of filteredHabits"
+    [habit]="habit"
+    (habitChanged)="fetchTodayHabits()"
+  ></app-habit-card>
 
   <button class="fab" routerLink="/add-habit">+</button>
 </div>
