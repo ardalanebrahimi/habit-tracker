@@ -1,14 +1,18 @@
 <div class="habit-card">
-  <div class="habit-header">
-    <!-- Username for friend's habits -->
-    <div *ngIf="habit.userName" class="user-name">{{ habit.userName }}</div>
+  <!-- Username for friend's habits -->
+  <div *ngIf="habit.isFriendsHabit" class="user-header">
+    <span class="friend-icon">👤</span>
+    <span class="user-name">{{ habit.userName }}</span>
+  </div>
 
+  <div class="habit-header">
     <!-- Binary Task Checkbox -->
     <label class="checkbox-container" *ngIf="habit.goalType === 'binary'">
       <input
         type="checkbox"
         [checked]="isHabitDoneToday()"
         (change)="toggleHabitCompletion($event)"
+        [disabled]="isReadOnly"
       />
     </label>
 
@@ -24,14 +28,14 @@
 
     <!-- Numeric Task Buttons -->
     <button
-      *ngIf="habit.goalType === 'numeric'"
+      *ngIf="habit.goalType === 'numeric' && !isReadOnly"
       class="icon-button plus"
       (click)="incrementProgress()"
     >
       +
     </button>
     <button
-      *ngIf="habit.goalType === 'numeric'"
+      *ngIf="habit.goalType === 'numeric' && !isReadOnly"
       class="icon-button minus"
       (click)="decrementProgress()"
     >

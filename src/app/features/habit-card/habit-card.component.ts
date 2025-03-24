@@ -13,6 +13,7 @@ import { HabitsService } from '../../services/habits.service';
 })
 export class HabitCardComponent {
   @Input() habit!: HabitWithProgressDTO;
+  @Input() isReadOnly = false;
   @Output() habitChanged = new EventEmitter<void>();
   /**
    *
@@ -58,8 +59,9 @@ export class HabitCardComponent {
   }
 
   toggleHabitCompletion(event: Event): void {
-    const isChecked = (event.target as HTMLInputElement).checked; // ✅ Type assertion fixes error
+    if (this.isReadOnly) return;
 
+    const isChecked = (event.target as HTMLInputElement).checked;
     if (isChecked) {
       this.habitsService.updateHabitProgress(this.habit.id!, false).subscribe({
         next: () => this.habitChanged.emit(),
@@ -74,6 +76,8 @@ export class HabitCardComponent {
   }
 
   incrementProgress(): void {
+    if (this.isReadOnly) return;
+
     this.habitsService.updateHabitProgress(this.habit.id!, false).subscribe({
       next: () => this.habitChanged.emit(),
       error: (err) => console.error('Error increasing progress:', err),
@@ -81,6 +85,8 @@ export class HabitCardComponent {
   }
 
   decrementProgress(): void {
+    if (this.isReadOnly) return;
+
     this.habitsService.updateHabitProgress(this.habit.id!, true).subscribe({
       next: () => this.habitChanged.emit(),
       error: (err) => console.error('Error decreasing progress:', err),

@@ -49,6 +49,7 @@
       class="habit-item"
       *ngFor="let habit of friendHabits"
       [habit]="habit"
+      [isReadOnly]="true"
       (habitChanged)="fetchFriendHabits()"
     ></app-habit-card>
   </div>

@@ -23,14 +23,16 @@ export class HabitsService {
   getHabitById(id: string): Observable<HabitWithProgressDTO> {
     return this.http.get<HabitWithProgressDTO>(`${this.apiUrl}/${id}`);
   }
+
   /**
    * ✅ Fetch today's habits only
    */
   getTodayHabits(): Observable<HabitWithProgressDTO[]> {
     return this.http.get<HabitWithProgressDTO[]>(`${this.apiUrl}/today`);
   }
+
   /**
-   * ✅ Fetch today's habits only
+   * ✅ Fetch Friends today's habits
    */
   getFriendsHabits(): Observable<HabitWithProgressDTO[]> {
     return this.http.get<HabitWithProgressDTO[]>(`${this.apiUrl}/friends`);
