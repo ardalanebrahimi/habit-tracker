@@ -7,15 +7,17 @@
     <a
       (click)="setView('remaining')"
       [class.active]="currentView === 'remaining'"
-      >See Remaining</a
+      >Remaining</a
     >
     |
-    <a (click)="setView('all')" [class.active]="currentView === 'all'"
-      >See All</a
-    >
+    <a (click)="setView('all')" [class.active]="currentView === 'all'">All</a>
     |
     <a (click)="setView('done')" [class.active]="currentView === 'done'"
-      >See Done</a
+      >Done</a
+    >
+    |
+    <a (click)="setView('friends')" [class.active]="currentView === 'friends'"
+      >Friends</a
     >
   </div>
 
@@ -27,12 +29,29 @@
     <p>Enjoy your day or keep up the streak tomorrow! 🌟</p>
   </div>
 
-  <app-habit-card
-    class="habit-item"
-    *ngFor="let habit of filteredHabits"
-    [habit]="habit"
-    (habitChanged)="fetchTodayHabits()"
-  ></app-habit-card>
+  <!-- My Habits -->
+  <div *ngIf="currentView !== 'friends'">
+    <app-habit-card
+      class="habit-item"
+      *ngFor="let habit of filteredHabits"
+      [habit]="habit"
+      (habitChanged)="fetchTodayHabits()"
+    ></app-habit-card>
+  </div>
+
+  <!-- Friends' Habits -->
+  <div *ngIf="currentView === 'friends'" class="friends-habits">
+    <div *ngIf="isLoading" class="loading">Loading friends' habits...</div>
+    <div *ngIf="!isLoading && friendHabits.length === 0" class="no-habits">
+      <p>No friends' habits to display.</p>
+    </div>
+    <app-habit-card
+      class="habit-item"
+      *ngFor="let habit of friendHabits"
+      [habit]="habit"
+      (habitChanged)="fetchFriendHabits()"
+    ></app-habit-card>
+  </div>
 
   <button class="fab" routerLink="/add-habit">+</button>
 </div>

@@ -4,6 +4,7 @@ import { HabitCardComponent } from '../habit-card/habit-card.component';
 import { HabitWithProgressDTO } from '../../models/habit-with-progress-dto.model';
 import { RouterModule } from '@angular/router';
 import { HabitsService } from '../../services/habits.service';
+import { ConnectionsService } from '../../services/connections.service';
 
 @Component({
   selector: 'app-today',
@@ -15,11 +16,15 @@ import { HabitsService } from '../../services/habits.service';
 export class TodayComponent implements OnInit {
   todayHabits: HabitWithProgressDTO[] = [];
   filteredHabits: HabitWithProgressDTO[] = [];
-  currentView: 'remaining' | 'all' | 'done' = 'remaining';
+  friendHabits: HabitWithProgressDTO[] = [];
+  currentView: 'remaining' | 'all' | 'done' | 'friends' = 'remaining';
   isLoading = true;
   errorMessage: string | null = null;
 
-  constructor(private habitsService: HabitsService) {}
+  constructor(
+    private habitsService: HabitsService,
+    private connectionsService: ConnectionsService
+  ) {}
 
   ngOnInit(): void {
     this.fetchTodayHabits();
@@ -39,6 +44,20 @@ export class TodayComponent implements OnInit {
       error: (err) => {
         this.errorMessage = "Failed to load today's habits. Please try again.";
         console.error("Error fetching today's habits:", err);
+        this.isLoading = false;
+      },
+    });
+  }
+
+  fetchFriendHabits(): void {
+    this.isLoading = true;
+    this.habitsService.getFriendsHabits().subscribe({
+      next: (habits) => {
+        this.friendHabits = habits;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error fetching friend habits:', err);
         this.isLoading = false;
       },
     });
@@ -71,15 +90,17 @@ export class TodayComponent implements OnInit {
       this.filteredHabits = this.todayHabits.filter(
         (habit) => habit.isCompleted
       );
-    } else {
+    } else if (this.currentView === 'all') {
       this.filteredHabits = [...this.todayHabits];
+    } else if (this.currentView === 'friends') {
+      this.fetchFriendHabits();
     }
   }
 
   /**
    * ✅ Set the habit filter view
    */
-  setView(view: 'remaining' | 'all' | 'done'): void {
+  setView(view: 'remaining' | 'all' | 'done' | 'friends'): void {
     this.currentView = view;
     this.filterHabits();
   }

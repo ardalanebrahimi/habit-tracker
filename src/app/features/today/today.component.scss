@@ -57,6 +57,23 @@
     line-height: 1.6;
   }
 
+  .friends-habits {
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #666;
+    }
+
+    .no-habits {
+      text-align: center;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+  }
+
   .fab {
     position: fixed;
     bottom: 20px;

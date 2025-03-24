@@ -25,4 +25,6 @@ export interface HabitWithProgressDTO {
   endDate?: string;
   allowedGaps?: number;
   startDate?: string;
+
+  userName?: string; // Optional field for friend's habits
 }
