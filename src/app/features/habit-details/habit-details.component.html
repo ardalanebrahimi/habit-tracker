@@ -11,7 +11,7 @@
   <div *ngIf="habit && !isLoading" class="content">
     <div class="top-actions">
       <button class="back-btn" routerLink="/habits">←</button>
-      <div class="action-buttons">
+      <div class="action-buttons" *ngIf="!habit.isFriendsHabit">
         <button
           class="btn icon-btn check-btn"
           (click)="toggleCheckRequestModal()"
@@ -124,7 +124,7 @@
       </div>
     </div>
 
-    <div class="bottom-actions">
+    <div class="bottom-actions" *ngIf="!habit.isFriendsHabit">
       <button class="btn archive-btn" (click)="archiveHabit()">
         📦 Archive Habit
       </button>
