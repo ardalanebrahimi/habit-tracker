@@ -35,6 +35,7 @@
       class="habit-item"
       *ngFor="let habit of filteredHabits"
       [habit]="habit"
+      [class.friend-habit]="habit.isFriendsHabit"
       (habitChanged)="fetchTodayHabits()"
     ></app-habit-card>
   </div>

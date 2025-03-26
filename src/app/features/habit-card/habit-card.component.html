@@ -29,17 +29,17 @@
     <!-- Numeric Task Buttons -->
     <button
       *ngIf="habit.goalType === 'numeric' && !isReadOnly"
-      class="icon-button plus"
-      (click)="incrementProgress()"
-    >
-      +
-    </button>
-    <button
-      *ngIf="habit.goalType === 'numeric' && !isReadOnly"
       class="icon-button minus"
       (click)="decrementProgress()"
     >
       -
+    </button>
+    <button
+      *ngIf="habit.goalType === 'numeric' && !isReadOnly"
+      class="icon-button plus"
+      (click)="incrementProgress()"
+    >
+      +
     </button>
   </div>
 
