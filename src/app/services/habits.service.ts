@@ -82,4 +82,15 @@ export class HabitsService {
   ): Observable<HabitWithProgressDTO> {
     return this.http.put<HabitWithProgressDTO>(`${this.apiUrl}/${id}`, habit);
   }
+
+  /**
+   * Fetch public habits (excluding the user's and their friends' habits) with pagination
+   */
+  getPublicHabits(
+    pageNumber: number,
+    pageSize: number = 5
+  ): Observable<HabitWithProgressDTO[]> {
+    const url = `${this.apiUrl}/public?pageNumber=${pageNumber}&pageSize=${pageSize}`;
+    return this.http.get<HabitWithProgressDTO[]>(url);
+  }
 }

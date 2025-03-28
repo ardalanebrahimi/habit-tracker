@@ -77,6 +77,14 @@
     }
   }
 
+  .habit-list {
+    max-height: 400px; // Set a fixed height
+    overflow-y: auto; // Enable vertical scrolling
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+
   .fab {
     position: fixed;
     bottom: 20px;
@@ -102,5 +110,11 @@
     &:active {
       transform: scale(0.9);
     }
+  }
+  .loading-spinner {
+    text-align: center;
+    padding: 10px;
+    font-size: 14px;
+    color: #888;
   }
 }

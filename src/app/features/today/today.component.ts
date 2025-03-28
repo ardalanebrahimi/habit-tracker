@@ -17,9 +17,14 @@ export class TodayComponent implements OnInit {
   todayHabits: HabitWithProgressDTO[] = [];
   filteredHabits: HabitWithProgressDTO[] = [];
   friendHabits: HabitWithProgressDTO[] = [];
-  currentView: 'remaining' | 'all' | 'done' | 'friends' = 'remaining';
+  everyoneHabits: any[] = [];
+  currentView: 'remaining' | 'all' | 'done' | 'friends' | 'everyone' =
+    'remaining';
   isLoading = true;
+  isLoadingEveryone = false;
   errorMessage: string | null = null;
+  everyonePage = 1;
+  // everyoneHasMore = true;
 
   constructor(
     private habitsService: HabitsService,
@@ -63,6 +68,20 @@ export class TodayComponent implements OnInit {
     });
   }
 
+  fetchEveryoneHabits(): void {
+    if (this.isLoadingEveryone) return;
+
+    this.isLoadingEveryone = true;
+    this.habitsService
+      .getPublicHabits(this.everyonePage)
+      .subscribe((response: HabitWithProgressDTO[]) => {
+        this.everyoneHabits = [...this.everyoneHabits, ...response];
+        // this.everyoneHasMore = response.hasMore;
+        this.isLoadingEveryone = false;
+        this.everyonePage++;
+      });
+  }
+
   /**
    * ✅ Get the progress percentage for numeric habits
    */
@@ -79,7 +98,7 @@ export class TodayComponent implements OnInit {
   }
 
   /**
-   * ✅ Filter habits based on the selected view (remaining, done, all)
+   * ✅ Filter habits based on the selected view (remaining, done, all, friends, everyone)
    */
   filterHabits(): void {
     if (this.currentView === 'remaining') {
@@ -94,15 +113,33 @@ export class TodayComponent implements OnInit {
       this.filteredHabits = [...this.todayHabits];
     } else if (this.currentView === 'friends') {
       this.fetchFriendHabits();
+    } else if (this.currentView === 'everyone') {
+      if (this.everyoneHabits.length === 0) {
+        this.everyonePage = 1;
+        this.fetchEveryoneHabits();
+      }
     }
   }
 
   /**
    * ✅ Set the habit filter view
    */
-  setView(view: 'remaining' | 'all' | 'done' | 'friends'): void {
+  setView(view: 'remaining' | 'all' | 'done' | 'friends' | 'everyone'): void {
     this.currentView = view;
     this.filterHabits();
+  }
+
+  /**
+   * Handle scroll events for "Everyone's Habits" section
+   */
+  onScroll(event: Event): void {
+    const target = event.target as HTMLElement;
+    if (
+      target.scrollTop + target.clientHeight >= target.scrollHeight - 2 &&
+      this.currentView === 'everyone'
+    ) {
+      this.fetchEveryoneHabits();
+    }
   }
 
   /**
