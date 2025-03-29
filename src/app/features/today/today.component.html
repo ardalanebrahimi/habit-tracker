@@ -27,14 +27,18 @@
 
   <!-- My Habits -->
   <div *ngIf="currentView === 'myHabits'">
-    <label>
-      <input
-        type="checkbox"
-        [checked]="showAllOwnedHabits"
-        (change)="toggleAllOwnedHabits()"
-      />
-      All
-    </label>
+    <div class="toggle-switch">
+      <label class="switch">
+        <input
+          type="checkbox"
+          [checked]="showAllOwnedHabits"
+          (change)="toggleAllOwnedHabits()"
+        />
+        <span class="slider"></span>
+      </label>
+      <span>{{ showAllOwnedHabits ? "All" : "Remaining" }}</span>
+    </div>
+
     <app-habit-card
       class="habit-item"
       *ngFor="let habit of filteredHabits"
