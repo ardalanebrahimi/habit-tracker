@@ -4,16 +4,8 @@
   </div>
 
   <div class="view-options">
-    <a
-      (click)="setView('remaining')"
-      [class.active]="currentView === 'remaining'"
-      >Remaining</a
-    >
-    |
-    <a (click)="setView('all')" [class.active]="currentView === 'all'">All</a>
-    |
-    <a (click)="setView('done')" [class.active]="currentView === 'done'"
-      >Done</a
+    <a (click)="setView('myHabits')" [class.active]="currentView === 'myHabits'"
+      >My Habits</a
     >
     |
     <a (click)="setView('friends')" [class.active]="currentView === 'friends'"
@@ -26,7 +18,7 @@
   </div>
 
   <div
-    *ngIf="filteredHabits.length === 0 && currentView === 'remaining'"
+    *ngIf="filteredHabits.length === 0 && currentView === 'myHabits'"
     class="done-message"
   >
     <p>🎉 Great job! You've completed all your tasks for today! 🎉</p>
@@ -34,7 +26,15 @@
   </div>
 
   <!-- My Habits -->
-  <div *ngIf="currentView !== 'friends' && currentView !== 'everyone'">
+  <div *ngIf="currentView === 'myHabits'">
+    <label>
+      <input
+        type="checkbox"
+        [checked]="showAllOwnedHabits"
+        (change)="toggleAllOwnedHabits()"
+      />
+      All
+    </label>
     <app-habit-card
       class="habit-item"
       *ngFor="let habit of filteredHabits"

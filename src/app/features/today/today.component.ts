@@ -18,13 +18,12 @@ export class TodayComponent implements OnInit {
   filteredHabits: HabitWithProgressDTO[] = [];
   friendHabits: HabitWithProgressDTO[] = [];
   everyoneHabits: any[] = [];
-  currentView: 'remaining' | 'all' | 'done' | 'friends' | 'everyone' =
-    'remaining';
+  currentView: 'myHabits' | 'friends' | 'everyone' = 'myHabits';
   isLoading = true;
   isLoadingEveryone = false;
   errorMessage: string | null = null;
   everyonePage = 1;
-  // everyoneHasMore = true;
+  showAllOwnedHabits = false;
 
   constructor(
     private habitsService: HabitsService,
@@ -76,7 +75,6 @@ export class TodayComponent implements OnInit {
       .getPublicHabits(this.everyonePage)
       .subscribe((response: HabitWithProgressDTO[]) => {
         this.everyoneHabits = [...this.everyoneHabits, ...response];
-        // this.everyoneHasMore = response.hasMore;
         this.isLoadingEveryone = false;
         this.everyonePage++;
       });
@@ -98,19 +96,13 @@ export class TodayComponent implements OnInit {
   }
 
   /**
-   * ✅ Filter habits based on the selected view (remaining, done, all, friends, everyone)
+   * ✅ Filter habits based on the selected view (myHabits, friends, everyone)
    */
   filterHabits(): void {
-    if (this.currentView === 'remaining') {
+    if (this.currentView === 'myHabits') {
       this.filteredHabits = this.todayHabits.filter(
         (habit) => !habit.isCompleted
       );
-    } else if (this.currentView === 'done') {
-      this.filteredHabits = this.todayHabits.filter(
-        (habit) => habit.isCompleted
-      );
-    } else if (this.currentView === 'all') {
-      this.filteredHabits = [...this.todayHabits];
     } else if (this.currentView === 'friends') {
       this.fetchFriendHabits();
     } else if (this.currentView === 'everyone') {
@@ -124,7 +116,7 @@ export class TodayComponent implements OnInit {
   /**
    * ✅ Set the habit filter view
    */
-  setView(view: 'remaining' | 'all' | 'done' | 'friends' | 'everyone'): void {
+  setView(view: 'myHabits' | 'friends' | 'everyone'): void {
     this.currentView = view;
     this.filterHabits();
   }
@@ -172,5 +164,14 @@ export class TodayComponent implements OnInit {
       default:
         return 'times';
     }
+  }
+  toggleAllOwnedHabits() {
+    this.showAllOwnedHabits = !this.showAllOwnedHabits;
+
+    if (this.showAllOwnedHabits) this.filteredHabits = [...this.todayHabits];
+    else
+      this.filteredHabits = this.todayHabits.filter(
+        (habit) => !habit.isCompleted
+      );
   }
 }
