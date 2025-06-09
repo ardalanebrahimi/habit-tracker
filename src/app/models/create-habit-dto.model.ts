@@ -9,4 +9,5 @@ export interface CreateHabitDTO {
   endDate?: string;
   allowedGaps?: number;
   startDate?: string;
+  isPrivate?: boolean;
 }

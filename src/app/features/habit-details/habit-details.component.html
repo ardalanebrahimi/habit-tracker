@@ -37,7 +37,19 @@
     </div>
 
     <div class="page-header">
-      <h2>{{ habit.name }}</h2>
+      <h2>
+        {{ habit.name }}
+        <span
+          *ngIf="habit.isOwnedHabit && habit.isPrivate"
+          class="privacy-badge private"
+          >🔒 Private</span
+        >
+        <span
+          *ngIf="habit.isOwnedHabit && !habit.isPrivate"
+          class="privacy-badge public"
+          >🌍 Public</span
+        >
+      </h2>
     </div>
 
     <!-- Basic Info -->

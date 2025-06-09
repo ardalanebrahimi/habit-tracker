@@ -26,7 +26,6 @@
       Next
     </button>
   </div>
-
   <!-- ✅ Step 2: Frequency & Type -->
   <div *ngIf="!isLoading && step === 2" class="step">
     <h3>Step 2: Set Frequency & Type</h3>
@@ -46,6 +45,30 @@
       placeholder="Target Value"
       min="1"
     />
+
+    <!-- ✅ Privacy Toggle -->
+    <div class="privacy-section">
+      <h4>Privacy Settings</h4>
+      <div class="privacy-toggle">
+        <label class="toggle-switch">
+          <input type="checkbox" [(ngModel)]="habit.isPrivate" />
+          <span class="slider"></span>
+        </label>
+        <div class="privacy-info">
+          <span class="privacy-label">
+            {{ habit.isPrivate ? "🔒 Private" : "🌍 Public" }}
+          </span>
+          <p class="privacy-description">
+            {{
+              habit.isPrivate
+                ? "Only you can see this habit"
+                : "Your connections and others can see this habit"
+            }}
+          </p>
+        </div>
+      </div>
+    </div>
+
     <p
       *ngIf="
         habit.goalType === 'numeric' &&
@@ -169,6 +192,12 @@
       </p>
       <p *ngIf="habit.targetType === 'endDate'">
         <strong>End Date:</strong> {{ habit.endDate }}
+      </p>
+      <p>
+        <strong>Privacy:</strong>
+        <span [class]="habit.isPrivate ? 'private-badge' : 'public-badge'">
+          {{ habit.isPrivate ? "🔒 Private" : "🌍 Public" }}
+        </span>
       </p>
     </div>
 

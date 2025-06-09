@@ -1,10 +1,13 @@
 # Habit Tracker - Development Backlog
 
 ## 🚨 CRITICAL MVP BLOCKERS
-*These features are essential for MVP launch and must be completed first.*
+
+_These features are essential for MVP launch and must be completed first._
 
 ### 📱 Android-Specific Functionality
+
 - [ ] **Android Back Button Handling**
+
   - Priority: **CRITICAL**
   - Description: Implement proper back button behavior using Capacitor App API
   - Acceptance Criteria:
@@ -22,7 +25,9 @@
     - Error handling for failed refreshes
 
 ### 🌐 Social & Virality Features
+
 - [ ] **Public/Private Habit Toggle**
+
   - Priority: **CRITICAL**
   - Description: Allow users to set habits as public or private
   - Acceptance Criteria:
@@ -46,7 +51,9 @@
   - Technical Notes: Use Capacitor's `@capacitor/share` plugin
 
 ### 🔔 Notification System
+
 - [ ] **Push Notifications Infrastructure**
+
   - Priority: **CRITICAL**
   - Description: Set up push notification system for habit reminders
   - Acceptance Criteria:
@@ -54,7 +61,7 @@
     - Streak milestone notifications
     - Configurable notification preferences
     - Works on both web and mobile
-  - Technical Notes: 
+  - Technical Notes:
     - Use Capacitor's `@capacitor/push-notifications`
     - Consider Firebase Cloud Messaging
     - Backend integration required
@@ -69,9 +76,11 @@
   - Technical Notes: Use Capacitor's `@capacitor/app-update`
 
 ## 🟡 NICE-TO-HAVE (MVP+)
-*Enhance UX but not blocking for launch.*
+
+_Enhance UX but not blocking for launch._
 
 ### 📊 Habit Organization & Display
+
 - [ ] **Habit Categorization (Current/Old/Upcoming)**
   - Priority: **MEDIUM**
   - Description: Split habits into time-based categories
@@ -85,7 +94,9 @@
     - `src/app/features/all-habits/`
 
 ### 🏆 Motivation & Gamification
+
 - [ ] **Basic Milestones System**
+
   - Priority: **MEDIUM**
   - Description: Celebrate progress at key intervals
   - Acceptance Criteria:
@@ -106,6 +117,7 @@
   - Dependencies: Milestones system
 
 ### ✏️ Data Management
+
 - [ ] **Edit Previous Days' Logs**
   - Priority: **MEDIUM**
   - Description: Allow users to modify past habit completions
@@ -119,9 +131,11 @@
     - `src/app/features/habit-details/`
 
 ## ⚪️ POST-MVP FEATURES
-*Future enhancements for later releases.*
+
+_Future enhancements for later releases._
 
 ### 📈 Advanced Analytics
+
 - [ ] **Daily Overall State Tracking**
   - Priority: **LOW**
   - Description: Aggregate view of all habits for each day
@@ -133,7 +147,9 @@
     - `src/app/features/daily-overview/`
 
 ### 👥 Enhanced Social Features
+
 - [ ] **Friends Cheering System**
+
   - Priority: **LOW**
   - Description: Allow friends to send encouragement
   - Acceptance Criteria:
@@ -143,6 +159,7 @@
   - Dependencies: Enhanced notification system
 
 - [ ] **Advanced Social Sharing**
+
   - Priority: **LOW**
   - Description: Auto-generated summaries, badges, stories
   - Acceptance Criteria:
@@ -164,7 +181,9 @@
     - `src/app/features/groups/`
 
 ### 🔧 Technical Improvements
+
 - [ ] **Enhanced Timezone Handling**
+
   - Priority: **MEDIUM**
   - Description: Robust client vs server time handling
   - Acceptance Criteria:
@@ -189,23 +208,26 @@
 ## 📋 Implementation Notes
 
 ### Priority Levels:
+
 - **CRITICAL**: Must be completed before MVP launch
 - **HIGH**: Important for user experience, complete soon after MVP
 - **MEDIUM**: Enhances functionality, plan for next release cycle
 - **LOW**: Future enhancements, long-term roadmap
 
 ### Dependencies:
+
 - Most Android functionality requires Capacitor plugins
 - Social features may need backend API updates
 - Push notifications require server-side infrastructure
 - Advanced features build upon basic implementations
 
 ### Estimated Development Timeline:
+
 - **MVP Blockers**: 2-3 weeks
 - **MVP+ Features**: 3-4 weeks
 - **Post-MVP Features**: 8-12 weeks (spread over multiple releases)
 
 ---
 
-*Last Updated: June 9, 2025*
-*Status: Initial backlog creation*
+_Last Updated: June 9, 2025_
+_Status: Initial backlog creation_

@@ -18,7 +18,6 @@ export class HabitFormComponent implements OnInit {
   isEditMode = false;
   habitId: string | null = null;
   pageTitle = 'Create a New Habit';
-
   habit: CreateHabitDTO = {
     name: '',
     description: '',
@@ -26,6 +25,7 @@ export class HabitFormComponent implements OnInit {
     goalType: 'binary',
     targetType: 'ongoing',
     allowedGaps: 1,
+    isPrivate: false,
   };
 
   minDate = new Date().toISOString().split('T')[0];
@@ -67,6 +67,7 @@ export class HabitFormComponent implements OnInit {
             endDate: habit.endDate,
             allowedGaps: habit.allowedGaps || 1,
             startDate: habit.startDate,
+            isPrivate: habit.isPrivate || false,
           };
         } else {
           this.errorMessage = 'Habit not found.';

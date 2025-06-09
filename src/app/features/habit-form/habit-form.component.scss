@@ -71,3 +71,97 @@ button.secondary:hover {
   margin-bottom: 10px;
   font-size: 16px;
 }
+
+/* Privacy Toggle Styles */
+.privacy-section {
+  margin: 20px 0;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+
+  h4 {
+    margin: 0 0 15px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+  }
+}
+
+.privacy-toggle {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 24px;
+
+    &:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+  }
+
+  input:checked + .slider {
+    background-color: #007bff;
+  }
+
+  input:checked + .slider:before {
+    transform: translateX(26px);
+  }
+}
+
+.privacy-info {
+  flex: 1;
+
+  .privacy-label {
+    font-weight: 600;
+    font-size: 16px;
+    color: #333;
+  }
+  .privacy-description {
+    margin: 5px 0 0 0;
+    font-size: 14px;
+    color: #666;
+    line-height: 1.4;
+  }
+}
+
+/* Privacy badges for summary */
+.private-badge {
+  color: #dc3545;
+  font-weight: 600;
+}
+
+.public-badge {
+  color: #28a745;
+  font-weight: 600;
+}

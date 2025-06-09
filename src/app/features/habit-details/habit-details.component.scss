@@ -49,6 +49,28 @@
     h2 {
       font-size: 28px;
       margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .privacy-badge {
+      font-size: 14px;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-weight: 500;
+
+      &.private {
+        background-color: #f8d7da;
+        color: #721c24;
+      }
+
+      &.public {
+        background-color: #d4edda;
+        color: #155724;
+      }
     }
   }
 

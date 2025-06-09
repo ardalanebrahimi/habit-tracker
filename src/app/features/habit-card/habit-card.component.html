@@ -15,10 +15,15 @@
         [disabled]="isReadOnly"
       />
     </label>
-
     <!-- Habit Name -->
     <p class="habit-name" [routerLink]="['/habit', habit.id]">
       {{ habit.name }}
+      <span
+        *ngIf="habit.isOwnedHabit && habit.isPrivate"
+        class="privacy-icon"
+        title="Private habit"
+        >🔒</span
+      >
     </p>
 
     <!-- Streak Display -->
