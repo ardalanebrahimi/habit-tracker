@@ -109,6 +109,16 @@
           </span>
         </div>
       </div>
+
+      <!-- Share Section -->
+      <div class="share-section" *ngIf="habit.isOwnedHabit && !habit.isPrivate">
+        <h4>Share Your Progress</h4>
+        <app-habit-share
+          [habit]="habit"
+          (shareCompleted)="onShareCompleted($event)"
+        >
+        </app-habit-share>
+      </div>
     </div>
 
     <!-- History -->

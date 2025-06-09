@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HabitWithProgressDTO } from '../../models/habit-with-progress-dto.model';
 import { HabitsService } from '../../services/habits.service';
+import { HabitQuickShareComponent } from '../habit-quick-share/habit-quick-share.component';
 
 @Component({
   selector: 'app-habit-card',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, HabitQuickShareComponent],
   templateUrl: './habit-card.component.html',
   styleUrls: ['./habit-card.component.scss'],
 })

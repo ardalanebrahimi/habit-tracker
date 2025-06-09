@@ -31,6 +31,9 @@
       🔥 {{ habit.streak }} {{ getStreakPeriod() }}
     </span>
 
+    <!-- Quick Share Button -->
+    <app-habit-quick-share [habit]="habit"></app-habit-quick-share>
+
     <!-- Numeric Task Buttons -->
     <button
       *ngIf="habit.goalType === 'numeric' && !isReadOnly"

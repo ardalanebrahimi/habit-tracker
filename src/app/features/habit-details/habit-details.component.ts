@@ -4,6 +4,7 @@ import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { HabitsService } from '../../services/habits.service';
 import { ConnectionsService } from '../../services/connections.service';
 import { HabitWithProgressDTO } from '../../models/habit-with-progress-dto.model';
+import { HabitShareComponent } from '../habit-share/habit-share.component';
 
 interface ChartDataPoint {
   day: string;
@@ -14,7 +15,7 @@ interface ChartDataPoint {
 @Component({
   selector: 'app-habit-details',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, HabitShareComponent],
   templateUrl: './habit-details.component.html',
   styleUrls: ['./habit-details.component.scss'],
 })
@@ -222,5 +223,10 @@ export class HabitDetailsComponent implements OnInit {
         },
       });
     }
+  }
+
+  onShareCompleted(shareType: string): void {
+    console.log(`Shared ${shareType} for habit: ${this.habit?.name}`);
+    // Optional: Show a toast notification or update UI
   }
 }
