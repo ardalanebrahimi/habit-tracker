@@ -61,4 +61,13 @@
       {{ getProgressPeriod() }}</span
     >
   </div>
+
+  <!-- Milestone Celebration -->
+  <app-milestone-celebration
+    *ngIf="showMilestoneCelebration && currentMilestone"
+    [habit]="habit"
+    [milestone]="currentMilestone.streakValue"
+    [showCelebration]="showMilestoneCelebration"
+    (celebrationClosed)="onMilestoneCelebrationClosed()"
+  ></app-milestone-celebration>
 </div>
