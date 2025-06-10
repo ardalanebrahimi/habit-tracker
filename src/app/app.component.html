@@ -30,6 +30,7 @@
           {{ unreadCount$ | async }}
         </span>
       </a>
+      <a routerLink="/cheer-test" (click)="closeMenu()">🎉 Test Cheers</a>
       <a (click)="logout()">Logout</a>
     </ng-container>
 
@@ -42,9 +43,11 @@
 
   <!-- Menu Button -->
   <button class="menu-btn" (click)="toggleMenu()">☰</button>
-
   <div class="loading-overlay" *ngIf="isLoading$ | async">
     <div class="spinner"></div>
   </div>
   <router-outlet></router-outlet>
+
+  <!-- Global Toast Notifications -->
+  <app-toast></app-toast>
 </div>

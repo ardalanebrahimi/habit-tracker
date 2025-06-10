@@ -52,7 +52,6 @@
                 Check Habit
               </button>
             </ng-container>
-
             <!-- Progress Update -->
             <ng-container *ngSwitchCase="'ProgressUpdate'">
               <button
@@ -60,6 +59,25 @@
                 (click)="navigateToHabitDetails(notification)"
               >
                 View Progress
+              </button>
+            </ng-container>
+
+            <!-- Cheer Received -->
+            <ng-container *ngSwitchCase="'CheerReceived'">
+              <button
+                class="action-btn view-btn"
+                (click)="navigateToHabitDetails(notification)"
+              >
+                View Habit
+              </button>
+            </ng-container>
+            <!-- Cheer Sent -->
+            <ng-container *ngSwitchCase="'CheerSent'">
+              <button
+                class="action-btn view-btn"
+                (click)="navigateToHabitDetails(notification)"
+              >
+                View Habit
               </button>
             </ng-container>
           </ng-container>

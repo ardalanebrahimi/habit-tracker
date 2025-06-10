@@ -6,6 +6,8 @@ import { HabitsService } from '../../services/habits.service';
 import { MilestoneService } from '../../services/milestone.service';
 import { HabitQuickShareComponent } from '../habit-quick-share/habit-quick-share.component';
 import { MilestoneCelebrationComponent } from '../milestone-celebration/milestone-celebration.component';
+import { CheerButtonComponent } from '../cheer-button/cheer-button.component';
+import { CheerDisplayComponent } from '../cheer-display/cheer-display.component';
 import { MilestoneDefinition } from '../../models/milestone.model';
 
 @Component({
@@ -16,6 +18,8 @@ import { MilestoneDefinition } from '../../models/milestone.model';
     RouterModule,
     HabitQuickShareComponent,
     MilestoneCelebrationComponent,
+    CheerButtonComponent,
+    CheerDisplayComponent,
   ],
   templateUrl: './habit-card.component.html',
   styleUrls: ['./habit-card.component.scss'],
@@ -157,5 +161,10 @@ export class HabitCardComponent {
   onMilestoneCelebrationClosed(): void {
     this.showMilestoneCelebration = false;
     this.currentMilestone = null;
+  }
+
+  onCheerSent(): void {
+    // Emit event to refresh habit data or update UI
+    this.habitChanged.emit();
   }
 }

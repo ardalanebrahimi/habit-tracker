@@ -41,7 +41,6 @@ export class NotificationService {
   updateUnreadCount(count: number): void {
     this.unreadCount.next(count);
   }
-
   // Helper method to get notification icon based on type
   getNotificationIcon(type: Notification['type']): string {
     switch (type) {
@@ -51,6 +50,10 @@ export class NotificationService {
         return '✅';
       case 'ProgressUpdate':
         return '📊';
+      case 'CheerReceived':
+        return '🎉';
+      case 'CheerSent':
+        return '💌';
       default:
         return '📢';
     }

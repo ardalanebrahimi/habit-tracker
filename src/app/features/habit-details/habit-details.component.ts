@@ -5,6 +5,8 @@ import { HabitsService } from '../../services/habits.service';
 import { ConnectionsService } from '../../services/connections.service';
 import { HabitWithProgressDTO } from '../../models/habit-with-progress-dto.model';
 import { HabitShareComponent } from '../habit-share/habit-share.component';
+import { CheerButtonComponent } from '../cheer-button/cheer-button.component';
+import { CheerDisplayComponent } from '../cheer-display/cheer-display.component';
 
 interface ChartDataPoint {
   day: string;
@@ -15,7 +17,13 @@ interface ChartDataPoint {
 @Component({
   selector: 'app-habit-details',
   standalone: true,
-  imports: [CommonModule, RouterModule, HabitShareComponent],
+  imports: [
+    CommonModule,
+    RouterModule,
+    HabitShareComponent,
+    CheerButtonComponent,
+    CheerDisplayComponent,
+  ],
   templateUrl: './habit-details.component.html',
   styleUrls: ['./habit-details.component.scss'],
 })
@@ -228,5 +236,12 @@ export class HabitDetailsComponent implements OnInit {
   onShareCompleted(shareType: string): void {
     console.log(`Shared ${shareType} for habit: ${this.habit?.name}`);
     // Optional: Show a toast notification or update UI
+  }
+
+  onCheerSent(): void {
+    // Refresh habit details to show updated cheer count
+    if (this.habit?.id) {
+      this.loadHabitDetails(this.habit.id);
+    }
   }
 }

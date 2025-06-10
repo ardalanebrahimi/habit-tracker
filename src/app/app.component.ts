@@ -10,11 +10,12 @@ import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { LoadingService } from './services/loading.service';
 import { NotificationService } from './services/notification.service';
+import { ToastComponent } from './features/toast/toast.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ToastComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })

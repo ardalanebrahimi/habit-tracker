@@ -110,6 +110,27 @@
         </div>
       </div>
 
+      <!-- Cheer Section for Friends' Habits -->
+      <div
+        class="cheer-section"
+        *ngIf="!habit.isOwnedHabit && habit.isCompleted"
+      >
+        <h4>Show Your Support</h4>
+        <app-cheer-button
+          [habit]="habit"
+          (cheerSent)="onCheerSent()"
+        ></app-cheer-button>
+      </div>
+
+      <!-- Cheers Received Section -->
+      <div
+        class="cheers-received-section"
+        *ngIf="habit.isOwnedHabit && habit.id"
+      >
+        <h4>Cheers Received</h4>
+        <app-cheer-display [habitId]="habit.id"></app-cheer-display>
+      </div>
+
       <!-- Share Section -->
       <div class="share-section" *ngIf="habit.isOwnedHabit && !habit.isPrivate">
         <h4>Share Your Progress</h4>

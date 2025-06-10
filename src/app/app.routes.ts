@@ -9,6 +9,7 @@ import { RegisterComponent } from './features/auth/register/register.component';
 import { ArchivedHabitsComponent } from './features/archived-habits.component/archived-habits.component';
 import { ConnectionsComponent } from './features/connections/connections.component';
 import { NotificationsComponent } from './features/notifications/notifications.component';
+import { CheerTestComponent } from './features/cheer-test/cheer-test.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'today', pathMatch: 'full' },
@@ -23,6 +24,7 @@ export const routes: Routes = [
   { path: 'archived-habits', component: ArchivedHabitsComponent },
   { path: 'connections', component: ConnectionsComponent },
   { path: 'notifications', component: NotificationsComponent },
+  { path: 'cheer-test', component: CheerTestComponent },
 
   { path: '**', redirectTo: 'login' },
 ];

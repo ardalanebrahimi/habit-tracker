@@ -1,13 +1,20 @@
 export type NotificationType =
   | 'ConnectionRequest'
   | 'HabitCheckRequest'
-  | 'ProgressUpdate';
+  | 'ProgressUpdate'
+  | 'CheerReceived'
+  | 'CheerSent';
 
 export interface NotificationData {
   ConnectionId?: string;
   HabitCheckRequestId?: string;
   HabitId?: string;
   HabitName?: string;
+  CheerFrom?: string;
+  CheerFromUsername?: string;
+  CheerMessage?: string;
+  CheerTo?: string;
+  CheerToUsername?: string;
 }
 
 export interface Notification {
@@ -43,6 +50,11 @@ export class NotificationFactory {
         HabitCheckRequestId: parsedData.HabitCheckRequestId,
         HabitId: parsedData.HabitId,
         HabitName: parsedData.HabitName,
+        CheerFrom: parsedData.CheerFrom,
+        CheerFromUsername: parsedData.CheerFromUsername,
+        CheerMessage: parsedData.CheerMessage,
+        CheerTo: parsedData.CheerTo,
+        CheerToUsername: parsedData.CheerToUsername,
       };
     } catch (error) {
       console.error('Error parsing notification data:', error);

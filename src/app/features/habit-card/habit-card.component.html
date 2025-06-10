@@ -30,9 +30,14 @@
     <span class="streak-badge" *ngIf="habit.streak !== undefined">
       🔥 {{ habit.streak }} {{ getStreakPeriod() }}
     </span>
-
     <!-- Quick Share Button -->
     <app-habit-quick-share [habit]="habit"></app-habit-quick-share>
+
+    <!-- Cheer Button for friends' completed habits -->
+    <app-cheer-button
+      [habit]="habit"
+      (cheerSent)="onCheerSent()"
+    ></app-cheer-button>
 
     <!-- Numeric Task Buttons -->
     <button
@@ -61,6 +66,12 @@
       {{ getProgressPeriod() }}</span
     >
   </div>
+
+  <!-- Cheer Display for own habits -->
+  <app-cheer-display
+    *ngIf="habit.isOwnedHabit && habit.id"
+    [habitId]="habit.id"
+  ></app-cheer-display>
 
   <!-- Milestone Celebration -->
   <app-milestone-celebration
