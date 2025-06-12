@@ -430,7 +430,7 @@ export class CheerButtonComponent implements OnInit {
 
     const cheerRequest: CheerRequest = {
       habitId: this.habit.id!,
-      toUserId: this.habit.userName || '', // Using userName as user identifier for now
+      toUserId: this.habit.userId || '',
       message: this.finalMessage,
       emoji: this.selectedEmoji,
     };

@@ -28,5 +28,6 @@ export interface HabitWithProgressDTO {
 
   isOwnedHabit: boolean;
   userName?: string; // Optional field for friend's habits
+  userId?: string;
   isPrivate?: boolean; // ✅ Privacy setting for the habit
 }
