@@ -1,54 +1,35 @@
 <div class="app-container">
-  <!-- Backdrop to close menu when clicking outside -->
-  <div class="backdrop" *ngIf="menuOpen" (click)="closeMenu()"></div>
+  <!-- Content Container with padding for navbar -->
+  <div class="content-container">
+    <div class="header">
+      <!-- Show user name if logged in -->
+      <ng-container *ngIf="authService.getToken(); else guestHeader">
+        <div class="user-info">
+          <span class="user-name">{{
+            authService.getCurrentUser()?.userName
+          }}</span>
+          <button class="logout-btn" (click)="logout()">Logout</button>
+        </div>
+      </ng-container>
 
-  <!-- Sidebar Menu -->
-  <nav class="sidebar" [class.open]="menuOpen">
-    <button class="close-btn" (click)="closeMenu()">✖</button>
+      <!-- Show only if NOT logged in -->
+      <ng-template #guestHeader>
+        <div class="auth-links">
+          <a routerLink="/login" class="auth-link">Login</a>
+          <a routerLink="/register" class="auth-link">Register</a>
+        </div>
+      </ng-template>
+    </div>
 
-    <!-- Show only if logged in -->
-    <ng-container *ngIf="authService.getToken(); else guestMenu">
-      <div class="user-info">
-        <span class="user-name">{{
-          authService.getCurrentUser()?.userName
-        }}</span>
-      </div>
-      <a routerLink="/today" (click)="closeMenu()">Today's Habits</a>
-      <a routerLink="/habits" (click)="closeMenu()">All Habits</a>
-      <a routerLink="/stats" (click)="closeMenu()">Statistics</a>
-      <a routerLink="/connections" (click)="closeMenu()">Connections</a>
-      <a routerLink="/discover" (click)="closeMenu()">🔍 Discover Profiles</a>
-      <a
-        routerLink="/notifications"
-        (click)="closeMenu()"
-        class="notifications-link"
-      >
-        Notifications
-        <span
-          *ngIf="(unreadCount$ | async) ?? 0 > 0"
-          class="notification-badge"
-        >
-          {{ unreadCount$ | async }}
-        </span>
-      </a>
-      <a routerLink="/cheer-test" (click)="closeMenu()">🎉 Test Cheers</a>
-      <a (click)="logout()">Logout</a>
-    </ng-container>
-
-    <!-- Show only if NOT logged in -->
-    <ng-template #guestMenu>
-      <a routerLink="/login" (click)="closeMenu()">Login</a>
-      <a routerLink="/register" (click)="closeMenu()">Register</a>
-    </ng-template>
-  </nav>
-
-  <!-- Menu Button -->
-  <button class="menu-btn" (click)="toggleMenu()">☰</button>
-  <div class="loading-overlay" *ngIf="isLoading$ | async">
-    <div class="spinner"></div>
+    <div class="loading-overlay" *ngIf="isLoading$ | async">
+      <div class="spinner"></div>
+    </div>
+    <router-outlet></router-outlet>
   </div>
-  <router-outlet></router-outlet>
 
   <!-- Global Toast Notifications -->
   <app-toast></app-toast>
+
+  <!-- Navigation Bar (only shown when logged in) -->
+  <app-navbar *ngIf="authService.getToken()"></app-navbar>
 </div>

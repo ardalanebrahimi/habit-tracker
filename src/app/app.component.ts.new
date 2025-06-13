@@ -1,5 +1,9 @@
 // filepath: c:\Users\ardal\habit-tracker\src\app\app.component.ts
-import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
+import {
+  Component,
+  ChangeDetectorRef,
+  OnInit,
+} from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from './services/auth.service';
 import { CommonModule } from '@angular/common';

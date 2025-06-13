@@ -9,9 +9,9 @@ import { RegisterComponent } from './features/auth/register/register.component';
 import { ArchivedHabitsComponent } from './features/archived-habits.component/archived-habits.component';
 import { ConnectionsComponent } from './features/connections/connections.component';
 import { NotificationsComponent } from './features/notifications/notifications.component';
-import { CheerTestComponent } from './features/cheer-test/cheer-test.component';
 import { UserProfileComponent } from './features/user-profile/user-profile.component';
-import { ProfileDiscoveryComponent } from './features/profile-discovery/profile-discovery.component';
+import { AuthService } from './services/auth.service';
+import { inject } from '@angular/core';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'today', pathMatch: 'full' },
@@ -26,9 +26,13 @@ export const routes: Routes = [
   { path: 'archived-habits', component: ArchivedHabitsComponent },
   { path: 'connections', component: ConnectionsComponent },
   { path: 'notifications', component: NotificationsComponent },
-  { path: 'cheer-test', component: CheerTestComponent },
+  { path: 'profile', redirectTo: 'profile/me', pathMatch: 'full' },
+  // {
+  //   path: 'profile/me',
+  //   component: UserProfileComponent,
+  //   resolve: { id: () => inject(AuthService).getCurrentUser()?.id },
+  // },
   { path: 'profile/:id', component: UserProfileComponent },
-  { path: 'discover', component: ProfileDiscoveryComponent },
 
   { path: '**', redirectTo: 'login' },
 ];
