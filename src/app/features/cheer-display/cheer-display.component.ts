@@ -5,7 +5,8 @@ import { CheeringService } from '../../services/cheering.service';
 import { Cheer } from '../../models/cheer.model';
 
 @Component({
-  selector: 'app-cheer-display',  standalone: true,
+  selector: 'app-cheer-display',
+  standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
     <div class="cheer-display" *ngIf="cheers.length > 0">
@@ -25,7 +26,15 @@ import { Cheer } from '../../models/cheer.model';
             <span class="cheer-emoji">{{ cheer.emoji }}</span>
             <div class="cheer-details">
               <div class="cheer-message">{{ cheer.message }}</div>
-              <div class="cheer-meta">                <span class="cheer-from">from <a [routerLink]="['/profile', cheer.fromUserId]" class="user-link">{{ cheer.fromUsername }}</a></span>
+              <div class="cheer-meta">
+                <span class="cheer-from"
+                  >from
+                  <a
+                    [routerLink]="['/profile', cheer.fromUserId]"
+                    class="user-link"
+                    >{{ cheer.fromUsername }}</a
+                  ></span
+                >
                 <span class="cheer-time">{{
                   getTimeAgo(cheer.timestamp)
                 }}</span>
@@ -58,7 +67,7 @@ import { Cheer } from '../../models/cheer.model';
         color: var(--ion-color-primary, #3880ff);
         text-decoration: none;
         cursor: pointer;
-        
+
         &:hover {
           text-decoration: underline;
         }

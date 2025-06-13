@@ -3,7 +3,8 @@ import { ConnectionsService } from '../../../services/connections.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-@Component({  selector: 'app-connections-list',
+@Component({
+  selector: 'app-connections-list',
   standalone: true,
   templateUrl: './connections-list.component.html',
   styleUrls: ['./connections-list.component.scss'],

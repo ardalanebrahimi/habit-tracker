@@ -1,7 +1,10 @@
-<div class="habit-card">  <!-- Username for friend's habits -->
+<div class="habit-card">
+  <!-- Username for friend's habits -->
   <div *ngIf="!habit.isOwnedHabit" class="user-header">
     <span class="friend-icon">👤</span>
-    <a [routerLink]="['/profile', habit.userId]" class="user-name clickable">{{ habit.userName }}</a>
+    <a [routerLink]="['/profile', habit.userId]" class="user-name clickable">{{
+      habit.userName
+    }}</a>
   </div>
 
   <div class="habit-header">

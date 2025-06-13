@@ -3,7 +3,9 @@
   <p *ngIf="!isLoading && connections.length === 0">No connections yet.</p>
   <ul *ngIf="!isLoading && connections.length">
     <li *ngFor="let user of connections">
-      <a [routerLink]="['/profile', user.id]" class="user-link">{{ user.userName }}</a>
+      <a [routerLink]="['/profile', user.id]" class="user-link">{{
+        user.userName
+      }}</a>
     </li>
   </ul>
 </div>

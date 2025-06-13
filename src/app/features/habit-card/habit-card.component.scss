@@ -12,11 +12,11 @@
   .user-name {
     font-size: 14px;
     font-weight: 600;
-    
+
     &.clickable {
       color: var(--ion-color-primary);
       cursor: pointer;
-      
+
       &:hover {
         text-decoration: underline;
       }
