@@ -10,6 +10,8 @@ import { ArchivedHabitsComponent } from './features/archived-habits.component/ar
 import { ConnectionsComponent } from './features/connections/connections.component';
 import { NotificationsComponent } from './features/notifications/notifications.component';
 import { CheerTestComponent } from './features/cheer-test/cheer-test.component';
+import { UserProfileComponent } from './features/user-profile/user-profile.component';
+import { ProfileDiscoveryComponent } from './features/profile-discovery/profile-discovery.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'today', pathMatch: 'full' },
@@ -25,6 +27,8 @@ export const routes: Routes = [
   { path: 'connections', component: ConnectionsComponent },
   { path: 'notifications', component: NotificationsComponent },
   { path: 'cheer-test', component: CheerTestComponent },
+  { path: 'profile/:id', component: UserProfileComponent },
+  { path: 'discover', component: ProfileDiscoveryComponent },
 
   { path: '**', redirectTo: 'login' },
 ];

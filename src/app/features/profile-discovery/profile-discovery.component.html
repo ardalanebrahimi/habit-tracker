@@ -1,0 +1,87 @@
+<div class="profile-discovery">
+  <div class="page-header">
+    <h2>🔍 Discover Profiles</h2>
+    <p>Explore public profiles and find inspiration from other users</p>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Profiles Grid -->
+  <div class="profiles-container" (scroll)="onScroll($event)">
+    <div class="profiles-grid">
+      <div
+        *ngFor="let profile of profiles"
+        class="profile-card"
+        [routerLink]="['/profile', profile.id]"
+      >
+        <!-- Profile Header -->
+        <div class="profile-header">
+          <div class="avatar">
+            {{ profile.userName.charAt(0).toUpperCase() }}
+          </div>
+          <div class="profile-info">
+            <h3>{{ profile.userName }}</h3>
+            <div class="profile-stats">
+              <span class="habit-count"
+                >📋 {{ getHabitCountText(profile) }}</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Preview Habits -->
+        <div class="habits-preview" *ngIf="profile.publicHabits.length > 0">
+          <h4>Public Habits</h4>
+          <div class="habit-list">
+            <div
+              *ngFor="let habit of getTruncatedHabits(profile)"
+              class="habit-item"
+            >
+              <div class="habit-info">
+                <span class="habit-name">{{ habit.name }}</span>
+                <span class="habit-streak" *ngIf="habit.streak > 0">
+                  🔥 {{ habit.streak }}
+                </span>
+              </div>
+              <div class="habit-status" [class.completed]="habit.isCompleted">
+                {{ habit.isCompleted ? "✅" : "⏳" }}
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="profile.publicHabits.length > 2" class="more-habits">
+            +{{ profile.publicHabits.length - 2 }} more habits
+          </div>
+        </div>
+
+        <!-- No Public Habits -->
+        <div *ngIf="profile.publicHabits.length === 0" class="no-habits">
+          <p>No public habits to display</p>
+        </div>
+
+        <!-- View Profile Button -->
+        <div class="card-footer">
+          <button class="view-profile-btn">View Full Profile →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div *ngIf="isLoading" class="loading-spinner">
+      <p>Loading more profiles...</p>
+    </div>
+
+    <!-- No More Results -->
+    <div *ngIf="!hasMore && profiles.length > 0" class="no-more">
+      <p>No more profiles to discover</p>
+    </div>
+
+    <!-- No Results -->
+    <div *ngIf="!isLoading && profiles.length === 0" class="no-results">
+      <p>No profiles found. Check back later for new users!</p>
+    </div>
+  </div>
+</div>

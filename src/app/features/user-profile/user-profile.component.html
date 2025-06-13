@@ -1,0 +1,146 @@
+<div class="user-profile">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading">Loading profile...</div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Profile Content -->
+  <div *ngIf="profile && !isLoading" class="content">
+    <!-- Back Button -->
+    <button class="back-btn" (click)="router.navigate(['/'])">← Back</button>
+
+    <!-- Profile Header -->
+    <div class="profile-header">
+      <div class="profile-info">
+        <div class="avatar">
+          {{ profile.userName.charAt(0).toUpperCase() }}
+        </div>
+        <div class="user-details">
+          <h2>{{ profile.userName }}</h2>
+          <p class="joined-date">
+            Joined {{ profile.joinedDate | date : "MMMM yyyy" }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="profile-actions" *ngIf="!profile.isCurrentUser">
+        <button
+          *ngIf="!profile.isFriend"
+          class="btn connect-btn"
+          (click)="sendConnectionRequest()"
+        >
+          🤝 Connect
+        </button>
+        <span *ngIf="profile.isFriend" class="friend-badge"> ✅ Friends </span>
+      </div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="tab-navigation">
+      <button
+        class="tab-btn"
+        [class.active]="activeTab === 'habits'"
+        (click)="setActiveTab('habits')"
+      >
+        📋 Habits
+      </button>
+      <button
+        *ngIf="showAnalytics"
+        class="tab-btn"
+        [class.active]="activeTab === 'analytics'"
+        (click)="setActiveTab('analytics')"
+      >
+        📊 Analytics
+      </button>
+    </div>
+
+    <!-- Habits Tab -->
+    <div *ngIf="activeTab === 'habits'" class="habits-section">
+      <div *ngIf="!hasVisibleHabits" class="no-habits">
+        <p>No habits to display.</p>
+      </div>
+
+      <!-- Public Habits -->
+      <div *ngIf="profile.publicHabits.length > 0" class="habits-group">
+        <h3>🌍 Public Habits</h3>
+        <div class="habits-grid">
+          <app-habit-card
+            *ngFor="let habit of profile.publicHabits"
+            [habit]="habit"
+            [isReadOnly]="!profile.isCurrentUser"
+          ></app-habit-card>
+        </div>
+      </div>
+
+      <!-- Friend Habits (only visible to friends) -->
+      <div
+        *ngIf="
+          profile.friendHabits.length > 0 &&
+          (profile.isFriend || profile.isCurrentUser)
+        "
+        class="habits-group"
+      >
+        <h3>🔒 Private Habits</h3>
+        <div class="habits-grid">
+          <app-habit-card
+            *ngFor="let habit of profile.friendHabits"
+            [habit]="habit"
+            [isReadOnly]="!profile.isCurrentUser"
+          ></app-habit-card>
+        </div>
+      </div>
+    </div>
+
+    <!-- Analytics Tab -->
+    <div
+      *ngIf="activeTab === 'analytics' && showAnalytics && profile.analytics"
+      class="analytics-section"
+    >
+      <div class="analytics-grid">
+        <div class="stat-card">
+          <div class="stat-value">{{ profile.analytics.totalHabits }}</div>
+          <div class="stat-label">Total Habits</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-value">{{ profile.analytics.activeHabits }}</div>
+          <div class="stat-label">Active Habits</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-value">{{ profile.analytics.completedToday }}</div>
+          <div class="stat-label">Completed Today</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-value">{{ profile.analytics.longestStreak }}</div>
+          <div class="stat-label">Longest Streak</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">{{ profile.analytics.successRate }}%</div>
+          <div class="stat-label">Success Rate</div>
+        </div>
+      </div>
+
+      <!-- Top Categories -->
+      <div
+        class="categories-section"
+        *ngIf="profile.analytics.topCategories.length > 0"
+      >
+        <h3>Top Categories</h3>
+        <div class="categories-list">
+          <span
+            *ngFor="let category of profile.analytics.topCategories"
+            class="category-tag"
+          >
+            {{ category }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
