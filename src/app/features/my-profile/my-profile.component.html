@@ -1,0 +1,58 @@
+<div class="profile-container">
+  <h2>My Profile</h2>
+
+  <div class="profile-tabs">
+    <a (click)="setView('profile')" [class.active]="currentView === 'profile'"
+      >Profile</a
+    >
+    <a (click)="setView('habits')" [class.active]="currentView === 'habits'"
+      >My Habits</a
+    >
+    <a (click)="setView('stats')" [class.active]="currentView === 'stats'"
+      >Statistics</a
+    >
+  </div>
+
+  <div [ngSwitch]="currentView">
+    <!-- Profile View -->
+    <!-- <div *ngSwitchCase="'profile'" class="profile-section">
+      <app-user-profile *ngIf="userId" [userId]="userId"></app-user-profile>
+    </div> -->
+
+    <!-- Habits View -->
+    <div *ngSwitchCase="'habits'" class="habits-section">
+      <div *ngIf="isLoading" class="loading">Loading habits...</div>
+      <div *ngIf="!isLoading && habits.length === 0" class="no-habits">
+        <p>You don't have any habits yet.</p>
+        <a routerLink="/add-habit" class="add-habit-link"
+          >Add your first habit</a
+        >
+      </div>
+      <div *ngIf="!isLoading && habits.length > 0" class="habits-list">
+        <div *ngFor="let habit of habits" class="habit-card">
+          <h3>{{ habit.name }}</h3>
+          <p>{{ habit.description }}</p>
+          <div class="habit-stats">
+            <div class="stat">
+              <span class="label">Streak:</span>
+              <!-- <span class="value">{{ habit.currentStreak }} days</span> -->
+              <!-- </div> -->
+              <div class="stat">
+                <span class="label">Completion Rate:</span>
+                <!-- <span class="value">{{ habit.completionRate | percent }}</span> -->
+              </div>
+            </div>
+            <a [routerLink]="['/habit', habit.id]" class="view-details"
+              >View Details</a
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats View -->
+      <div *ngSwitchCase="'stats'" class="stats-section">
+        <app-stats></app-stats>
+      </div>
+    </div>
+  </div>
+</div>

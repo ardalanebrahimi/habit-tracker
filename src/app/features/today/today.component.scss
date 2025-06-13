@@ -84,10 +84,9 @@
     border: 1px solid #ddd;
     border-radius: 5px;
   }
-
   .fab {
     position: fixed;
-    bottom: 20px;
+    bottom: 80px; /* Increased to avoid navbar overlap */
     right: 20px;
     background: #007bff;
     color: white;

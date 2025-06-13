@@ -34,11 +34,12 @@
 }
 
 .icon {
-  font-size: 1.5rem;
-  margin-bottom: 2px;
+  font-size: 1.8rem; /* Make icons larger since we're not showing labels */
+  margin-bottom: 0;
 }
 
 .label {
+  display: none; /* Hide labels as requested */
   font-size: 0.75rem;
 }
 

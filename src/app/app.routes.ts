@@ -10,6 +10,7 @@ import { ArchivedHabitsComponent } from './features/archived-habits.component/ar
 import { ConnectionsComponent } from './features/connections/connections.component';
 import { NotificationsComponent } from './features/notifications/notifications.component';
 import { UserProfileComponent } from './features/user-profile/user-profile.component';
+import { MyProfileComponent } from './features/my-profile/my-profile.component';
 import { AuthService } from './services/auth.service';
 import { inject } from '@angular/core';
 
@@ -26,12 +27,7 @@ export const routes: Routes = [
   { path: 'archived-habits', component: ArchivedHabitsComponent },
   { path: 'connections', component: ConnectionsComponent },
   { path: 'notifications', component: NotificationsComponent },
-  { path: 'profile', redirectTo: 'profile/me', pathMatch: 'full' },
-  // {
-  //   path: 'profile/me',
-  //   component: UserProfileComponent,
-  //   resolve: { id: () => inject(AuthService).getCurrentUser()?.id },
-  // },
+  { path: 'myprofile', component: MyProfileComponent },
   { path: 'profile/:id', component: UserProfileComponent },
 
   { path: '**', redirectTo: 'login' },

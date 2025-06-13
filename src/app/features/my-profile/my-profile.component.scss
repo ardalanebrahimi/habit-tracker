@@ -1,0 +1,136 @@
+.profile-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+}
+
+.profile-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 10px;
+
+  a {
+    padding: 8px 16px;
+    cursor: pointer;
+    font-weight: 500;
+    color: #555;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s ease;
+
+    &.active {
+      color: #0056b3;
+      border-bottom: 2px solid #0056b3;
+    }
+
+    &:hover {
+      color: #0056b3;
+    }
+  }
+}
+
+.habits-section {
+  margin-top: 20px;
+}
+
+.loading {
+  text-align: center;
+  padding: 20px;
+  font-style: italic;
+  color: #777;
+}
+
+.no-habits {
+  text-align: center;
+  padding: 30px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+
+  p {
+    margin-bottom: 15px;
+    font-size: 1.1em;
+    color: #555;
+  }
+
+  .add-habit-link {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #0056b3;
+    color: white;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: #003d82;
+    }
+  }
+}
+
+.habits-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.habit-card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #0056b3;
+  }
+
+  p {
+    color: #666;
+    margin-bottom: 15px;
+  }
+
+  .habit-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+
+      .label {
+        font-size: 0.8em;
+        color: #777;
+      }
+
+      .value {
+        font-weight: 600;
+        color: #333;
+      }
+    }
+  }
+
+  .view-details {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #f0f0f0;
+    color: #333;
+    text-decoration: none;
+    border-radius: 4px;
+    text-align: center;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: #e0e0e0;
+    }
+  }
+}
