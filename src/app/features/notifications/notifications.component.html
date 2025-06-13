@@ -19,9 +19,25 @@
       <div class="notification-icon">
         {{ notificationService.getNotificationIcon(notification.type) }}
       </div>
-      <div class="notification-content">
-        <div class="notification-title">{{ notification.title }}</div>
-        <div class="notification-message">{{ notification.message }}</div>
+      <div class="notification-content">        <div class="notification-title">{{ notification.title }}</div>
+        <div class="notification-message">
+          <ng-container [ngSwitch]="notification.type">
+            <!-- Connection Request and Cheers - make usernames clickable -->
+            <ng-container *ngSwitchCase="'ConnectionRequest'">
+              <a [routerLink]="['/profile', notification.data.ConnectionId]" class="user-link">{{ extractUsername(notification.message) }}</a>{{ extractMessageWithoutUsername(notification.message) }}
+            </ng-container>
+            <ng-container *ngSwitchCase="'CheerReceived'">
+              <a [routerLink]="['/profile', notification.data.CheerFrom]" class="user-link">{{ notification.data.CheerFromUsername }}</a>{{ extractMessageWithoutUsername(notification.message) }}
+            </ng-container>
+            <ng-container *ngSwitchCase="'CheerSent'">
+              <span>You sent a cheer to </span><a [routerLink]="['/profile', notification.data.CheerTo]" class="user-link">{{ notification.data.CheerToUsername }}</a>
+            </ng-container>
+            <!-- Default case for other notification types -->
+            <ng-container *ngSwitchDefault>
+              {{ notification.message }}
+            </ng-container>
+          </ng-container>
+        </div>
         <div class="notification-time">
           {{ notification.timestamp | date : "short" }}
         </div>

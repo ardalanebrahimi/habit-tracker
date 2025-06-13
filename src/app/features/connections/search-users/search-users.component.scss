@@ -26,6 +26,16 @@ li {
   justify-content: space-between;
   align-items: center;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  
+  .user-link {
+    color: var(--ion-color-primary, #3880ff);
+    text-decoration: none;
+    cursor: pointer;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 .add-btn {

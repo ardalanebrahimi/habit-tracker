@@ -6,10 +6,9 @@
     placeholder="Search users..."
   />
   <p *ngIf="message">{{ message }}</p>
-
   <ul *ngIf="users.length">
     <li *ngFor="let user of users">
-      <span>{{ user.userName }}</span>
+      <a [routerLink]="['/profile', user.id]" class="user-link">{{ user.userName }}</a>
       <button class="add-btn" (click)="sendRequest(user.id)">Add</button>
     </li>
   </ul>

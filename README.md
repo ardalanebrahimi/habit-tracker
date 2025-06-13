@@ -87,4 +87,15 @@ To build and deploy the app for Android devices:
 4. **Build and Run the App**:
    - In Android Studio, click `Run` to install and run the app on an emulator or connected device.
 
----
+## Features
+
+### Profile Navigation
+
+The app allows users to navigate to any user's profile by clicking on usernames throughout the interface. This feature enables seamless profile discovery and social interaction from various contexts:
+
+- In the connections list, clicking any username will take you to that user's profile
+- In habit cards, clicking on a friend's username will show their profile
+- In notifications, usernames are clickable to view the sender's profile
+- In cheers and comments, clicking usernames navigates to the respective user's profile
+
+This design makes it easy to discover and connect with other users from any part of the application where usernames appear.

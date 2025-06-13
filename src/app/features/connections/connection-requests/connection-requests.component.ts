@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ConnectionsService } from '../../../services/connections.service';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-connection-requests',
   templateUrl: './connection-requests.component.html',
   styleUrls: ['./connection-requests.component.scss'],
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
+  standalone: true,
 })
 export class ConnectionRequestsComponent implements OnInit {
   incomingRequests: any[] = [];

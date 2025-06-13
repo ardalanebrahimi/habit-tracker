@@ -16,6 +16,19 @@ export class NotificationsComponent implements OnInit {
   notifications: Notification[] = [];
   hasUnreadNotifications = false;
 
+  // Helper methods for username extraction in notifications
+  extractUsername(message: string): string {
+    // Assumes format like "Username sent you a connection request" or "Username cheered your habit"
+    const usernameMatch = message.match(/^([^\s]+)/);
+    return usernameMatch ? usernameMatch[1] : '';
+  }
+
+  extractMessageWithoutUsername(message: string): string {
+    // Returns everything after the username
+    const usernameMatch = message.match(/^([^\s]+)\s(.*)/);
+    return usernameMatch ? ' ' + usernameMatch[2] : message;
+  }
+
   constructor(
     public notificationService: NotificationService,
     private connectionsService: ConnectionsService,

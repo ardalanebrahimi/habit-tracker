@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ConnectionsService } from '../../../services/connections.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import {
   ShareButtonComponent,
   ShareData,
@@ -12,7 +13,8 @@ import { AuthService } from '../../../services/auth.service';
   selector: 'app-search-users',
   templateUrl: './search-users.component.html',
   styleUrls: ['./search-users.component.scss'],
-  imports: [CommonModule, FormsModule, ShareButtonComponent],
+  imports: [CommonModule, FormsModule, RouterModule, ShareButtonComponent],
+  standalone: true,
 })
 export class SearchUsersComponent {
   searchQuery: string = '';

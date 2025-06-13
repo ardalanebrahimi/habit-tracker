@@ -1,8 +1,7 @@
 <div class="content">
   <h3>Incoming Requests</h3>
-  <p *ngIf="incomingRequests.length === 0">No incoming requests.</p>
-  <div *ngFor="let request of incomingRequests" class="request-card">
-    <span>{{ request.userName }}</span>
+  <p *ngIf="incomingRequests.length === 0">No incoming requests.</p>  <div *ngFor="let request of incomingRequests" class="request-card">
+    <a [routerLink]="['/profile', request.id]" class="user-link">{{ request.userName }}</a>
     <button (click)="acceptRequest(request.id)" class="accept-btn">
       Accept
     </button>
@@ -12,8 +11,8 @@
   </div>
 
   <h3>Sent Requests</h3>
-  <p *ngIf="sentRequests.length === 0">No sent requests.</p>
-  <div *ngFor="let request of sentRequests" class="request-card">
-    <span>{{ request.userName }} - Pending</span>
+  <p *ngIf="sentRequests.length === 0">No sent requests.</p>  <div *ngFor="let request of sentRequests" class="request-card">
+    <a [routerLink]="['/profile', request.id]" class="user-link">{{ request.userName }}</a>
+    <span> - Pending</span>
   </div>
 </div>
