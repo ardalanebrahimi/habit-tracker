@@ -37,6 +37,11 @@ export class AppComponent implements OnInit {
     });
   }
 
+  isAuthPage(): boolean {
+    const currentUrl = this.router.url;
+    return currentUrl === '/login' || currentUrl === '/register';
+  }
+
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);

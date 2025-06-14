@@ -4,13 +4,12 @@
   background-color: #f5f5f5;
 }
 
-/* Content container - adds padding for the bottom navbar */
+/* Content container - adds padding for the top navbar */
 .content-container {
-  padding-bottom: 70px; /* Space for the navbar */
   min-height: 100vh;
 }
 
-/* Header with user info */
+/* Header with auth links */
 .header {
   padding: 15px 20px;
   background-color: #ffffff;
@@ -20,36 +19,6 @@
   justify-content: flex-end;
 }
 
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-
-  .user-name {
-    font-size: 1.1em;
-    font-weight: 600;
-    color: #0056b3;
-
-    @media (max-width: 480px) {
-      font-size: 0.9em;
-    }
-  }
-}
-
-.logout-btn {
-  background-color: transparent;
-  border: 1px solid #dc3545;
-  color: #dc3545;
-  padding: 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.8em;
-
-  &:hover {
-    background-color: #dc3545;
-    color: white;
-  }
-}
 /* Auth links for guest users */
 .auth-links {
   display: flex;
@@ -67,8 +36,6 @@
     background-color: #e9f2ff;
   }
 }
-
-/* No longer needed - removed menu button */
 
 .loading-overlay {
   position: fixed;
@@ -101,8 +68,7 @@
   }
 }
 
-/* Moved to navbar component */
-
+/* Notification badge styling */
 .notification-badge {
   position: absolute;
   right: 0.5rem;

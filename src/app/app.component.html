@@ -1,26 +1,9 @@
+<!-- Navigation Bar (only shown when logged in) -->
+<app-navbar *ngIf="authService.getToken()"></app-navbar>
+
 <div class="app-container">
-  <!-- Content Container with padding for navbar -->
+  <!-- Content Container -->
   <div class="content-container">
-    <div class="header">
-      <!-- Show user name if logged in -->
-      <ng-container *ngIf="authService.getToken(); else guestHeader">
-        <div class="user-info">
-          <span class="user-name">{{
-            authService.getCurrentUser()?.userName
-          }}</span>
-          <button class="logout-btn" (click)="logout()">Logout</button>
-        </div>
-      </ng-container>
-
-      <!-- Show only if NOT logged in -->
-      <ng-template #guestHeader>
-        <div class="auth-links">
-          <a routerLink="/login" class="auth-link">Login</a>
-          <a routerLink="/register" class="auth-link">Register</a>
-        </div>
-      </ng-template>
-    </div>
-
     <div class="loading-overlay" *ngIf="isLoading$ | async">
       <div class="spinner"></div>
     </div>
@@ -29,7 +12,4 @@
 
   <!-- Global Toast Notifications -->
   <app-toast></app-toast>
-
-  <!-- Navigation Bar (only shown when logged in) -->
-  <app-navbar *ngIf="authService.getToken()"></app-navbar>
 </div>
