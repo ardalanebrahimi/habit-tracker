@@ -93,4 +93,15 @@ export class HabitsService {
     const url = `${this.apiUrl}/public?pageNumber=${pageNumber}&pageSize=${pageSize}`;
     return this.http.get<HabitWithProgressDTO[]>(url);
   }
+
+  /**
+   * Copy a public habit from another user
+   * @param id The ID of the habit to copy
+   */
+  copyHabit(id: string): Observable<HabitWithProgressDTO> {
+    return this.http.post<HabitWithProgressDTO>(
+      `${this.apiUrl}/${id}/copy`,
+      {}
+    );
+  }
 }

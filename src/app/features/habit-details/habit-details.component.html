@@ -11,28 +11,40 @@
   <div *ngIf="habit && !isLoading" class="content">
     <div class="top-actions">
       <button class="back-btn" routerLink="/habits">←</button>
-      <div class="action-buttons" *ngIf="habit.isOwnedHabit">
+      <div class="action-buttons">
+        <!-- Copy button for non-owned, public habits -->
         <button
-          class="btn icon-btn check-btn"
-          (click)="toggleCheckRequestModal()"
-          title="Ask friends to check"
+          *ngIf="!habit.isOwnedHabit && !habit.isPrivate"
+          class="btn icon-btn copy-btn"
+          (click)="copyHabit()"
+          title="Copy habit"
         >
-          👥
+          📋
         </button>
-        <button
-          class="btn icon-btn edit-btn"
-          (click)="editHabit()"
-          title="Edit"
-        >
-          ✏️
-        </button>
-        <button
-          class="btn icon-btn delete-btn"
-          (click)="deleteHabit()"
-          title="Delete"
-        >
-          🗑️
-        </button>
+        <!-- Existing action buttons for owned habits -->
+        <ng-container *ngIf="habit.isOwnedHabit">
+          <button
+            class="btn icon-btn check-btn"
+            (click)="toggleCheckRequestModal()"
+            title="Ask friends to check"
+          >
+            👥
+          </button>
+          <button
+            class="btn icon-btn edit-btn"
+            (click)="editHabit()"
+            title="Edit"
+          >
+            ✏️
+          </button>
+          <button
+            class="btn icon-btn delete-btn"
+            (click)="deleteHabit()"
+            title="Delete"
+          >
+            🗑️
+          </button>
+        </ng-container>
       </div>
     </div>
 

@@ -119,6 +119,15 @@
     }
   }
 
+  .copy-btn {
+    background-color: #6c757d;
+    color: white;
+
+    &:hover {
+      background-color: #5a6268;
+    }
+  }
+
   .bottom-actions {
     margin-top: 40px;
     text-align: right;

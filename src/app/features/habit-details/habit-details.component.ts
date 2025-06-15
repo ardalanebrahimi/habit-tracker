@@ -233,6 +233,21 @@ export class HabitDetailsComponent implements OnInit {
     }
   }
 
+  copyHabit(): void {
+    if (!this.habit?.id) return;
+
+    this.habitsService.copyHabit(this.habit.id).subscribe({
+      next: (newHabit) => {
+        // Navigate to the edit page of the newly created habit
+        this.router.navigate(['/edit-habit', newHabit.id]);
+      },
+      error: (err) => {
+        this.errorMessage = 'Failed to copy habit';
+        console.error('Error copying habit:', err);
+      },
+    });
+  }
+
   onShareCompleted(shareType: string): void {
     console.log(`Shared ${shareType} for habit: ${this.habit?.name}`);
     // Optional: Show a toast notification or update UI
