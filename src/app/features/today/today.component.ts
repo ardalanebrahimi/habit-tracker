@@ -17,12 +17,9 @@ export class TodayComponent implements OnInit {
   todayHabits: HabitWithProgressDTO[] = [];
   filteredHabits: HabitWithProgressDTO[] = [];
   friendHabits: HabitWithProgressDTO[] = [];
-  everyoneHabits: any[] = [];
-  currentView: 'myHabits' | 'friends' | 'everyone' = 'myHabits';
+  currentView: 'myHabits' | 'friends' = 'myHabits';
   isLoading = true;
-  isLoadingEveryone = false;
   errorMessage: string | null = null;
-  everyonePage = 1;
   showAllOwnedHabits = false;
 
   constructor(
@@ -67,19 +64,6 @@ export class TodayComponent implements OnInit {
     });
   }
 
-  fetchEveryoneHabits(): void {
-    if (this.isLoadingEveryone) return;
-
-    this.isLoadingEveryone = true;
-    this.habitsService
-      .getPublicHabits(this.everyonePage)
-      .subscribe((response: HabitWithProgressDTO[]) => {
-        this.everyoneHabits = [...this.everyoneHabits, ...response];
-        this.isLoadingEveryone = false;
-        this.everyonePage++;
-      });
-  }
-
   /**
    * ✅ Get the progress percentage for numeric habits
    */
@@ -96,7 +80,7 @@ export class TodayComponent implements OnInit {
   }
 
   /**
-   * ✅ Filter habits based on the selected view (myHabits, friends, everyone)
+   * ✅ Filter habits based on the selected view (myHabits, friends)
    */
   filterHabits(): void {
     if (this.currentView === 'myHabits') {
@@ -105,18 +89,13 @@ export class TodayComponent implements OnInit {
       );
     } else if (this.currentView === 'friends') {
       this.fetchFriendHabits();
-    } else if (this.currentView === 'everyone') {
-      if (this.everyoneHabits.length === 0) {
-        this.everyonePage = 1;
-        this.fetchEveryoneHabits();
-      }
     }
   }
 
   /**
    * ✅ Set the habit filter view
    */
-  setView(view: 'myHabits' | 'friends' | 'everyone'): void {
+  setView(view: 'myHabits' | 'friends'): void {
     this.currentView = view;
     this.filterHabits();
   }
@@ -125,13 +104,8 @@ export class TodayComponent implements OnInit {
    * Handle scroll events for "Everyone's Habits" section
    */
   onScroll(event: Event): void {
-    const target = event.target as HTMLElement;
-    if (
-      target.scrollTop + target.clientHeight >= target.scrollHeight - 2 &&
-      this.currentView === 'everyone'
-    ) {
-      this.fetchEveryoneHabits();
-    }
+    // This method is no longer needed since Everyone's habits moved to Explore
+    // Keeping for backwards compatibility but can be removed
   }
 
   /**

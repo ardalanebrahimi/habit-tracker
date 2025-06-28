@@ -1,0 +1,30 @@
+<div class="explore">
+  <div class="page-header">
+    <h2>🔍 Explore</h2>
+    <p>Discover habits from the community</p>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <div class="habits-container" (scroll)="onScroll($event)">
+    <app-habit-card
+      class="habit-item"
+      *ngFor="let habit of everyoneHabits"
+      [habit]="habit"
+      [isReadOnly]="true"
+    ></app-habit-card>
+
+    <!-- Loading spinner at the end of the list -->
+    <div *ngIf="isLoading" class="loading-spinner">
+      <p>Loading more habits...</p>
+    </div>
+
+    <div *ngIf="!isLoading && everyoneHabits.length === 0" class="no-habits">
+      <p>No public habits to explore.</p>
+    </div>
+  </div>
+
+  <button class="fab" routerLink="/add-habit">+</button>
+</div>

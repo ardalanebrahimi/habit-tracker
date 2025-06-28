@@ -11,12 +11,14 @@ import { ConnectionsComponent } from './features/connections/connections.compone
 import { NotificationsComponent } from './features/notifications/notifications.component';
 import { UserProfileComponent } from './features/user-profile/user-profile.component';
 import { MyProfileComponent } from './features/my-profile/my-profile.component';
+import { ExploreComponent } from './features/explore/explore.component';
 import { AuthService } from './services/auth.service';
 import { inject } from '@angular/core';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'today', pathMatch: 'full' },
   { path: 'today', component: TodayComponent },
+  { path: 'explore', component: ExploreComponent },
   { path: 'habits', component: AllHabitsComponent },
   { path: 'stats', component: StatsComponent },
   { path: 'add-habit', component: HabitFormComponent },

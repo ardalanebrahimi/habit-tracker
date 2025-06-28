@@ -1,20 +1,24 @@
 <div class="today">
-  <div class="page-header">
-    <h2>Home</h2>
-  </div>
-
-  <div class="view-options">
-    <a (click)="setView('myHabits')" [class.active]="currentView === 'myHabits'"
-      >My Habits</a
-    >
-    |
-    <a (click)="setView('friends')" [class.active]="currentView === 'friends'"
-      >Friends' Habits</a
-    >
-    |
-    <a (click)="setView('everyone')" [class.active]="currentView === 'everyone'"
-      >Everyone's Habits</a
-    >
+  <!-- Two-segment pill navigation -->
+  <div class="pill-navigation">
+    <div class="pill-container">
+      <button
+        class="pill-segment"
+        [class.active]="currentView === 'myHabits'"
+        (click)="setView('myHabits')"
+      >
+        <span class="pill-icon">🏷</span>
+        <span class="pill-text">My</span>
+      </button>
+      <button
+        class="pill-segment"
+        [class.active]="currentView === 'friends'"
+        (click)="setView('friends')"
+      >
+        <span class="pill-icon">🤝</span>
+        <span class="pill-text">Friends</span>
+      </button>
+    </div>
   </div>
 
   <div
@@ -61,28 +65,6 @@
       [isReadOnly]="true"
       (habitChanged)="fetchFriendHabits()"
     ></app-habit-card>
-  </div>
-
-  <!-- Everyone's Habits -->
-  <div *ngIf="currentView === 'everyone'" class="everyone-habits">
-    <div class="habit-list" (scroll)="onScroll($event)">
-      <app-habit-card
-        class="habit-item"
-        *ngFor="let habit of everyoneHabits"
-        [habit]="habit"
-        [isReadOnly]="true"
-      ></app-habit-card>
-      <!-- Loading spinner at the end of the list -->
-      <div *ngIf="isLoadingEveryone" class="loading-spinner">
-        <p>Loading more habits...</p>
-      </div>
-    </div>
-    <div
-      *ngIf="!isLoadingEveryone && everyoneHabits.length === 0"
-      class="no-habits"
-    >
-      <p>No habits to display.</p>
-    </div>
   </div>
 
   <button class="fab" routerLink="/add-habit">+</button>

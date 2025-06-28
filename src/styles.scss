@@ -1,12 +1,12 @@
+/* Import shared styles */
+@use "./app/shared/user-link.scss";
+
 /* Global Reset */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-
-/* Import shared styles */
-@import "./app/shared/user-link.scss";
 
 body {
   font-family: Arial, sans-serif;
