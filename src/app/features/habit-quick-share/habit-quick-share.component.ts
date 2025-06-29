@@ -8,138 +8,351 @@ import { HabitWithProgressDTO } from '../../models/habit-with-progress-dto.model
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="quick-share" *ngIf="habit.isOwnedHabit && !habit.isPrivate">
+    <div
+      class="modern-quick-share"
+      *ngIf="habit.isOwnedHabit && !habit.isPrivate"
+    >
       <button
-        class="quick-share-btn"
+        class="modern-share-btn"
         (click)="toggleShareMenu()"
         [class.active]="showShareMenu"
         title="Share this habit"
         [disabled]="isSharing"
       >
-        📤
+        <svg class="share-icon" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M4 12V20C4 20.5523 4.44772 21 5 21H19C19.5523 21 20 20.5523 20 20V12"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <path
+            d="M16 6L12 2L8 6"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M12 2V15"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        </svg>
       </button>
 
       <div
-        class="share-menu"
+        class="modern-share-menu"
         *ngIf="showShareMenu"
         (click)="$event.stopPropagation()"
       >
-        <button
-          class="share-option"
-          (click)="shareCompletion()"
-          *ngIf="habit.isCompleted"
-          [disabled]="isSharing"
-        >
-          ✅ Share Achievement
-        </button>
+        <div class="share-header">
+          <h5>Share your progress</h5>
+        </div>
 
-        <button
-          class="share-option"
-          (click)="shareStreak()"
-          *ngIf="habit.streak > 0"
-          [disabled]="isSharing"
-        >
-          🔥 Share Streak
-        </button>
+        <div class="share-options">
+          <button
+            class="modern-share-option completion"
+            (click)="shareCompletion()"
+            *ngIf="habit.isCompleted"
+            [disabled]="isSharing"
+          >
+            <div class="option-icon">✅</div>
+            <div class="option-content">
+              <span class="option-title">Achievement</span>
+              <span class="option-desc">Share your completion</span>
+            </div>
+          </button>
 
-        <button
-          class="share-option"
-          (click)="shareProgress()"
-          [disabled]="isSharing"
-        >
-          📊 Share Progress
-        </button>
+          <button
+            class="modern-share-option streak"
+            (click)="shareStreak()"
+            *ngIf="habit.streak > 0"
+            [disabled]="isSharing"
+          >
+            <div class="option-icon">🔥</div>
+            <div class="option-content">
+              <span class="option-title">Streak</span>
+              <span class="option-desc"
+                >{{ habit.streak }} {{ getStreakPeriod() }}</span
+              >
+            </div>
+          </button>
 
-        <button
-          class="share-option milestone"
-          (click)="shareMilestone()"
-          *ngIf="isMilestone"
-          [disabled]="isSharing"
-        >
-          🏆 Share Milestone
-        </button>
+          <button
+            class="modern-share-option progress"
+            (click)="shareProgress()"
+            [disabled]="isSharing"
+          >
+            <div class="option-icon">📊</div>
+            <div class="option-content">
+              <span class="option-title">Progress</span>
+              <span class="option-desc">Share your journey</span>
+            </div>
+          </button>
+
+          <button
+            class="modern-share-option milestone"
+            (click)="shareMilestone()"
+            *ngIf="isMilestone"
+            [disabled]="isSharing"
+          >
+            <div class="option-icon">🏆</div>
+            <div class="option-content">
+              <span class="option-title">Milestone</span>
+              <span class="option-desc">Special achievement!</span>
+            </div>
+          </button>
+        </div>
       </div>
     </div>
   `,
   styles: [
     `
-      .quick-share {
+      /* Modern Quick Share Component Styles */
+      .modern-quick-share {
         position: relative;
         display: inline-block;
       }
 
-      .quick-share-btn {
-        background: none;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        width: 28px;
-        height: 28px;
-        cursor: pointer;
-        font-size: 12px;
+      .modern-share-btn {
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: all 0.2s ease;
+        width: 32px;
+        height: 32px;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        color: #6b7280;
+
+        .share-icon {
+          width: 16px;
+          height: 16px;
+        }
+
+        &:hover:not(:disabled) {
+          background: #e8f2ff;
+          border-color: #4f46e5;
+          color: #4f46e5;
+          transform: scale(1.05);
+        }
+
+        &.active {
+          background: #4f46e5;
+          border-color: #4f46e5;
+          color: white;
+          box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        &:disabled {
+          opacity: 0.4;
+          cursor: not-allowed;
+          transform: none;
+        }
       }
 
-      .quick-share-btn:hover:not(:disabled) {
-        background: #f8f9fa;
-        border-color: #17a2b8;
-      }
-
-      .quick-share-btn.active {
-        background: #17a2b8;
-        color: white;
-        border-color: #17a2b8;
-      }
-
-      .quick-share-btn:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-      }
-
-      .share-menu {
+      .modern-share-menu {
         position: absolute;
-        top: 100%;
+        top: calc(100% + 8px);
         right: 0;
         background: white;
-        border: 1px solid #ddd;
-        border-radius: 6px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
         z-index: 1000;
-        min-width: 140px;
-        padding: 4px 0;
-        margin-top: 4px;
+        min-width: 240px;
+        overflow: hidden;
+        animation: slideDown 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: -4px;
+          right: 12px;
+          width: 8px;
+          height: 8px;
+          background: white;
+          transform: rotate(45deg);
+          border-top: 1px solid rgba(0, 0, 0, 0.1);
+          border-left: 1px solid rgba(0, 0, 0, 0.1);
+        }
       }
 
-      .share-option {
-        display: block;
+      .share-header {
+        padding: 16px 16px 8px 16px;
+        border-bottom: 1px solid #f3f4f6;
+
+        h5 {
+          margin: 0;
+          font-size: 14px;
+          font-weight: 600;
+          color: #374151;
+        }
+      }
+
+      .share-options {
+        padding: 8px;
+      }
+
+      .modern-share-option {
+        display: flex;
+        align-items: center;
         width: 100%;
-        padding: 8px 12px;
+        padding: 12px;
         border: none;
         background: none;
-        text-align: left;
+        border-radius: 8px;
         cursor: pointer;
-        font-size: 12px;
-        transition: background-color 0.2s ease;
-        white-space: nowrap;
+        transition: all 0.2s ease;
+        text-align: left;
+        gap: 12px;
+
+        .option-icon {
+          font-size: 20px;
+          flex-shrink: 0;
+          width: 32px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 8px;
+          background: #f9fafb;
+        }
+
+        .option-content {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+
+          .option-title {
+            font-weight: 600;
+            font-size: 14px;
+            color: #374151;
+          }
+
+          .option-desc {
+            font-size: 12px;
+            color: #6b7280;
+          }
+        }
+
+        &:hover:not(:disabled) {
+          background: #f9fafb;
+
+          .option-icon {
+            background: #f3f4f6;
+          }
+        }
+
+        &:disabled {
+          opacity: 0.4;
+          cursor: not-allowed;
+        }
+
+        &.completion {
+          &:hover:not(:disabled) {
+            background: #f0fdf4;
+
+            .option-icon {
+              background: #dcfce7;
+            }
+          }
+        }
+
+        &.streak {
+          &:hover:not(:disabled) {
+            background: #fff7ed;
+
+            .option-icon {
+              background: #fed7aa;
+            }
+          }
+        }
+
+        &.progress {
+          &:hover:not(:disabled) {
+            background: #eff6ff;
+
+            .option-icon {
+              background: #dbeafe;
+            }
+          }
+        }
+
+        &.milestone {
+          background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+          border: 1px solid #f59e0b;
+
+          .option-icon {
+            background: #f59e0b;
+            color: white;
+          }
+
+          .option-title {
+            color: #92400e;
+            font-weight: 700;
+          }
+
+          .option-desc {
+            color: #b45309;
+            font-weight: 600;
+          }
+
+          &:hover:not(:disabled) {
+            background: linear-gradient(135deg, #fde68a 0%, #fcd34d 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+          }
+        }
       }
 
-      .share-option:hover:not(:disabled) {
-        background: #f8f9fa;
+      /* Animations */
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
 
-      .share-option:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
+      /* Responsive Design */
+      @media (max-width: 480px) {
+        .modern-share-menu {
+          right: -8px;
+          min-width: 220px;
+
+          &::before {
+            right: 20px;
+          }
+        }
+
+        .modern-share-option {
+          padding: 14px 12px;
+
+          .option-icon {
+            width: 36px;
+            height: 36px;
+            font-size: 18px;
+          }
+
+          .option-content {
+            .option-title {
+              font-size: 15px;
+            }
+
+            .option-desc {
+              font-size: 13px;
+            }
+          }
+        }
       }
 
-      .share-option.milestone {
-        color: #856404;
-        font-weight: 600;
-      }
-
-      /* Click outside to close */
       :host {
         display: contents;
       }
@@ -159,6 +372,19 @@ export class HabitQuickShareComponent {
 
   get isMilestone(): boolean {
     return this.sharingService.isMilestone(this.habit.streak);
+  }
+
+  getStreakPeriod(): string {
+    switch (this.habit.frequency) {
+      case 'daily':
+        return 'days';
+      case 'weekly':
+        return 'weeks';
+      case 'monthly':
+        return 'months';
+      default:
+        return 'days';
+    }
   }
 
   toggleShareMenu(): void {

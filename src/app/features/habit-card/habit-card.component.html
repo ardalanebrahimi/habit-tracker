@@ -1,78 +1,178 @@
-<div class="habit-card">
-  <!-- Username for friend's habits -->
-  <div *ngIf="!habit.isOwnedHabit" class="user-header">
-    <span class="friend-icon">👤</span>
-    <a [routerLink]="['/profile', habit.userId]" class="user-name clickable">{{
-      habit.userName
-    }}</a>
-  </div>
-
-  <div class="habit-header">
-    <!-- Binary Task Checkbox -->
-    <label class="checkbox-container" *ngIf="habit.goalType === 'binary'">
-      <input
-        type="checkbox"
-        [checked]="isHabitDoneToday()"
-        (change)="toggleHabitCompletion($event)"
-        [disabled]="isReadOnly"
-      />
-    </label>
-    <!-- Habit Name -->
-    <p class="habit-name" [routerLink]="['/habit', habit.id]">
-      {{ habit.name }}
-      <span
-        *ngIf="habit.isOwnedHabit && habit.isPrivate"
-        class="privacy-icon"
-        title="Private habit"
-        >🔒</span
-      >
-    </p>
-
-    <!-- Streak Display -->
-    <span class="streak-badge" *ngIf="habit.streak !== undefined">
-      🔥 {{ habit.streak }} {{ getStreakPeriod() }}
-    </span>
-    <!-- Quick Share Button -->
-    <app-habit-quick-share [habit]="habit"></app-habit-quick-share>
-
-    <!-- Cheer Button for friends' completed habits -->
-    <app-cheer-button
-      [habit]="habit"
-      (cheerSent)="onCheerSent()"
-    ></app-cheer-button>
-
-    <!-- Numeric Task Buttons -->
-    <button
-      *ngIf="habit.goalType === 'numeric' && !isReadOnly"
-      class="icon-button minus"
-      (click)="decrementProgress()"
-    >
-      -
-    </button>
-    <button
-      *ngIf="habit.goalType === 'numeric' && !isReadOnly"
-      class="icon-button plus"
-      (click)="incrementProgress()"
-    >
-      +
-    </button>
-  </div>
-
-  <!-- Numeric Task Progress Bar -->
-  <div *ngIf="habit.goalType === 'numeric'" class="progress-row">
-    <div class="progress-container">
-      <div class="progress-bar" [style.width.%]="getProgressPercentage()"></div>
+<div
+  class="habit-card"
+  [class.friend-habit]="!habit.isOwnedHabit"
+  [class.binary-habit]="habit.goalType === 'binary'"
+  [class.numeric-habit]="habit.goalType === 'numeric'"
+>
+  <!-- Friend's info for non-owned habits -->
+  <div *ngIf="!habit.isOwnedHabit" class="friend-header">
+    <div class="friend-avatar">
+      <span class="avatar-icon">{{ getFriendInitial() }}</span>
     </div>
-    <span class="progress-text"
-      >{{ habit.currentValue || 0 }} / {{ habit.targetValue }}
-      {{ getProgressPeriod() }}</span
-    >
+    <a [routerLink]="['/profile', habit.userId]" class="friend-name">
+      {{ habit.userName }}
+    </a>
   </div>
 
-  <!-- Cheer Display for own habits -->
+  <!-- Compact Main Header Row -->
+  <div class="habit-main-row">
+    <!-- Binary habit completion button -->
+    <div *ngIf="habit.goalType === 'binary'" class="completion-control">
+      <button
+        class="complete-btn"
+        [class.completed]="isHabitDoneToday()"
+        (click)="toggleHabitCompletion($event)"
+        [disabled]="isReadOnly"
+        [title]="isHabitDoneToday() ? 'Mark as incomplete' : 'Mark as complete'"
+      >
+        <svg
+          class="check-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          *ngIf="isHabitDoneToday()"
+        >
+          <path
+            d="M5 12L10 17L20 7"
+            stroke="currentColor"
+            stroke-width="3"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <span class="btn-text">{{
+          isHabitDoneToday() ? "Done" : "Complete"
+        }}</span>
+      </button>
+    </div>
+
+    <!-- Habit name and details -->
+    <div class="habit-info" [routerLink]="['/habit', habit.id]">
+      <h3 class="habit-name">
+        {{ habit.name }}
+        <svg
+          *ngIf="habit.isOwnedHabit && habit.isPrivate"
+          class="privacy-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          title="Private habit"
+        >
+          <path
+            d="M6 10V8C6 5.79086 7.79086 4 10 4H14C16.2091 4 18 5.79086 18 8V10"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <rect
+            x="4"
+            y="10"
+            width="16"
+            height="10"
+            rx="2"
+            fill="currentColor"
+          />
+        </svg>
+      </h3>
+
+      <!-- Numeric progress inline -->
+      <div *ngIf="habit.goalType === 'numeric'" class="progress-summary">
+        <span class="progress-text"
+          >{{ habit.currentValue || 0 }} / {{ habit.targetValue }}
+          {{ getProgressPeriod() }}</span
+        >
+        <span
+          class="progress-percentage"
+          [class.complete]="isHabitDoneToday()"
+          [attr.data-progress]="getProgressLevel()"
+          [title]="getProgressPercentage() + '% complete'"
+        >
+          {{ getProgressPercentage() | number : "1.0-0" }}%
+        </span>
+      </div>
+    </div>
+
+    <!-- Compact actions row -->
+    <div class="compact-actions">
+      <!-- Streak badge -->
+      <div
+        class="streak-badge"
+        *ngIf="habit.streak !== undefined && habit.streak > 0"
+      >
+        <svg class="streak-icon" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M12 2C12 6.5 8.5 8.5 8.5 13C8.5 15.5 10 17 12 17C14 17 15.5 15.5 15.5 13C15.5 8.5 12 6.5 12 2Z"
+            fill="currentColor"
+          />
+        </svg>
+        <span class="streak-count">{{ habit.streak }}</span>
+        <span class="streak-period">{{ getStreakPeriod() }}</span>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="quick-actions">
+        <app-habit-quick-share
+          [habit]="habit"
+          *ngIf="habit.isOwnedHabit"
+        ></app-habit-quick-share>
+        <app-cheer-button
+          [habit]="habit"
+          (cheerSent)="onCheerSent()"
+          *ngIf="!habit.isOwnedHabit"
+        ></app-cheer-button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Numeric habit controls -->
+  <div *ngIf="habit.goalType === 'numeric'" class="numeric-controls-row">
+    <div class="progress-bar-container">
+      <div class="progress-track">
+        <div
+          class="progress-fill"
+          [style.width.%]="getProgressPercentage()"
+          [class.completed]="isHabitDoneToday()"
+          [attr.data-progress]="getProgressLevel()"
+          [title]="getProgressPercentage() + '% complete'"
+        ></div>
+      </div>
+    </div>
+
+    <div *ngIf="!isReadOnly" class="numeric-controls">
+      <button
+        class="control-btn decrement"
+        (click)="decrementProgress()"
+        [disabled]="(habit.currentValue || 0) <= 0"
+        title="Decrease"
+      >
+        <svg viewBox="0 0 24 24" fill="none">
+          <path
+            d="M5 12H19"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        </svg>
+      </button>
+      <button
+        class="control-btn increment"
+        (click)="incrementProgress()"
+        title="Increase"
+      >
+        <svg viewBox="0 0 24 24" fill="none">
+          <path
+            d="M12 5V19M5 12H19"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Cheer Display for own habits (collapsed by default) -->
   <app-cheer-display
     *ngIf="habit.isOwnedHabit && habit.id"
     [habitId]="habit.id"
+    class="cheer-display"
   ></app-cheer-display>
 
   <!-- Milestone Celebration -->

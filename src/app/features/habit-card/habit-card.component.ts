@@ -69,6 +69,14 @@ export class HabitCardComponent {
     return ((this.habit.currentValue || 0) / this.habit.targetValue) * 100;
   }
 
+  getProgressLevel(): string {
+    const percentage = this.getProgressPercentage();
+    if (percentage >= 100) return 'complete';
+    if (percentage >= 70) return 'high';
+    if (percentage >= 30) return 'medium';
+    return 'low';
+  }
+
   isHabitDoneToday(): boolean {
     if (this.habit.goalType === 'binary') {
       return this.habit.isCompleted;
@@ -78,10 +86,14 @@ export class HabitCardComponent {
   toggleHabitCompletion(event: Event): void {
     if (this.isReadOnly) return;
 
-    const isChecked = (event.target as HTMLInputElement).checked;
+    event.preventDefault();
+    event.stopPropagation();
+
+    const isCurrentlyCompleted = this.isHabitDoneToday();
     const previousStreak = this.habit.streak;
 
-    if (isChecked) {
+    if (!isCurrentlyCompleted) {
+      // Mark as complete
       this.habitsService.updateHabitProgress(this.habit.id!, false).subscribe({
         next: () => {
           // Update habit streak optimistically (assuming success)
@@ -95,8 +107,15 @@ export class HabitCardComponent {
         error: (err) => console.error('Error marking habit as complete:', err),
       });
     } else {
+      // Mark as incomplete (undo)
       this.habitsService.updateHabitProgress(this.habit.id!, true).subscribe({
-        next: () => this.habitChanged.emit(),
+        next: () => {
+          this.habit.isCompleted = false;
+          if (this.habit.streak > 0) {
+            this.habit.streak = previousStreak - 1;
+          }
+          this.habitChanged.emit();
+        },
         error: (err) => console.error('Error undoing habit:', err),
       });
     }
@@ -166,5 +185,10 @@ export class HabitCardComponent {
   onCheerSent(): void {
     // Emit event to refresh habit data or update UI
     this.habitChanged.emit();
+  }
+
+  getFriendInitial(): string {
+    if (!this.habit.userName) return '?';
+    return this.habit.userName.charAt(0).toUpperCase();
   }
 }
