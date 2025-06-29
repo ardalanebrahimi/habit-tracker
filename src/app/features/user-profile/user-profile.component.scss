@@ -1,3 +1,6 @@
+@import "../../../styles/_shared.scss";
+
+// Optimized User Profile Styles
 .user-profile {
   padding: 20px;
   max-width: 1200px;
@@ -11,9 +14,9 @@
   }
 
   .error-message {
-    color: var(--ion-color-danger);
-    background: rgba(var(--ion-color-danger-rgb), 0.1);
-    border-radius: 8px;
+    color: var(--danger-color);
+    background: rgba(239, 68, 68, 0.1);
+    border-radius: var(--radius-md);
     margin: 20px 0;
   }
 
@@ -21,206 +24,197 @@
     background: none;
     border: none;
     font-size: 16px;
-    color: var(--ion-color-primary);
+    color: var(--primary-color);
     cursor: pointer;
     margin-bottom: 20px;
     padding: 8px 0;
-
     &:hover {
       text-decoration: underline;
     }
   }
 
   .profile-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    @extend %flex-between;
     margin-bottom: 30px;
     padding: 20px;
-    background: var(--ion-color-light);
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: var(--bg-light);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
 
     .profile-info {
-      display: flex;
-      align-items: center;
+      @extend %flex-start;
       gap: 20px;
 
       .avatar {
         width: 80px;
         height: 80px;
         border-radius: 50%;
-        background: var(--ion-color-primary);
+        background: linear-gradient(
+          135deg,
+          var(--primary-color) 0%,
+          var(--purple-primary) 100%
+        );
+        @extend %flex-center;
         color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         font-size: 32px;
         font-weight: bold;
+        box-shadow: var(--shadow-md);
       }
 
-      .user-details {
-        h2 {
+      .profile-details {
+        h1 {
           margin: 0 0 8px 0;
-          color: var(--ion-color-dark);
-          font-size: 28px;
+          color: var(--text-primary);
+          font-size: 24px;
         }
 
-        .joined-date,
-        .view-count {
-          margin: 4px 0;
-          color: var(--ion-color-medium);
-          font-size: 14px;
+        .profile-meta {
+          @extend %text-small;
+          color: var(--text-secondary);
+
+          .meta-item {
+            margin-bottom: 4px;
+            @extend %flex-start;
+            gap: 6px;
+
+            .icon {
+              width: 16px;
+              height: 16px;
+            }
+          }
         }
       }
     }
 
     .profile-actions {
-      .connect-btn {
-        background: var(--ion-color-primary);
-        color: white;
-        border: none;
-        padding: 12px 24px;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 16px;
-        transition: all 0.2s ease;
+      @extend %flex-start;
+      gap: 10px;
 
-        &:hover {
-          background: var(--ion-color-primary-shade);
-          transform: translateY(-1px);
+      .action-btn {
+        @extend %btn-primary;
+        padding: 8px 16px;
+
+        &.secondary {
+          @extend %btn-secondary;
         }
       }
-
-      .friend-badge {
-        background: var(--ion-color-success);
-        color: white;
-        padding: 12px 24px;
-        border-radius: 8px;
-        font-size: 16px;
-        font-weight: 500;
-      }
     }
   }
 
-  .tab-navigation {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 24px;
-    border-bottom: 2px solid var(--ion-color-light);
+  .profile-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
 
-    .tab-btn {
-      background: none;
-      border: none;
-      padding: 12px 24px;
-      cursor: pointer;
-      font-size: 16px;
-      color: var(--ion-color-medium);
-      border-bottom: 3px solid transparent;
-      transition: all 0.2s ease;
+    .main-content {
+      .section {
+        @extend %card-base;
+        margin-bottom: 20px;
 
-      &:hover {
-        color: var(--ion-color-primary);
-      }
+        .section-header {
+          @extend %flex-between;
+          margin-bottom: 20px;
 
-      &.active {
-        color: var(--ion-color-primary);
-        border-bottom-color: var(--ion-color-primary);
-        font-weight: 600;
-      }
-    }
-  }
+          h3 {
+            margin: 0;
+            color: var(--text-primary);
+          }
 
-  .habits-section {
-    .no-habits {
-      text-align: center;
-      padding: 40px;
-      color: var(--ion-color-medium);
-      font-size: 16px;
-    }
+          .filter-controls {
+            @extend %flex-start;
+            gap: 10px;
 
-    .habits-group {
-      margin-bottom: 32px;
+            select,
+            input {
+              padding: 6px 12px;
+              border: 1px solid var(--border-light);
+              border-radius: var(--radius-sm);
+              background: white;
+              color: var(--text-primary);
+            }
+          }
+        }
 
-      h3 {
-        margin: 0 0 16px 0;
-        color: var(--ion-color-dark);
-        font-size: 20px;
-        font-weight: 600;
-      }
+        .habits-grid {
+          display: grid;
+          gap: 16px;
+        }
 
-      .habits-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 16px;
+        .empty-state {
+          text-align: center;
+          padding: 40px;
+          color: var(--text-muted);
+        }
       }
     }
-  }
 
-  .analytics-section {
-    .analytics-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 32px;
-
-      .stat-card {
-        background: var(--ion-color-light);
-        padding: 24px;
-        border-radius: 12px;
+    .sidebar {
+      .stats-card {
+        @extend %card-base;
+        margin-bottom: 20px;
         text-align: center;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        transition: transform 0.2s ease;
 
-        &:hover {
-          transform: translateY(-2px);
+        h4 {
+          margin: 0 0 15px 0;
+          color: var(--text-primary);
         }
 
-        .stat-value {
-          font-size: 32px;
-          font-weight: bold;
-          color: var(--ion-color-primary);
-          margin-bottom: 8px;
-        }
+        .stat-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 15px;
 
-        .stat-label {
-          font-size: 14px;
-          color: var(--ion-color-medium);
-          font-weight: 500;
+          .stat-item {
+            .stat-number {
+              font-size: 1.5rem;
+              font-weight: bold;
+              color: var(--primary-color);
+              margin-bottom: 4px;
+            }
+
+            .stat-label {
+              @extend %text-small;
+              color: var(--text-secondary);
+            }
+          }
         }
       }
-    }
 
-    .categories-section {
-      h3 {
-        margin: 0 0 16px 0;
-        color: var(--ion-color-dark);
-        font-size: 20px;
-        font-weight: 600;
-      }
+      .connection-section {
+        @extend %card-base;
 
-      .categories-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
+        h4 {
+          margin: 0 0 15px 0;
+          color: var(--text-primary);
+        }
 
-        .category-tag {
-          background: var(--ion-color-primary);
-          color: white;
-          padding: 8px 16px;
-          border-radius: 20px;
-          font-size: 14px;
-          font-weight: 500;
+        .connection-actions {
+          @extend %flex-start;
+          gap: 10px;
+          margin-bottom: 15px;
+
+          .connect-btn {
+            @extend %btn-primary;
+            padding: 8px 16px;
+            font-size: 14px;
+          }
+        }
+
+        .connection-status {
+          @extend %text-small;
+          color: var(--text-secondary);
+          text-align: center;
+          padding: 20px;
         }
       }
     }
   }
 }
 
-// Mobile responsive
+// Responsive design
 @media (max-width: 768px) {
   .user-profile {
-    padding: 16px;
+    padding: 15px;
 
     .profile-header {
       flex-direction: column;
@@ -229,21 +223,13 @@
 
       .profile-info {
         flex-direction: column;
-        gap: 16px;
+        text-align: center;
       }
     }
 
-    .analytics-section .analytics-grid {
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 12px;
-
-      .stat-card {
-        padding: 16px;
-
-        .stat-value {
-          font-size: 24px;
-        }
-      }
+    .profile-content {
+      grid-template-columns: 1fr;
+      gap: 20px;
     }
   }
 }

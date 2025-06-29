@@ -1,5 +1,6 @@
 /* Import shared styles */
 @use "./app/shared/user-link.scss";
+@import "styles/_shared.scss";
 
 /* CSS Variables for Theme Consistency */
 :root {

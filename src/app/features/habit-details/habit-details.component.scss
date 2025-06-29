@@ -1,3 +1,6 @@
+@import "../../../styles/_shared.scss";
+
+// Optimized Habit Details Styles
 .habit-details {
   max-width: 800px;
   margin: 0 auto;
@@ -13,13 +16,11 @@
   }
 
   .error-message {
-    color: #dc3545;
+    color: var(--danger-color);
   }
 
   .top-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    @extend %flex-between;
     margin-bottom: 20px;
 
     .back-btn {
@@ -30,14 +31,13 @@
       cursor: pointer;
       padding: 8px;
       transition: color 0.2s;
-
       &:hover {
         color: #333;
       }
     }
 
     .action-buttons {
-      display: flex;
+      @extend %flex-start;
       gap: 8px;
     }
   }
@@ -49,9 +49,7 @@
     h2 {
       font-size: 28px;
       margin: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      @extend %flex-center;
       gap: 10px;
       flex-wrap: wrap;
     }
@@ -66,7 +64,6 @@
         background-color: #f8d7da;
         color: #721c24;
       }
-
       &.public {
         background-color: #d4edda;
         color: #155724;
@@ -78,328 +75,179 @@
     width: 36px;
     height: 36px;
     padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @extend %flex-center;
     font-size: 18px;
     border-radius: 50%;
     border: none;
     cursor: pointer;
     transition: transform 0.2s, background-color 0.3s;
-
     &:hover {
       transform: scale(1.1);
     }
   }
 
   .check-btn {
-    background-color: #4caf50;
+    background-color: var(--success-color);
     color: white;
-
     &:hover {
-      background-color: #45a049;
+      background-color: var(--success-hover);
     }
   }
 
   .edit-btn {
-    background-color: #11ea43;
-    color: black;
-
+    background-color: var(--primary-color);
+    color: white;
     &:hover {
-      background-color: #05c131;
+      background-color: var(--primary-hover);
     }
   }
 
   .delete-btn {
-    background-color: #dc3545;
+    background-color: var(--danger-color);
     color: white;
-
     &:hover {
-      background-color: #b02a37;
+      background-color: #dc2626;
     }
   }
 
-  .copy-btn {
-    background-color: #6c757d;
-    color: white;
+  .habit-overview {
+    @extend %card-base;
+    margin-bottom: 30px;
 
-    &:hover {
-      background-color: #5a6268;
-    }
-  }
+    .overview-content {
+      @extend %flex-between;
+      align-items: flex-start;
+      gap: 20px;
 
-  .bottom-actions {
-    margin-top: 40px;
-    text-align: right;
+      .overview-stats {
+        flex: 1;
 
-    .archive-btn {
-      padding: 12px 24px;
-      background-color: #6c757d;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: all 0.2s ease;
+        .stat-item {
+          margin-bottom: 15px;
 
-      &:hover {
-        background-color: #5a6268;
-        transform: translateY(-2px);
+          .stat-label {
+            @extend %text-small;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+          }
+
+          .stat-value {
+            @extend %text-large;
+            color: var(--text-primary);
+          }
+        }
+      }
+
+      .completion-control {
+        flex-shrink: 0;
+
+        .complete-btn {
+          @extend %btn-success;
+          padding: 12px 24px;
+          font-size: 16px;
+          gap: 8px;
+
+          &.completed {
+            background: linear-gradient(
+              135deg,
+              var(--success-color) 0%,
+              var(--success-hover) 100%
+            );
+          }
+        }
       }
     }
   }
 
-  .info-section,
-  .progress-section,
-  .history-section {
-    background: #f9f9f9;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-    h3 {
-      margin-top: 0;
-      margin-bottom: 20px;
-      font-size: 20px;
-      color: #333;
-    }
-  }
-
-  .info-grid {
+  .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 20px;
-  }
+    margin-bottom: 30px;
 
-  .info-item {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+    .stat-card {
+      @extend %card-base;
+      text-align: center;
+      padding: 20px;
 
-    .label {
-      font-size: 14px;
-      color: #666;
-    }
-
-    .value {
-      font-size: 16px;
-      font-weight: 500;
-      color: #333;
-
-      &.streak {
-        color: #e65100;
+      .stat-number {
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--primary-color);
+        margin-bottom: 8px;
       }
 
-      &.completed {
-        color: #28a745;
+      .stat-label {
+        @extend %text-medium;
+        color: var(--text-secondary);
       }
     }
   }
 
-  .progress-bar-container {
-    width: 100%;
-    height: 8px;
-    background-color: #eaeaea;
-    border-radius: 4px;
-    overflow: hidden;
-    margin-top: 5px;
-  }
-
-  .progress-bar {
-    height: 100%;
-    background-color: #007bff;
-    transition: width 0.3s ease;
-  }
-
-  .history-section {
-    background-color: #fff;
-    border-radius: 8px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-top: 1.5rem;
-
-    h3 {
-      margin: 0 0 1rem;
-      color: #333;
-    }
-
-    .chart-container {
-      width: 100%;
-      height: 300px;
-      margin-top: 1rem;
-      overflow: hidden;
-    }
-
-    .chart {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: flex-end;
-      padding: 1rem 0;
-    }
-
-    .chart-bars {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      width: 100%;
-      height: 100%;
-      padding: 0 1rem;
-    }
-
-    .bar-container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      height: 200px;
-      margin: 0 0.25rem;
-      position: relative;
-      justify-content: flex-end;
-    }
-
-    .bar {
-      width: 2rem;
-      background-color: #007bff;
-      border-radius: 4px 4px 0 0;
-      transition: height 0.3s ease;
-      min-height: 2px;
-      margin: 0.5rem 0;
-    }
-
-    .bar-value {
-      font-size: 0.875rem;
-      color: #666;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-    }
-
-    .bar-label {
-      font-size: 0.75rem;
-      color: #999;
-      margin-top: 0.5rem;
-      white-space: nowrap;
-    }
-  }
-
-  .progress-section {
+  .calendar-container {
+    @extend %card-base;
     margin-bottom: 30px;
 
     h3 {
-      color: #333;
-      margin-bottom: 15px;
-      font-size: 20px;
-    }
-
-    .share-section {
-      margin-top: 20px;
-      padding: 16px;
-      background: #f8f9fa;
-      border-radius: 8px;
-      border-left: 4px solid #17a2b8;
-
-      h4 {
-        margin: 0 0 12px 0;
-        color: #495057;
-        font-size: 16px;
-        font-weight: 600;
-      }
+      margin-bottom: 20px;
+      color: var(--text-primary);
     }
   }
 
-  // Modal styles
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-
-  .modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 400px;
-    max-height: 80vh;
-    overflow-y: auto;
+  .logs-section {
+    @extend %card-base;
 
     h3 {
-      margin: 0 0 20px;
-      color: #333;
-      text-align: center;
-    }
-
-    .connections-list {
       margin-bottom: 20px;
-      max-height: 300px;
-      overflow-y: auto;
+      color: var(--text-primary);
+    }
 
-      .connection-item {
-        padding: 10px;
-        border-bottom: 1px solid #eee;
+    .log-item {
+      @extend %flex-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-light);
 
-        &:last-child {
-          border-bottom: none;
-        }
+      &:last-child {
+        border-bottom: none;
+      }
 
-        label {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          cursor: pointer;
+      .log-date {
+        @extend %text-medium;
+        color: var(--text-primary);
+      }
 
-          input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-          }
-        }
+      .log-value {
+        @extend %text-medium;
+        color: var(--primary-color);
       }
     }
 
-    .modal-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-muted);
+    }
+  }
+}
 
-      .btn {
-        padding: 8px 16px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-weight: 500;
-        transition: background-color 0.3s;
+// Responsive design
+@media (max-width: 768px) {
+  .habit-details {
+    padding: 15px;
+    padding-top: 50px;
 
-        &.cancel-btn {
-          background-color: #6c757d;
-          color: white;
-
-          &:hover {
-            background-color: #5a6268;
-          }
-        }
-
-        &.send-btn {
-          background-color: #4caf50;
-          color: white;
-
-          &:hover:not(:disabled) {
-            background-color: #45a049;
-          }
-
-          &:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
-          }
-        }
-      }
+    .page-header h2 {
+      font-size: 24px;
+    }
+    .overview-content {
+      flex-direction: column;
+    }
+    .stats-grid {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+    }
+    .stat-card .stat-number {
+      font-size: 1.5rem;
     }
   }
 }

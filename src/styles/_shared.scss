@@ -1,0 +1,174 @@
+// Shared styles to reduce component SCSS file sizes
+
+// Common variables
+:root {
+  --border-light: #d1d5db;
+  --bg-light: #f9fafb;
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-muted: #6b7280;
+  --primary-color: #4f46e5;
+  --primary-hover: #3730a3;
+  --success-color: #10b981;
+  --success-hover: #059669;
+  --warning-color: #f59e0b;
+  --danger-color: #ef4444;
+  --purple-primary: #7c3aed;
+  --purple-hover: #6d28d9;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.12);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.15);
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// Common button styles
+%btn-base {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  border: none;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  &:hover:not(:disabled) {
+    transform: scale(1.02);
+  }
+}
+
+%btn-primary {
+  @extend %btn-base;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color) 0%,
+    var(--primary-hover) 100%
+  );
+  color: white;
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, var(--primary-hover) 0%, #312e81 100%);
+  }
+}
+
+%btn-success {
+  @extend %btn-base;
+  background: linear-gradient(
+    135deg,
+    var(--success-color) 0%,
+    var(--success-hover) 100%
+  );
+  color: white;
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, var(--success-hover) 0%, #047857 100%);
+  }
+}
+
+%btn-secondary {
+  @extend %btn-base;
+  background: var(--bg-light);
+  color: var(--text-secondary);
+  border: 2px solid #9ca3af;
+
+  &:hover:not(:disabled) {
+    border-color: var(--primary-color);
+    background: #f0f9ff;
+    color: var(--primary-color);
+  }
+}
+
+// Common card styles
+%card-base {
+  background: #e5e7eb;
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-fast);
+  border: 1px solid var(--border-light);
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+    background: #e0e4e7;
+  }
+}
+
+// Common layouts
+%flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+%flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+%flex-start {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+// Common text styles
+%text-small {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+%text-medium {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+%text-large {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+// Common animations
+@keyframes confetti {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
