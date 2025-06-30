@@ -14,6 +14,15 @@
   <!-- ✅ Step 1: Name & Description -->
   <div *ngIf="!isLoading && step === 1" class="step">
     <h3>Step 1: Habit Name & Description</h3>
+
+    <!-- AI Suggestion Button -->
+    <div class="ai-suggestion-section">
+      <button type="button" class="ai-button" (click)="openAiModal()">
+        💡 Use AI
+      </button>
+      <p class="ai-hint">Let AI help you create the perfect habit</p>
+    </div>
+
     <input [(ngModel)]="habit.name" placeholder="Habit Name" required />
     <textarea
       [(ngModel)]="habit.description"
@@ -230,5 +239,98 @@
     >
       {{ isEditMode ? "Save Changes" : "Start Habit" }}
     </button>
+  </div>
+</div>
+
+<!-- AI Suggestion Modal -->
+<div *ngIf="showAiModal" class="modal-overlay" (click)="closeAiModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>💡 AI Habit Suggestion</h3>
+      <button class="close-btn" (click)="closeAiModal()">×</button>
+    </div>
+
+    <!-- Prompt Input Section -->
+    <div *ngIf="!showAiPreview" class="modal-body">
+      <p class="modal-description">
+        Describe what habit you'd like to build and AI will create a
+        personalized suggestion for you.
+      </p>
+
+      <textarea
+        [(ngModel)]="aiPrompt"
+        placeholder="Example: I want to read more books to improve my knowledge..."
+        maxlength="500"
+        class="ai-prompt-input"
+      ></textarea>
+
+      <div class="character-counter">{{ aiPrompt.length }}/500 characters</div>
+
+      <div *ngIf="aiErrorMessage" class="error-message">
+        {{ aiErrorMessage }}
+      </div>
+
+      <div class="modal-actions">
+        <button
+          class="btn secondary"
+          (click)="closeAiModal()"
+          [disabled]="isAiLoading"
+        >
+          Cancel
+        </button>
+        <button
+          class="btn primary"
+          (click)="generateAiSuggestion()"
+          [disabled]="!aiPrompt.trim() || aiPrompt.length > 500 || isAiLoading"
+        >
+          <span *ngIf="isAiLoading" class="loading-spinner">⏳</span>
+          {{ isAiLoading ? "Generating..." : "Generate" }}
+        </button>
+      </div>
+    </div>
+
+    <!-- AI Suggestion Preview Section -->
+    <div *ngIf="showAiPreview && aiSuggestion" class="modal-body">
+      <div class="suggestion-preview">
+        <h4>{{ aiSuggestion.name }}</h4>
+        <p class="suggestion-description">{{ aiSuggestion.description }}</p>
+
+        <div class="suggestion-details">
+          <div class="detail-item">
+            <strong>Frequency:</strong>
+            {{ formatFrequency(aiSuggestion.frequency) }}
+          </div>
+          <div class="detail-item">
+            <strong>Type:</strong> {{ formatGoalType(aiSuggestion.goalType) }}
+          </div>
+          <div class="detail-item" *ngIf="aiSuggestion.targetValue">
+            <strong>Target:</strong> {{ aiSuggestion.targetValue }}
+            <span *ngIf="aiSuggestion.goalType === 'numeric'">
+              per
+              {{ formatFrequency(aiSuggestion.frequency).toLowerCase() }}</span
+            >
+          </div>
+          <div class="detail-item" *ngIf="aiSuggestion.targetType">
+            <strong>Target Type:</strong>
+            {{ formatTargetType(aiSuggestion.targetType) }}
+          </div>
+          <div class="detail-item" *ngIf="aiSuggestion.streakTarget">
+            <strong>Streak Goal:</strong> {{ aiSuggestion.streakTarget }}
+            {{ formatFrequency(aiSuggestion.frequency).toLowerCase() }}s
+          </div>
+          <div class="detail-item" *ngIf="aiSuggestion.endDate">
+            <strong>End Date:</strong>
+            {{ aiSuggestion.endDate | date : "mediumDate" }}
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn secondary" (click)="tryAgain()">Try Again</button>
+        <button class="btn primary" (click)="useAiSuggestion()">
+          Use This Suggestion
+        </button>
+      </div>
+    </div>
   </div>
 </div>

@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { HabitWithProgressDTO } from '../models/habit-with-progress-dto.model';
 import { CreateHabitDTO } from '../models/create-habit-dto.model';
+import { AiHabitSuggestionRequest } from '../models/ai-habit-suggestion.model';
 
 @Injectable({
   providedIn: 'root',
@@ -102,6 +103,18 @@ export class HabitsService {
     return this.http.post<HabitWithProgressDTO>(
       `${this.apiUrl}/${id}/copy`,
       {}
+    );
+  }
+
+  /**
+   * Generate AI habit suggestion based on user prompt
+   * @param prompt User's description of the habit they want to build
+   */
+  generateHabitSuggestion(prompt: string): Observable<CreateHabitDTO> {
+    const request: AiHabitSuggestionRequest = { prompt };
+    return this.http.post<CreateHabitDTO>(
+      `${environment.apiUrl}/ai/habit-suggest`,
+      request
     );
   }
 }

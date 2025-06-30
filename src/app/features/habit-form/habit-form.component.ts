@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HabitsService } from '../../services/habits.service';
 import { CreateHabitDTO } from '../../models/create-habit-dto.model';
-import { HabitWithProgressDTO } from '../../models/habit-with-progress-dto.model';
 
 @Component({
   selector: 'app-habit-form',
@@ -32,6 +31,14 @@ export class HabitFormComponent implements OnInit {
   isLoading = false;
   errorMessage: string | null = null;
   startType?: string;
+
+  // AI suggestion properties
+  showAiModal = false;
+  aiPrompt = '';
+  isAiLoading = false;
+  aiErrorMessage: string | null = null;
+  aiSuggestion: CreateHabitDTO | null = null;
+  showAiPreview = false;
 
   constructor(
     private habitsService: HabitsService,
@@ -116,5 +123,89 @@ export class HabitFormComponent implements OnInit {
         } habit. Please try again.`;
       },
     });
+  }
+
+  // AI suggestion methods
+  openAiModal(): void {
+    this.showAiModal = true;
+    this.aiPrompt = '';
+    this.aiErrorMessage = null;
+    this.aiSuggestion = null;
+    this.showAiPreview = false;
+  }
+
+  closeAiModal(): void {
+    this.showAiModal = false;
+    this.aiPrompt = '';
+    this.aiErrorMessage = null;
+    this.aiSuggestion = null;
+    this.showAiPreview = false;
+  }
+
+  generateAiSuggestion(): void {
+    if (!this.aiPrompt.trim() || this.aiPrompt.length > 500) {
+      this.aiErrorMessage = 'Please enter a valid prompt (1-500 characters)';
+      return;
+    }
+
+    this.isAiLoading = true;
+    this.aiErrorMessage = null;
+
+    this.habitsService.generateHabitSuggestion(this.aiPrompt).subscribe({
+      next: (suggestion) => {
+        this.aiSuggestion = suggestion;
+        this.showAiPreview = true;
+        this.isAiLoading = false;
+      },
+      error: (err) => {
+        this.aiErrorMessage =
+          'Failed to generate suggestion. Please try again.';
+        this.isAiLoading = false;
+        console.error('AI suggestion error:', err);
+      },
+    });
+  }
+
+  useAiSuggestion(): void {
+    if (!this.aiSuggestion) return;
+
+    // Remove AI-specific fields and use the rest directly
+    const { ...habitData } = this.aiSuggestion;
+
+    // Direct assignment - no conversion needed since AI response extends CreateHabitDTO
+    this.habit = { ...this.habit, ...habitData };
+
+    // Close modal and advance to next step
+    this.closeAiModal();
+    this.step = 2; // Move to frequency & type step
+  }
+
+  tryAgain(): void {
+    this.showAiPreview = false;
+    this.aiSuggestion = null;
+  }
+
+  // Display helpers for AI suggestion preview
+  formatFrequency(frequency: string): string {
+    return frequency.charAt(0).toUpperCase() + frequency.slice(1);
+  }
+
+  formatGoalType(goalType: string): string {
+    return goalType === 'binary'
+      ? 'Yes/No (Binary)'
+      : 'Count/Measure (Numeric)';
+  }
+
+  formatTargetType(targetType: string): string {
+    switch (targetType) {
+      case 'ongoing':
+        return 'Ongoing';
+      case 'streak':
+        return 'Streak Target';
+      case 'endDate':
+        return 'End Date Target';
+      default:
+        return targetType;
+    }
   }
 }
