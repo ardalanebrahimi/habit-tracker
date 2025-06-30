@@ -4,10 +4,10 @@
   background: linear-gradient(135deg, #5a5a5a 0%, #ffffff 100%);
 }
 
-/* Content container - adds padding for the top navbar and bottom navigation */
+/* Content container - adds padding for the floating bottom navigation */
 .content-container {
   min-height: 100vh;
-  padding-bottom: var(--nav-h);
+  padding-bottom: 100px; /* Increased to accommodate floating nav */
 }
 
 /* Header with auth links */
