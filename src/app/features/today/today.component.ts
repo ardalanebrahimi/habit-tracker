@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HabitCardComponent } from '../habit-card/habit-card.component';
 import { HabitWithProgressDTO } from '../../models/habit-with-progress-dto.model';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { HabitsService } from '../../services/habits.service';
 import { ConnectionsService } from '../../services/connections.service';
+import { OnboardingService } from '../../services/onboarding.service';
 
 @Component({
   selector: 'app-today',
@@ -21,10 +22,13 @@ export class TodayComponent implements OnInit {
   isLoading = true;
   errorMessage: string | null = null;
   showAllOwnedHabits = false;
+  showFabOptions = false; // Add this property
 
   constructor(
     private habitsService: HabitsService,
-    private connectionsService: ConnectionsService
+    private connectionsService: ConnectionsService,
+    public onboardingService: OnboardingService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -147,5 +151,31 @@ export class TodayComponent implements OnInit {
       this.filteredHabits = this.todayHabits.filter(
         (habit) => !habit.isCompleted
       );
+  }
+
+  /**
+   * Check if FAB should show additional options
+   */
+  shouldShowFabOptions(): boolean {
+    return this.shouldShowOnboardingFab();
+  }
+
+  /**
+   * Check if onboarding FAB option should be shown
+   */
+  shouldShowOnboardingFab(): boolean {
+    return this.onboardingService.shouldShowOnboardingPrompts() && this.todayHabits.length < 3;
+  }
+
+  /**
+   * Toggle FAB options visibility
+   */
+  toggleFabOptions(): void {
+    if (this.shouldShowFabOptions()) {
+      this.showFabOptions = !this.showFabOptions;
+    } else {
+      // If no options, go directly to add habit
+      this.router.navigate(['/add-habit']);
+    }
   }
 }

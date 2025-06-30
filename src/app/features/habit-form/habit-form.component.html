@@ -70,10 +70,16 @@
       <div class="ai-content">
         <h3>Need inspiration?</h3>
         <p>Let AI help you create the perfect habit based on your goals</p>
-        <button type="button" class="ai-button" (click)="openAiModal()">
-          <span class="ai-button-icon">✨</span>
-          Use AI Assistant
-        </button>
+        <div class="ai-actions">
+          <button type="button" class="ai-button primary" (click)="openAiModal()">
+            <span class="ai-button-icon">✨</span>
+            Use AI Assistant
+          </button>
+          <a class="ai-button secondary" routerLink="/onboarding">
+            <span class="ai-button-icon">🚀</span>
+            Get Personalized Journey
+          </a>
+        </div>
       </div>
     </div>
 

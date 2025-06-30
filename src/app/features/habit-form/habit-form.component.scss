@@ -340,6 +340,12 @@
       opacity: 0.9;
       line-height: 1.4;
     }
+
+    .ai-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
   }
 
   .ai-button {
@@ -356,6 +362,19 @@
     align-items: center;
     gap: 6px;
     backdrop-filter: blur(10px);
+    text-decoration: none;
+
+    &.primary {
+      background: rgba(255, 255, 255, 0.25);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    &.secondary {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.25);
+      font-size: 13px;
+      padding: 6px 12px;
+    }
 
     &:hover {
       background: rgba(255, 255, 255, 0.3);

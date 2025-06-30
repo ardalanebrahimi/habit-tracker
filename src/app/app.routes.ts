@@ -12,6 +12,7 @@ import { NotificationsComponent } from './features/notifications/notifications.c
 import { UserProfileComponent } from './features/user-profile/user-profile.component';
 import { MyProfileComponent } from './features/my-profile/my-profile.component';
 import { ExploreComponent } from './features/explore/explore.component';
+import { OnboardingComponent } from './features/onboarding/onboarding.component';
 import { AuthService } from './services/auth.service';
 import { inject } from '@angular/core';
 
@@ -21,6 +22,7 @@ export const routes: Routes = [
   { path: 'explore', component: ExploreComponent },
   { path: 'habits', component: AllHabitsComponent },
   { path: 'stats', component: StatsComponent },
+  { path: 'onboarding', component: OnboardingComponent },
   { path: 'add-habit', component: HabitFormComponent },
   { path: 'edit-habit/:id', component: HabitFormComponent },
   { path: 'habit/:id', component: HabitDetailsComponent },

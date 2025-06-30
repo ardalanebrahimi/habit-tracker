@@ -109,3 +109,80 @@
 }
 
 // Habit cards now handle their own styling through app-habit-card component
+
+// Quick Actions Section
+.quick-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+
+  .action-btn {
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border: none;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+
+    &.onboarding-action {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 24px rgba(102, 126, 234, 0.4);
+      }
+    }
+
+    &.habit-action {
+      background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+      color: #2c5530;
+      box-shadow: 0 4px 16px rgba(132, 250, 176, 0.3);
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 24px rgba(132, 250, 176, 0.4);
+      }
+    }
+
+    .action-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .action-text {
+      font-weight: 600;
+      line-height: 1.2;
+    }
+  }
+
+  // Mobile responsiveness
+  @media (max-width: 600px) {
+    flex-direction: column;
+
+    .action-btn {
+      min-width: auto;
+      justify-content: center;
+      text-align: center;
+      padding: 14px 16px;
+
+      .action-icon {
+        font-size: 18px;
+      }
+
+      .action-text {
+        font-size: 13px;
+      }
+    }
+  }
+}

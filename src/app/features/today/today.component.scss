@@ -61,14 +61,54 @@
 
   .done-message {
     text-align: center;
-    background: #eafaf1;
-    color: #28a745;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    font-size: 18px;
-    line-height: 1.6;
+    margin: 40px 0;
+    padding: 32px;
+    background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+    border-radius: 16px;
+    color: #2c5530;
+
+    p {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0 0 8px 0;
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.7);
+    }
+
+    .add-more-section {
+      margin-top: 24px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+
+      p {
+        font-size: 16px;
+        margin-bottom: 16px;
+        color: #2c5530;
+      }
+
+      .btn-outline {
+        background: transparent;
+        border: 2px solid #2c5530;
+        color: #2c5530;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+
+        &:hover {
+          background: #2c5530;
+          color: white;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(44, 85, 48, 0.3);
+        }
+      }
+    }
   }
 
   .friends-habits {
@@ -178,6 +218,368 @@
       input:checked + .slider:before {
         transform: translateX(14px);
       }
+    }
+  }
+
+  // Welcome Section Styles
+  .welcome-section {
+    margin: 40px 0;
+    display: flex;
+    justify-content: center;
+
+    .welcome-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 32px;
+      border-radius: 16px;
+      text-align: center;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+
+      .welcome-header {
+        margin-bottom: 28px;
+
+        h2 {
+          font-size: 28px;
+          font-weight: 700;
+          margin: 0 0 12px 0;
+          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        p {
+          font-size: 16px;
+          opacity: 0.9;
+          margin: 0;
+          line-height: 1.5;
+        }
+      }
+
+      .welcome-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 28px;
+
+        .btn-primary {
+          background: rgba(255, 255, 255, 0.2);
+          border: 2px solid white;
+          color: white;
+          padding: 14px 24px;
+          border-radius: 12px;
+          font-size: 16px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          text-decoration: none;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+
+          &:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+          }
+        }
+
+        .btn-secondary {
+          background: transparent;
+          border: 2px solid rgba(255, 255, 255, 0.5);
+          color: white;
+          padding: 12px 24px;
+          border-radius: 12px;
+          font-size: 14px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          text-decoration: none;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+
+          &:hover {
+            border-color: white;
+            background: rgba(255, 255, 255, 0.1);
+          }
+        }
+      }
+
+      .welcome-features {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+
+        .feature-item {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 8px 0;
+          font-size: 14px;
+          opacity: 0.9;
+
+          .feature-icon {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+          }
+
+          .feature-text {
+            text-align: left;
+          }
+        }
+      }
+    }
+  }
+
+  // Mobile Responsiveness for Welcome Section
+  @media (max-width: 768px) {
+    .welcome-section {
+      margin: 20px 0;
+
+      .welcome-card {
+        padding: 24px 20px;
+        margin: 0 10px;
+
+        .welcome-header h2 {
+          font-size: 24px;
+        }
+
+        .welcome-actions {
+          .btn-primary,
+          .btn-secondary {
+            padding: 12px 20px;
+            font-size: 14px;
+          }
+        }
+
+        .welcome-features {
+          .feature-item {
+            font-size: 13px;
+
+            .feature-icon {
+              font-size: 16px;
+            }
+          }
+        }
+      }
+    }
+
+    .done-message {
+      margin: 20px 10px;
+      padding: 24px 20px;
+
+      p {
+        font-size: 16px;
+      }
+
+      .add-more-section {
+        padding: 16px;
+
+        p {
+          font-size: 14px;
+        }
+
+        .btn-outline {
+          padding: 10px 16px;
+          font-size: 13px;
+        }
+      }
+    }
+  }
+
+  // Enhanced FAB with Options
+  .fab-container {
+    position: fixed;
+    bottom: 80px; // Above the bottom navigation
+    right: 20px;
+    z-index: 1000;
+  }
+
+  .main-fab {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    font-size: 24px;
+    font-weight: 300;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    position: relative;
+
+    &:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 28px rgba(102, 126, 234, 0.5);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    &.has-options {
+      background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+      box-shadow: 0 4px 20px rgba(132, 250, 176, 0.4);
+
+      &:hover {
+        box-shadow: 0 6px 28px rgba(132, 250, 176, 0.5);
+      }
+    }
+
+    .fab-icon {
+      transition: transform 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &.rotated {
+        transform: rotate(45deg);
+      }
+    }
+  }
+
+  .fab-options {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+  }
+
+  .fab-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: white;
+    border-radius: 28px;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    min-width: 160px;
+    white-space: nowrap;
+
+    &:hover {
+      transform: translateX(-8px);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    &.onboarding-fab {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+
+      &:hover {
+        box-shadow: 0 6px 24px rgba(102, 126, 234, 0.4);
+      }
+    }
+
+    &.manual-fab {
+      background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+      color: #2c5530;
+
+      &:hover {
+        box-shadow: 0 6px 24px rgba(132, 250, 176, 0.4);
+      }
+    }
+
+    .fab-option-icon {
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .fab-option-label {
+      font-weight: 600;
+    }
+  }
+
+  // Legacy FAB styles (for fallback)
+  .fab {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    font-size: 24px;
+    font-weight: 300;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    z-index: 1000;
+
+    &:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 28px rgba(102, 126, 234, 0.5);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+
+  // Mobile Responsiveness for FAB
+  @media (max-width: 768px) {
+    .fab-container {
+      bottom: 100px; // More space from bottom nav on mobile
+      right: 16px;
+    }
+
+    .main-fab {
+      width: 48px;
+      height: 48px;
+      font-size: 20px;
+    }
+
+    .fab-options {
+      bottom: 60px;
+
+      .fab-option {
+        padding: 10px 14px;
+        font-size: 13px;
+        min-width: 140px;
+
+        .fab-option-icon {
+          font-size: 16px;
+        }
+      }
+    }
+
+    .fab {
+      width: 48px;
+      height: 48px;
+      font-size: 20px;
+      bottom: 100px;
+      right: 16px;
     }
   }
 }

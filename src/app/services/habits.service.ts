@@ -5,6 +5,7 @@ import { environment } from '../../environments/environment';
 import { HabitWithProgressDTO } from '../models/habit-with-progress-dto.model';
 import { CreateHabitDTO } from '../models/create-habit-dto.model';
 import { AiHabitSuggestionRequest } from '../models/ai-habit-suggestion.model';
+import { OnboardingRequest, OnboardingSuggestion } from '../models/onboarding.model';
 
 @Injectable({
   providedIn: 'root',
@@ -115,6 +116,19 @@ export class HabitsService {
     return this.http.post<CreateHabitDTO>(
       `${environment.apiUrl}/ai/habit-suggest`,
       request
+    );
+  }
+
+  /**
+   * Generate onboarding habit suggestions based on questionnaire answers
+   * @param answers User's onboarding questionnaire answers
+   */
+  generateOnboardingSuggestions(
+    answers: OnboardingRequest
+  ): Observable<OnboardingSuggestion[]> {
+    return this.http.post<OnboardingSuggestion[]>(
+      `${environment.apiUrl}/ai/onboard-suggest`,
+      answers
     );
   }
 }

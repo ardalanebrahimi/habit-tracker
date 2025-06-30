@@ -21,12 +21,67 @@
     </div>
   </div>
 
+  <!-- Welcome Section for New Users -->
   <div
-    *ngIf="filteredHabits.length === 0 && currentView === 'myHabits'"
+    *ngIf="todayHabits.length === 0 && currentView === 'myHabits' && onboardingService.shouldShowOnboardingPrompts()"
+    class="welcome-section"
+  >
+    <div class="welcome-card">
+      <div class="welcome-header">
+        <h2>🌟 Welcome to Habit Tracker!</h2>
+        <p>Start building positive habits that will transform your life.</p>
+      </div>
+      
+      <div class="welcome-actions">
+        <button 
+          class="btn-primary onboarding-btn" 
+          routerLink="/onboarding"
+        >
+          🚀 Get Personalized Habits
+        </button>
+        <button 
+          class="btn-secondary manual-btn" 
+          routerLink="/add-habit"
+        >
+          📝 Create Habit Manually
+        </button>
+      </div>
+      
+      <div class="welcome-features">
+        <div class="feature-item">
+          <span class="feature-icon">🎯</span>
+          <span class="feature-text">AI-powered habit suggestions</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">👥</span>
+          <span class="feature-text">Connect with friends for motivation</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">📊</span>
+          <span class="feature-text">Track your progress and streaks</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Completion Message for Users with Habits -->
+  <div
+    *ngIf="filteredHabits.length === 0 && todayHabits.length > 0 && currentView === 'myHabits'"
     class="done-message"
   >
     <p>🎉 Great job! You've completed all your tasks for today! 🎉</p>
     <p>Enjoy your day or keep up the streak tomorrow! 🌟</p>
+    
+    <!-- Option to get more habits -->
+    <div class="add-more-section">
+      <p>Want to build more positive habits?</p>
+      <button 
+        class="btn-outline get-suggestions-btn" 
+        routerLink="/onboarding"
+      >
+        ✨ Get AI Suggestions
+      </button>
+    </div>
   </div>
 
   <!-- My Habits -->
@@ -67,5 +122,35 @@
     ></app-habit-card>
   </div>
 
-  <button class="fab" routerLink="/add-habit">+</button>
+  <!-- Enhanced FAB with Onboarding Option -->
+  <div class="fab-container">
+    <!-- Primary FAB -->
+    <button 
+      class="fab main-fab" 
+      [class.has-options]="shouldShowFabOptions()"
+      (click)="toggleFabOptions()"
+    >
+      <span class="fab-icon" [class.rotated]="showFabOptions">{{ showFabOptions ? '×' : '+' }}</span>
+    </button>
+
+    <!-- Secondary FAB Options -->
+    <div class="fab-options" [class.visible]="showFabOptions">
+      <a 
+        class="fab-option onboarding-fab" 
+        routerLink="/onboarding"
+        *ngIf="shouldShowOnboardingFab()"
+      >
+        <span class="fab-option-icon">🚀</span>
+        <span class="fab-option-label">AI Suggestions</span>
+      </a>
+      
+      <a 
+        class="fab-option manual-fab" 
+        routerLink="/add-habit"
+      >
+        <span class="fab-option-icon">📝</span>
+        <span class="fab-option-label">Manual Habit</span>
+      </a>
+    </div>
+  </div>
 </div>

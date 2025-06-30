@@ -1,0 +1,268 @@
+<div class="onboarding-container">
+  <!-- Header -->
+  <div class="onboarding-header">
+    <h1 class="onboarding-title">Let's personalize your habit journey</h1>
+    <p class="onboarding-subtitle">Answer a few quick questions to get AI-powered habit recommendations</p>
+    
+    <!-- Token indicator -->
+    <div class="token-indicator" *ngIf="tokenInfo && !showPaywall">
+      <div class="token-icon">🎫</div>
+      <span class="token-count">{{ tokenInfo.remainingTokens }} AI suggestions remaining</span>
+    </div>
+    
+    <!-- Progress indicator -->
+    <div class="progress-container" *ngIf="!showSuggestions && !showPaywall">
+      <div class="progress-bar">
+        <div class="progress-fill" [style.width.%]="getProgress()"></div>
+      </div>
+      <div class="progress-text">
+        Step {{ currentStep + 1 }} of {{ questions.length }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Question Steps -->
+  <div *ngIf="!showSuggestions && !isGeneratingSuggestions && !showPaywall" class="question-container">
+    <div class="question-card">
+      <div class="question-icon">{{ getCurrentQuestion().icon }}</div>
+      <h2 class="question-title">{{ getCurrentQuestion().title }}</h2>
+      <p class="question-subtitle">{{ getCurrentQuestion().subtitle }}</p>
+
+      <!-- Options -->
+      <div class="options-grid">
+        <button
+          *ngFor="let option of getCurrentQuestion().options"
+          class="option-card"
+          [class.selected]="answers[getCurrentQuestion().id] === option.value"
+          (click)="selectOption(option.value)"
+        >
+          <div class="option-icon" *ngIf="option.icon">{{ option.icon }}</div>
+          <div class="option-content">
+            <h3 class="option-label">{{ option.label }}</h3>
+            <p class="option-description" *ngIf="option.description">{{ option.description }}</p>
+          </div>
+        </button>
+      </div>
+
+      <!-- Custom input for flexible questions -->
+      <div *ngIf="getCurrentQuestion().allowCustom" class="custom-input-section">
+        <p class="custom-label">Or describe your own:</p>
+        <input
+          type="text"
+          class="custom-input"
+          placeholder="Type your answer here..."
+          [value]="answers[getCurrentQuestion().id]"
+          (input)="handleCustomInput($any($event.target).value)"
+        />
+      </div>
+
+      <!-- Navigation buttons -->
+      <div class="navigation-buttons">
+        <button
+          *ngIf="currentStep > 0"
+          class="btn btn-secondary"
+          (click)="previousStep()"
+        >
+          <span class="btn-arrow">←</span>
+          Back
+        </button>
+        <button
+          class="btn btn-primary"
+          [disabled]="!canProceed()"
+          (click)="nextStep()"
+        >
+          <span *ngIf="currentStep < questions.length - 1">
+            Continue
+            <span class="btn-arrow">→</span>
+          </span>
+          <span *ngIf="currentStep === questions.length - 1">
+            Get My Suggestions
+            <span class="btn-arrow">✨</span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isGeneratingSuggestions && !showPaywall" class="loading-container">
+    <div class="loading-spinner"></div>
+    <h2>Creating your personalized habits...</h2>
+    <p>Our AI is analyzing your answers to suggest the perfect habits for you.</p>
+  </div>
+
+  <!-- Paywall Modal -->
+  <div *ngIf="showPaywall" class="paywall-container">
+    <div class="paywall-card">
+      <div class="paywall-icon">🎫</div>
+      <h2>AI Suggestions Require Tokens</h2>
+      <p class="paywall-subtitle">
+        You've used all your AI suggestion tokens. Get more to continue personalizing your habit journey!
+      </p>
+
+      <div class="token-info">
+        <div class="token-stat">
+          <span class="stat-label">Current Tokens:</span>
+          <span class="stat-value">{{ tokenInfo?.remainingTokens || 0 }}</span>
+        </div>
+        <div class="token-stat">
+          <span class="stat-label">Tokens Reset:</span>
+          <span class="stat-value">{{ (tokenInfo?.resetDate | date:'shortDate') || 'Unknown' }}</span>
+        </div>
+      </div>
+
+      <div class="paywall-options">
+        <div class="option-card featured">
+          <div class="option-header">
+            <h3>Get More Tokens</h3>
+            <div class="option-badge">Recommended</div>
+          </div>
+          <div class="option-content">
+            <div class="price">$2.99</div>
+            <div class="benefit">10 AI Suggestions</div>
+            <ul class="features">
+              <li>✨ Personalized habit recommendations</li>
+              <li>🎯 Tailored to your goals</li>
+              <li>🚀 Instant suggestions</li>
+            </ul>
+          </div>
+          <button class="btn btn-primary btn-large" (click)="purchaseTokens()">
+            Purchase Tokens
+          </button>
+        </div>
+
+        <div class="option-card">
+          <div class="option-header">
+            <h3>Skip AI Suggestions</h3>
+          </div>
+          <div class="option-content">
+            <div class="price">Free</div>
+            <div class="benefit">Create habits manually</div>
+            <ul class="features">
+              <li>🛠️ Full habit customization</li>
+              <li>📝 Create from scratch</li>
+              <li>💯 No limits</li>
+            </ul>
+          </div>
+          <button class="btn btn-secondary btn-large" (click)="skipOnboarding()">
+            Create Manually
+          </button>
+        </div>
+      </div>
+
+      <div class="paywall-footer">
+        <button class="paywall-close" (click)="closePaywall()">
+          ← Back to Questions
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Suggestions Display -->
+  <div *ngIf="showSuggestions && !isGeneratingSuggestions && !showPaywall" class="suggestions-container">
+    <div class="suggestions-header">
+      <h2>Your Personalized Habit Recommendations</h2>
+      <p>Based on your answers, here are {{ suggestions.length }} habits that could help you reach your goals:</p>
+    </div>
+
+    <div class="suggestions-grid">
+      <div
+        *ngFor="let suggestion of suggestions; let i = index"
+        class="suggestion-card"
+        [class.selected]="isSuggestionSelected(i)"
+        (click)="toggleSuggestionSelection(i)"
+      >
+        <div class="suggestion-header">
+          <div class="suggestion-icon">
+            {{ suggestion.goalType === 'binary' ? '✅' : '📊' }}
+          </div>
+          <div class="selection-indicator">
+            <div class="checkbox" [class.checked]="isSuggestionSelected(i)">
+              <svg *ngIf="isSuggestionSelected(i)" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M5 12L10 17L20 7"
+                  stroke="currentColor"
+                  stroke-width="3"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="suggestion-title">{{ suggestion.name }}</h3>
+        <p class="suggestion-description">{{ suggestion.description }}</p>
+
+        <div class="suggestion-details">
+          <div class="detail-item">
+            <span class="detail-icon">📅</span>
+            <span class="detail-text">{{ suggestion.frequency | titlecase }}</span>
+          </div>
+          <div class="detail-item" *ngIf="suggestion.targetValue">
+            <span class="detail-icon">🎯</span>
+            <span class="detail-text">Target: {{ suggestion.targetValue }}</span>
+          </div>
+          <div class="detail-item" *ngIf="suggestion.category">
+            <span class="detail-icon">🏷️</span>
+            <span class="detail-text">{{ suggestion.category }}</span>
+          </div>
+        </div>
+
+        <div *ngIf="suggestion.tips" class="suggestion-tips">
+          <h4>💡 Tips:</h4>
+          <p>{{ suggestion.tips }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="suggestions-actions">
+      <button class="btn btn-secondary" (click)="tryAgain()">
+        Try Different Answers
+      </button>
+      <button class="btn btn-tertiary" (click)="skipOnboarding()">
+        Skip & Create Custom
+      </button>
+      <button
+        class="btn btn-primary btn-large"
+        [disabled]="!canStartHabits() || isCreatingHabits"
+        (click)="startSelectedHabits()"
+      >
+        <span *ngIf="isCreatingHabits" class="loading-spinner-small">⏳</span>
+        <span *ngIf="!isCreatingHabits">
+          Start {{ selectedSuggestions.size }} 
+          {{ selectedSuggestions.size === 1 ? 'Habit' : 'Habits' }}
+          <span class="btn-arrow">🚀</span>
+        </span>
+        <span *ngIf="isCreatingHabits">Creating...</span>
+      </button>
+    </div>
+
+    <div class="suggestions-footer">
+      <p class="footer-text">
+        You selected {{ selectedSuggestions.size }} of {{ suggestions.length }} habits. 
+        You can always add more or edit these later!
+      </p>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage" class="error-banner">
+    <div class="error-icon">⚠️</div>
+    <div class="error-content">
+      <h3>Something went wrong</h3>
+      <p>{{ errorMessage }}</p>
+      <button class="btn btn-primary" (click)="tryAgain()">
+        Try Again
+      </button>
+    </div>
+  </div>
+
+  <!-- Skip option -->
+  <div *ngIf="!showSuggestions && !isGeneratingSuggestions && !showPaywall" class="skip-section">
+    <button class="skip-btn" (click)="skipOnboarding()">
+      Skip onboarding and create habits manually
+    </button>
+  </div>
+</div>
