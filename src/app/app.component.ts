@@ -7,6 +7,9 @@ import { Observable } from 'rxjs';
 import { LoadingService } from './services/loading.service';
 import { ToastComponent } from './features/toast/toast.component';
 import { NavbarComponent } from './features/navbar/navbar.component';
+import { App } from '@capacitor/app';
+import { Capacitor } from '@capacitor/core';
+import { NavigationService } from './services/navigation.service';
 
 @Component({
   selector: 'app-root',
@@ -22,19 +25,32 @@ export class AppComponent implements OnInit {
     public authService: AuthService,
     private router: Router,
     private loadingService: LoadingService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private navigationService: NavigationService
   ) {
     this.isLoading$ = this.loadingService.isLoading.asObservable();
   }
 
   ngOnInit(): void {
-    // Nothing to initialize
+    this.initializeBackButtonHandling();
   }
 
   ngAfterViewInit() {
     this.isLoading$.subscribe(() => {
       this.cdr.detectChanges(); // ✅ Force UI update to avoid ExpressionChangedAfterItHasBeenCheckedError
     });
+  }
+
+  private initializeBackButtonHandling(): void {
+    if (Capacitor.getPlatform() === 'android') {
+      App.addListener('backButton', () => {
+        this.handleBackButton();
+      });
+    }
+  }
+
+  private handleBackButton(): void {
+    this.navigationService.handleBackNavigation();
   }
 
   isAuthPage(): boolean {
@@ -44,6 +60,7 @@ export class AppComponent implements OnInit {
 
   logout(): void {
     this.authService.logout();
+    this.navigationService.clearHistory();
     this.router.navigate(['/login']);
   }
 }
