@@ -1,244 +1,524 @@
 <div class="wizard-container">
+  <!-- Page Header with Progress -->
   <div class="page-header">
-    <h2>{{ pageTitle }}</h2>
+    <h1 class="page-title">{{ pageTitle }}</h1>
+    <div *ngIf="!isLoading && !errorMessage" class="progress-indicator">
+      <div class="progress-steps">
+        <div
+          class="step-indicator"
+          [class.active]="step >= 1"
+          [class.completed]="step > 1"
+        >
+          <span class="step-number">1</span>
+        </div>
+        <div class="progress-line" [class.completed]="step > 1"></div>
+        <div
+          class="step-indicator"
+          [class.active]="step >= 2"
+          [class.completed]="step > 2"
+        >
+          <span class="step-number">2</span>
+        </div>
+        <div class="progress-line" [class.completed]="step > 2"></div>
+        <div
+          class="step-indicator"
+          [class.active]="step >= 3"
+          [class.completed]="step > 3"
+        >
+          <span class="step-number">3</span>
+        </div>
+        <div class="progress-line" [class.completed]="step > 3"></div>
+        <div
+          class="step-indicator"
+          [class.active]="step >= 4"
+          [class.completed]="step > 4"
+        >
+          <span class="step-number">4</span>
+        </div>
+      </div>
+      <p class="progress-text">Step {{ step }} of 4</p>
+    </div>
   </div>
 
   <!-- Loading State -->
-  <div *ngIf="isLoading" class="loading">Loading...</div>
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="loading-spinner"></div>
+    <p>Loading...</p>
+  </div>
 
   <!-- Error Message -->
-  <div *ngIf="errorMessage" class="error-message">
-    {{ errorMessage }}
+  <div *ngIf="errorMessage" class="error-banner">
+    <div class="error-icon">⚠️</div>
+    <div class="error-content">
+      <h3>Oops! Something went wrong</h3>
+      <p>{{ errorMessage }}</p>
+    </div>
   </div>
 
   <!-- ✅ Step 1: Name & Description -->
-  <div *ngIf="!isLoading && step === 1" class="step">
-    <h3>Step 1: Habit Name & Description</h3>
-
-    <!-- AI Suggestion Button -->
-    <div class="ai-suggestion-section">
-      <button type="button" class="ai-button" (click)="openAiModal()">
-        💡 Use AI
-      </button>
-      <p class="ai-hint">Let AI help you create the perfect habit</p>
+  <div *ngIf="!isLoading && step === 1" class="step-card">
+    <div class="step-header">
+      <h2 class="step-title">Let's name your habit</h2>
+      <p class="step-subtitle">
+        Give your habit a clear, motivating name and description
+      </p>
     </div>
 
-    <input [(ngModel)]="habit.name" placeholder="Habit Name" required />
-    <textarea
-      [(ngModel)]="habit.description"
-      placeholder="Describe your habit (optional)"
-    ></textarea>
-    <p *ngIf="!habit.name && errorMessage" class="error">
-      ⚠ Habit name is required
-    </p>
-    <button class="primary" (click)="nextStep()" [disabled]="!habit.name">
-      Next
-    </button>
+    <!-- AI Suggestion Card -->
+    <div class="ai-suggestion-card">
+      <div class="ai-icon">🤖</div>
+      <div class="ai-content">
+        <h3>Need inspiration?</h3>
+        <p>Let AI help you create the perfect habit based on your goals</p>
+        <button type="button" class="ai-button" (click)="openAiModal()">
+          <span class="ai-button-icon">✨</span>
+          Use AI Assistant
+        </button>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="input-group">
+        <label class="input-label"
+          >Habit Name <span class="required">*</span></label
+        >
+        <input
+          [(ngModel)]="habit.name"
+          placeholder="e.g., Read for 30 minutes, Drink 8 glasses of water"
+          class="form-input"
+          [class.error]="!habit.name && errorMessage"
+        />
+      </div>
+
+      <div class="input-group">
+        <label class="input-label">Description (Optional)</label>
+        <textarea
+          [(ngModel)]="habit.description"
+          placeholder="Why is this habit important to you? What do you hope to achieve?"
+          class="form-textarea"
+          rows="3"
+        ></textarea>
+      </div>
+
+      <div *ngIf="!habit.name && errorMessage" class="field-error">
+        <span class="error-icon">⚠️</span>
+        Habit name is required
+      </div>
+    </div>
+
+    <div class="step-actions">
+      <button
+        class="btn btn-primary"
+        (click)="nextStep()"
+        [disabled]="!habit.name"
+      >
+        Continue
+        <span class="btn-arrow">→</span>
+      </button>
+    </div>
   </div>
   <!-- ✅ Step 2: Frequency & Type -->
-  <div *ngIf="!isLoading && step === 2" class="step">
-    <h3>Step 2: Set Frequency & Type</h3>
-    <select [(ngModel)]="habit.frequency">
-      <option value="daily">Daily</option>
-      <option value="weekly">Weekly</option>
-      <option value="monthly">Monthly</option>
-    </select>
-    <select [(ngModel)]="habit.goalType">
-      <option value="binary">Binary (Done/Not Done)</option>
-      <option value="numeric">Numeric (e.g., 2 Liters of Water)</option>
-    </select>
-    <input
-      *ngIf="habit.goalType === 'numeric'"
-      [(ngModel)]="habit.targetValue"
-      type="number"
-      placeholder="Target Value"
-      min="1"
-    />
+  <div *ngIf="!isLoading && step === 2" class="step-card">
+    <div class="step-header">
+      <h2 class="step-title">Set your frequency & type</h2>
+      <p class="step-subtitle">
+        How often will you do this habit and how will you measure it?
+      </p>
+    </div>
 
-    <!-- ✅ Privacy Toggle -->
-    <div class="privacy-section">
-      <h4>Privacy Settings</h4>
-      <div class="privacy-toggle">
-        <label class="toggle-switch">
-          <input type="checkbox" [(ngModel)]="habit.isPrivate" />
-          <span class="slider"></span>
-        </label>
+    <div class="form-section">
+      <div class="input-group">
+        <label class="input-label">Frequency</label>
+        <select [(ngModel)]="habit.frequency" class="form-select">
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="monthly">Monthly</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label class="input-label">Measurement Type</label>
+        <select [(ngModel)]="habit.goalType" class="form-select">
+          <option value="binary">Simple Yes/No (Did I do it?)</option>
+          <option value="numeric">Count or Measure (How much did I do?)</option>
+        </select>
+      </div>
+
+      <div *ngIf="habit.goalType === 'numeric'" class="input-group fade-in">
+        <label class="input-label">Target Amount</label>
+        <input
+          [(ngModel)]="habit.targetValue"
+          type="number"
+          placeholder="e.g., 8 glasses, 30 minutes, 10,000 steps"
+          class="form-input"
+          [class.error]="
+            habit.goalType === 'numeric' &&
+            (!habit.targetValue || habit.targetValue < 1)
+          "
+          min="1"
+        />
+        <div
+          *ngIf="
+            habit.goalType === 'numeric' &&
+            (!habit.targetValue || habit.targetValue < 1)
+          "
+          class="field-error"
+        >
+          <span class="error-icon">⚠️</span>
+          Please enter a valid target amount
+        </div>
+      </div>
+    </div>
+
+    <!-- Privacy Settings Card -->
+    <div class="privacy-card">
+      <div class="privacy-header">
+        <h3>Privacy Settings</h3>
+        <div class="privacy-toggle">
+          <label class="toggle-switch">
+            <input type="checkbox" [(ngModel)]="habit.isPrivate" />
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="privacy-status">
+        <div class="privacy-icon">
+          {{ habit.isPrivate ? "🔒" : "🌍" }}
+        </div>
         <div class="privacy-info">
           <span class="privacy-label">
-            {{ habit.isPrivate ? "🔒 Private" : "🌍 Public" }}
+            {{ habit.isPrivate ? "Private Habit" : "Public Habit" }}
           </span>
           <p class="privacy-description">
             {{
               habit.isPrivate
-                ? "Only you can see this habit"
-                : "Your connections and others can see this habit"
+                ? "Only you can see this habit and your progress"
+                : "Your connections and community can see this habit"
             }}
           </p>
         </div>
       </div>
     </div>
 
-    <p
-      *ngIf="
-        habit.goalType === 'numeric' &&
-        (!habit.targetValue || habit.targetValue < 1)
-      "
-      class="error"
-    >
-      ⚠ Please enter a valid target
-    </p>
-    <button class="secondary" (click)="previousStep()">Back</button>
-    <button
-      class="primary"
-      (click)="nextStep()"
-      [disabled]="
-        habit.goalType === 'numeric' &&
-        (!habit.targetValue || habit.targetValue < 1)
-      "
-    >
-      Next
-    </button>
+    <div class="step-actions">
+      <button class="btn btn-secondary" (click)="previousStep()">
+        <span class="btn-arrow">←</span>
+        Back
+      </button>
+      <button
+        class="btn btn-primary"
+        (click)="nextStep()"
+        [disabled]="
+          habit.goalType === 'numeric' &&
+          (!habit.targetValue || habit.targetValue < 1)
+        "
+      >
+        Continue
+        <span class="btn-arrow">→</span>
+      </button>
+    </div>
   </div>
 
   <!-- ✅ Step 3: Define Target -->
-  <div *ngIf="!isLoading && step === 3" class="step">
-    <h3>Step 3: Define Target</h3>
-    <div class="radio-group">
-      <label>
+  <div *ngIf="!isLoading && step === 3" class="step-card">
+    <div class="step-header">
+      <h2 class="step-title">Set your goal</h2>
+      <p class="step-subtitle">Choose how you want to track your progress</p>
+    </div>
+
+    <div class="form-section">
+      <div class="radio-grid">
+        <label
+          class="radio-card"
+          [class.selected]="habit.targetType === 'ongoing'"
+        >
+          <input
+            type="radio"
+            name="target"
+            [(ngModel)]="habit.targetType"
+            value="ongoing"
+          />
+          <div class="radio-content">
+            <div class="radio-icon">🔄</div>
+            <h4>Ongoing</h4>
+            <p>Keep building this habit indefinitely</p>
+          </div>
+        </label>
+
+        <label
+          class="radio-card"
+          [class.selected]="habit.targetType === 'streak'"
+        >
+          <input
+            type="radio"
+            name="target"
+            [(ngModel)]="habit.targetType"
+            value="streak"
+          />
+          <div class="radio-content">
+            <div class="radio-icon">🔥</div>
+            <h4>Streak Target</h4>
+            <p>Aim for a specific number of consecutive days</p>
+          </div>
+        </label>
+
+        <label
+          class="radio-card"
+          [class.selected]="habit.targetType === 'endDate'"
+        >
+          <input
+            type="radio"
+            name="target"
+            [(ngModel)]="habit.targetType"
+            value="endDate"
+          />
+          <div class="radio-content">
+            <div class="radio-icon">📅</div>
+            <h4>End Date</h4>
+            <p>Set a specific date to achieve your goal</p>
+          </div>
+        </label>
+      </div>
+
+      <!-- Target Details -->
+      <div *ngIf="habit.targetType === 'streak'" class="input-group fade-in">
+        <label class="input-label">Streak Target (Days)</label>
         <input
-          type="radio"
-          name="target"
-          [(ngModel)]="habit.targetType"
-          value="ongoing"
-        />
-        Ongoing
-      </label>
-      <label>
-        <input
-          type="radio"
-          name="target"
-          [(ngModel)]="habit.targetType"
-          value="streak"
-        />
-        Streak Target
-        <input
-          *ngIf="habit.targetType === 'streak'"
           type="number"
           [(ngModel)]="habit.streakTarget"
           min="1"
-          placeholder="Days"
+          placeholder="e.g., 30, 60, 100"
+          class="form-input"
+          [class.error]="habit.targetType === 'streak' && !habit.streakTarget"
         />
-      </label>
-      <label>
+        <div
+          *ngIf="habit.targetType === 'streak' && !habit.streakTarget"
+          class="field-error"
+        >
+          <span class="error-icon">⚠️</span>
+          Please enter a streak target
+        </div>
+      </div>
+
+      <div *ngIf="habit.targetType === 'endDate'" class="input-group fade-in">
+        <label class="input-label">End Date</label>
         <input
-          type="radio"
-          name="target"
-          [(ngModel)]="habit.targetType"
-          value="endDate"
-        />
-        End Date
-        <input
-          *ngIf="habit.targetType === 'endDate'"
           type="date"
           [(ngModel)]="habit.endDate"
           [min]="minDate"
+          class="form-input"
+          [class.error]="habit.targetType === 'endDate' && !habit.endDate"
         />
-      </label>
+        <div
+          *ngIf="habit.targetType === 'endDate' && !habit.endDate"
+          class="field-error"
+        >
+          <span class="error-icon">⚠️</span>
+          Please select an end date
+        </div>
+      </div>
+
+      <!-- Allowed Gaps Card (Only for Daily Habits) -->
+      <div *ngIf="habit.frequency === 'daily'" class="feature-card">
+        <div class="feature-header">
+          <div class="feature-icon">🛡️</div>
+          <h3>Streak Protection</h3>
+        </div>
+        <p>How many days can you miss before your streak breaks?</p>
+        <input
+          type="number"
+          [(ngModel)]="habit.allowedGaps"
+          min="0"
+          placeholder="0"
+          class="form-input"
+        />
+        <small class="helper-text"
+          >Setting this to 1 means you can miss 1 day without breaking your
+          streak</small
+        >
+      </div>
     </div>
 
-    <p
-      *ngIf="habit.targetType === 'streak' && !habit.streakTarget"
-      class="error"
-    >
-      ⚠ Please enter a streak target
-    </p>
-
-    <p *ngIf="habit.targetType === 'endDate' && !habit.endDate" class="error">
-      ⚠ Please select an end date
-    </p>
-
-    <!-- ✅ Allowed Gaps (Only for Daily Habits) -->
-    <div *ngIf="habit.frequency === 'daily'">
-      <h4>Allowed Gaps</h4>
-      <p>You can miss up to this many days before the streak breaks.</p>
-      <input
-        type="number"
-        [(ngModel)]="habit.allowedGaps"
-        min="0"
-        placeholder="Allowed Gaps"
-      />
+    <div class="step-actions">
+      <button class="btn btn-secondary" (click)="previousStep()">
+        <span class="btn-arrow">←</span>
+        Back
+      </button>
+      <button
+        class="btn btn-primary"
+        (click)="nextStep()"
+        [disabled]="
+          (habit.targetType === 'streak' && !habit.streakTarget) ||
+          (habit.targetType === 'endDate' && !habit.endDate)
+        "
+      >
+        Continue
+        <span class="btn-arrow">→</span>
+      </button>
     </div>
-
-    <button class="secondary" (click)="previousStep()">Back</button>
-    <button
-      class="primary"
-      (click)="nextStep()"
-      [disabled]="
-        (habit.targetType === 'streak' && !habit.streakTarget) ||
-        (habit.targetType === 'endDate' && !habit.endDate)
-      "
-    >
-      Next
-    </button>
   </div>
 
   <!-- ✅ Step 4: Summary & Start -->
-  <div *ngIf="!isLoading && step === 4" class="step">
-    <h3>Final Step: Summary</h3>
-    <div class="summary">
-      <p><strong>Name:</strong> {{ habit.name }}</p>
-      <p>
-        <strong>Description:</strong>
-        {{ habit.description || "No description" }}
-      </p>
-      <p><strong>Frequency:</strong> {{ habit.frequency }}</p>
-      <p><strong>Type:</strong> {{ habit.goalType }}</p>
-      <p *ngIf="habit.goalType === 'numeric'">
-        <strong>Target:</strong> {{ habit.targetValue }}
-      </p>
-      <p *ngIf="habit.targetType === 'streak'">
-        <strong>Streak Target:</strong> {{ habit.streakTarget }} days
-      </p>
-      <p *ngIf="habit.targetType === 'endDate'">
-        <strong>End Date:</strong> {{ habit.endDate }}
-      </p>
-      <p>
-        <strong>Privacy:</strong>
-        <span [class]="habit.isPrivate ? 'private-badge' : 'public-badge'">
-          {{ habit.isPrivate ? "🔒 Private" : "🌍 Public" }}
-        </span>
+  <div *ngIf="!isLoading && step === 4" class="step-card">
+    <div class="step-header">
+      <h2 class="step-title">Ready to start!</h2>
+      <p class="step-subtitle">
+        Review your habit details and choose when to begin
       </p>
     </div>
 
-    <div *ngIf="!isEditMode">
-      <label>
-        <input type="radio" [(ngModel)]="startType" value="Immediate" /> Start
-        Immediately
-      </label>
-      <label>
-        <input type="radio" [(ngModel)]="startType" value="scheduled" />
-        Start on:
+    <!-- Habit Summary Card -->
+    <div class="summary-card">
+      <div class="summary-header">
+        <div class="summary-icon">✨</div>
+        <h3>{{ habit.name }}</h3>
+      </div>
+
+      <div class="summary-details">
+        <div class="summary-item">
+          <div class="item-icon">📝</div>
+          <div class="item-content">
+            <span class="item-label">Description</span>
+            <span class="item-value">{{
+              habit.description || "No description provided"
+            }}</span>
+          </div>
+        </div>
+
+        <div class="summary-item">
+          <div class="item-icon">📅</div>
+          <div class="item-content">
+            <span class="item-label">Frequency</span>
+            <span class="item-value">{{ habit.frequency | titlecase }}</span>
+          </div>
+        </div>
+
+        <div class="summary-item">
+          <div class="item-icon">📊</div>
+          <div class="item-content">
+            <span class="item-label">Type</span>
+            <span class="item-value">
+              {{
+                habit.goalType === "binary"
+                  ? "Yes/No Tracking"
+                  : "Number Tracking"
+              }}
+            </span>
+          </div>
+        </div>
+
+        <div *ngIf="habit.goalType === 'numeric'" class="summary-item">
+          <div class="item-icon">🎯</div>
+          <div class="item-content">
+            <span class="item-label">Target</span>
+            <span class="item-value"
+              >{{ habit.targetValue }} per {{ habit.frequency }}</span
+            >
+          </div>
+        </div>
+
+        <div *ngIf="habit.targetType === 'streak'" class="summary-item">
+          <div class="item-icon">🔥</div>
+          <div class="item-content">
+            <span class="item-label">Streak Goal</span>
+            <span class="item-value">{{ habit.streakTarget }} days</span>
+          </div>
+        </div>
+
+        <div *ngIf="habit.targetType === 'endDate'" class="summary-item">
+          <div class="item-icon">🏁</div>
+          <div class="item-content">
+            <span class="item-label">End Date</span>
+            <span class="item-value">{{
+              habit.endDate | date : "mediumDate"
+            }}</span>
+          </div>
+        </div>
+
+        <div class="summary-item">
+          <div class="item-icon">{{ habit.isPrivate ? "🔒" : "🌍" }}</div>
+          <div class="item-content">
+            <span class="item-label">Privacy</span>
+            <span
+              class="item-value"
+              [class]="habit.isPrivate ? 'private-text' : 'public-text'"
+            >
+              {{ habit.isPrivate ? "Private" : "Public" }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Start Options Card -->
+    <div *ngIf="!isEditMode" class="start-options-card">
+      <h3>When would you like to start?</h3>
+
+      <div class="start-options">
+        <label
+          class="start-option"
+          [class.selected]="startType === 'Immediate'"
+        >
+          <input type="radio" [(ngModel)]="startType" value="Immediate" />
+          <div class="option-content">
+            <div class="option-icon">🚀</div>
+            <div class="option-text">
+              <h4>Start Now</h4>
+              <p>Begin tracking this habit immediately</p>
+            </div>
+          </div>
+        </label>
+
+        <label
+          class="start-option"
+          [class.selected]="startType === 'scheduled'"
+        >
+          <input type="radio" [(ngModel)]="startType" value="scheduled" />
+          <div class="option-content">
+            <div class="option-icon">📆</div>
+            <div class="option-text">
+              <h4>Schedule Start</h4>
+              <p>Choose a specific date to begin</p>
+            </div>
+          </div>
+        </label>
+      </div>
+
+      <div *ngIf="startType === 'scheduled'" class="input-group fade-in">
+        <label class="input-label">Start Date</label>
         <input
-          *ngIf="startType === 'scheduled'"
           type="date"
           [(ngModel)]="habit.startDate"
           [min]="minDate"
+          class="form-input"
+          [class.error]="startType === 'scheduled' && !habit.startDate"
         />
-      </label>
-
-      <p *ngIf="startType === 'scheduled' && !habit.startDate" class="error">
-        ⚠ Please select a start date
-      </p>
+        <div
+          *ngIf="startType === 'scheduled' && !habit.startDate"
+          class="field-error"
+        >
+          <span class="error-icon">⚠️</span>
+          Please select a start date
+        </div>
+      </div>
     </div>
 
-    <button class="secondary" (click)="previousStep()">Back</button>
-    <button
-      class="primary"
-      (click)="saveHabit()"
-      [disabled]="!isEditMode && startType === 'scheduled' && !habit.startDate"
-    >
-      {{ isEditMode ? "Save Changes" : "Start Habit" }}
-    </button>
+    <div class="step-actions">
+      <button class="btn btn-secondary" (click)="previousStep()">
+        <span class="btn-arrow">←</span>
+        Back
+      </button>
+      <button
+        class="btn btn-primary btn-large"
+        (click)="saveHabit()"
+        [disabled]="
+          !isEditMode && startType === 'scheduled' && !habit.startDate
+        "
+      >
+        <span class="btn-icon">{{ isEditMode ? "💾" : "🎉" }}</span>
+        {{ isEditMode ? "Save Changes" : "Create Habit" }}
+      </button>
+    </div>
   </div>
 </div>
 

@@ -30,7 +30,7 @@ export class HabitFormComponent implements OnInit {
   minDate = new Date().toISOString().split('T')[0];
   isLoading = false;
   errorMessage: string | null = null;
-  startType?: string;
+  startType: string = 'Immediate';
 
   // AI suggestion properties
   showAiModal = false;
