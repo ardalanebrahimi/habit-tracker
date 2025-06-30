@@ -2,14 +2,18 @@
   <!-- Header -->
   <div class="onboarding-header">
     <h1 class="onboarding-title">Let's personalize your habit journey</h1>
-    <p class="onboarding-subtitle">Answer a few quick questions to get AI-powered habit recommendations</p>
-    
+    <p class="onboarding-subtitle">
+      Answer a few quick questions to get AI-powered habit recommendations
+    </p>
+
     <!-- Token indicator -->
     <div class="token-indicator" *ngIf="tokenInfo && !showPaywall">
       <div class="token-icon">🎫</div>
-      <span class="token-count">{{ tokenInfo.remainingTokens }} AI suggestions remaining</span>
+      <span class="token-count"
+        >{{ tokenInfo.remainingTokens }} AI suggestions remaining</span
+      >
     </div>
-    
+
     <!-- Progress indicator -->
     <div class="progress-container" *ngIf="!showSuggestions && !showPaywall">
       <div class="progress-bar">
@@ -22,7 +26,10 @@
   </div>
 
   <!-- Question Steps -->
-  <div *ngIf="!showSuggestions && !isGeneratingSuggestions && !showPaywall" class="question-container">
+  <div
+    *ngIf="!showSuggestions && !isGeneratingSuggestions && !showPaywall"
+    class="question-container"
+  >
     <div class="question-card">
       <div class="question-icon">{{ getCurrentQuestion().icon }}</div>
       <h2 class="question-title">{{ getCurrentQuestion().title }}</h2>
@@ -39,13 +46,18 @@
           <div class="option-icon" *ngIf="option.icon">{{ option.icon }}</div>
           <div class="option-content">
             <h3 class="option-label">{{ option.label }}</h3>
-            <p class="option-description" *ngIf="option.description">{{ option.description }}</p>
+            <p class="option-description" *ngIf="option.description">
+              {{ option.description }}
+            </p>
           </div>
         </button>
       </div>
 
       <!-- Custom input for flexible questions -->
-      <div *ngIf="getCurrentQuestion().allowCustom" class="custom-input-section">
+      <div
+        *ngIf="getCurrentQuestion().allowCustom"
+        class="custom-input-section"
+      >
         <p class="custom-label">Or describe your own:</p>
         <input
           type="text"
@@ -85,10 +97,15 @@
   </div>
 
   <!-- Loading State -->
-  <div *ngIf="isGeneratingSuggestions && !showPaywall" class="loading-container">
+  <div
+    *ngIf="isGeneratingSuggestions && !showPaywall"
+    class="loading-container"
+  >
     <div class="loading-spinner"></div>
     <h2>Creating your personalized habits...</h2>
-    <p>Our AI is analyzing your answers to suggest the perfect habits for you.</p>
+    <p>
+      Our AI is analyzing your answers to suggest the perfect habits for you.
+    </p>
   </div>
 
   <!-- Paywall Modal -->
@@ -97,7 +114,8 @@
       <div class="paywall-icon">🎫</div>
       <h2>AI Suggestions Require Tokens</h2>
       <p class="paywall-subtitle">
-        You've used all your AI suggestion tokens. Get more to continue personalizing your habit journey!
+        You've used all your AI suggestion tokens. Get more to continue
+        personalizing your habit journey!
       </p>
 
       <div class="token-info">
@@ -107,7 +125,9 @@
         </div>
         <div class="token-stat">
           <span class="stat-label">Tokens Reset:</span>
-          <span class="stat-value">{{ (tokenInfo?.resetDate | date:'shortDate') || 'Unknown' }}</span>
+          <span class="stat-value">{{
+            (tokenInfo?.resetDate | date : "shortDate") || "Unknown"
+          }}</span>
         </div>
       </div>
 
@@ -144,7 +164,10 @@
               <li>💯 No limits</li>
             </ul>
           </div>
-          <button class="btn btn-secondary btn-large" (click)="skipOnboarding()">
+          <button
+            class="btn btn-secondary btn-large"
+            (click)="skipOnboarding()"
+          >
             Create Manually
           </button>
         </div>
@@ -159,10 +182,16 @@
   </div>
 
   <!-- Suggestions Display -->
-  <div *ngIf="showSuggestions && !isGeneratingSuggestions && !showPaywall" class="suggestions-container">
+  <div
+    *ngIf="showSuggestions && !isGeneratingSuggestions && !showPaywall"
+    class="suggestions-container"
+  >
     <div class="suggestions-header">
       <h2>Your Personalized Habit Recommendations</h2>
-      <p>Based on your answers, here are {{ suggestions.length }} habits that could help you reach your goals:</p>
+      <p>
+        Based on your answers, here are {{ suggestions.length }} habits that
+        could help you reach your goals:
+      </p>
     </div>
 
     <div class="suggestions-grid">
@@ -174,11 +203,15 @@
       >
         <div class="suggestion-header">
           <div class="suggestion-icon">
-            {{ suggestion.goalType === 'binary' ? '✅' : '📊' }}
+            {{ suggestion.goalType === "binary" ? "✅" : "📊" }}
           </div>
           <div class="selection-indicator">
             <div class="checkbox" [class.checked]="isSuggestionSelected(i)">
-              <svg *ngIf="isSuggestionSelected(i)" viewBox="0 0 24 24" fill="none">
+              <svg
+                *ngIf="isSuggestionSelected(i)"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
                 <path
                   d="M5 12L10 17L20 7"
                   stroke="currentColor"
@@ -197,11 +230,15 @@
         <div class="suggestion-details">
           <div class="detail-item">
             <span class="detail-icon">📅</span>
-            <span class="detail-text">{{ suggestion.frequency | titlecase }}</span>
+            <span class="detail-text">{{
+              suggestion.frequency | titlecase
+            }}</span>
           </div>
           <div class="detail-item" *ngIf="suggestion.targetValue">
             <span class="detail-icon">🎯</span>
-            <span class="detail-text">Target: {{ suggestion.targetValue }}</span>
+            <span class="detail-text"
+              >Target: {{ suggestion.targetValue }}</span
+            >
           </div>
           <div class="detail-item" *ngIf="suggestion.category">
             <span class="detail-icon">🏷️</span>
@@ -231,8 +268,8 @@
       >
         <span *ngIf="isCreatingHabits" class="loading-spinner-small">⏳</span>
         <span *ngIf="!isCreatingHabits">
-          Start {{ selectedSuggestions.size }} 
-          {{ selectedSuggestions.size === 1 ? 'Habit' : 'Habits' }}
+          Start {{ selectedSuggestions.size }}
+          {{ selectedSuggestions.size === 1 ? "Habit" : "Habits" }}
           <span class="btn-arrow">🚀</span>
         </span>
         <span *ngIf="isCreatingHabits">Creating...</span>
@@ -241,8 +278,9 @@
 
     <div class="suggestions-footer">
       <p class="footer-text">
-        You selected {{ selectedSuggestions.size }} of {{ suggestions.length }} habits. 
-        You can always add more or edit these later!
+        You selected {{ selectedSuggestions.size }} of
+        {{ suggestions.length }} habits. You can always add more or edit these
+        later!
       </p>
     </div>
   </div>
@@ -253,14 +291,15 @@
     <div class="error-content">
       <h3>Something went wrong</h3>
       <p>{{ errorMessage }}</p>
-      <button class="btn btn-primary" (click)="tryAgain()">
-        Try Again
-      </button>
+      <button class="btn btn-primary" (click)="tryAgain()">Try Again</button>
     </div>
   </div>
 
   <!-- Skip option -->
-  <div *ngIf="!showSuggestions && !isGeneratingSuggestions && !showPaywall" class="skip-section">
+  <div
+    *ngIf="!showSuggestions && !isGeneratingSuggestions && !showPaywall"
+    class="skip-section"
+  >
     <button class="skip-btn" (click)="skipOnboarding()">
       Skip onboarding and create habits manually
     </button>

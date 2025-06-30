@@ -5,7 +5,10 @@ import { environment } from '../../environments/environment';
 import { HabitWithProgressDTO } from '../models/habit-with-progress-dto.model';
 import { CreateHabitDTO } from '../models/create-habit-dto.model';
 import { AiHabitSuggestionRequest } from '../models/ai-habit-suggestion.model';
-import { OnboardingRequest, OnboardingSuggestion } from '../models/onboarding.model';
+import {
+  OnboardingRequest,
+  OnboardingSuggestion,
+} from '../models/onboarding.model';
 
 @Injectable({
   providedIn: 'root',

@@ -53,7 +53,9 @@ export class UserService {
    * Purchase more tokens (placeholder for future paywall)
    */
   purchaseTokens(amount: number): Observable<UserTokenInfo> {
-    return this.http.post<UserTokenInfo>(`${this.apiUrl}/purchase-tokens`, { amount });
+    return this.http.post<UserTokenInfo>(`${this.apiUrl}/purchase-tokens`, {
+      amount,
+    });
   }
 
   /**
@@ -70,7 +72,9 @@ export class UserService {
         this.tokenInfo.next({
           remainingTokens: 5,
           maxTokens: 10,
-          resetDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days from now
+          resetDate: new Date(
+            Date.now() + 30 * 24 * 60 * 60 * 1000
+          ).toISOString(), // 30 days from now
         });
       },
     });

@@ -164,7 +164,10 @@ export class TodayComponent implements OnInit {
    * Check if onboarding FAB option should be shown
    */
   shouldShowOnboardingFab(): boolean {
-    return this.onboardingService.shouldShowOnboardingPrompts() && this.todayHabits.length < 3;
+    return (
+      this.onboardingService.shouldShowOnboardingPrompts() &&
+      this.todayHabits.length < 3
+    );
   }
 
   /**
