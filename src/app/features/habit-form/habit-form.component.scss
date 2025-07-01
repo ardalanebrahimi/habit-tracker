@@ -17,6 +17,18 @@
   margin-bottom: 32px;
 }
 
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
 .page-title {
   margin: 0 0 24px 0;
   font-size: 28px;
@@ -381,8 +393,38 @@
       transform: translateY(-1px);
     }
 
+    &.disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: none;
+      }
+    }
+
     .ai-button-icon {
       font-size: 16px;
+    }
+
+    .token-requirement {
+      font-size: 12px;
+      opacity: 0.8;
+      margin-left: 4px;
+    }
+  }
+
+  .token-info {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+
+    .token-balance {
+      font-size: 13px;
+      opacity: 0.9;
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
   }
 }

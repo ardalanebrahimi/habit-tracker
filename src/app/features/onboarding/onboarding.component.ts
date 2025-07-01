@@ -283,9 +283,13 @@ export class OnboardingComponent implements OnInit {
     this.errorMessage = null;
 
     try {
-      // Consume a token before making the request
+      // Spend a token before making the request
       const updatedTokenInfo = await this.userService
-        .consumeToken()
+        .spendTokens({
+          transactionType: 'ai_suggestion',
+          description: 'Onboarding AI suggestions',
+          amount: 1,
+        })
         .toPromise();
       if (updatedTokenInfo) {
         this.userService.updateTokenInfo(updatedTokenInfo);
@@ -387,9 +391,13 @@ export class OnboardingComponent implements OnInit {
 
   async purchaseTokens(): Promise<void> {
     try {
-      // For demo purposes, purchase 10 tokens
+      // For demo purposes, award 10 tokens for onboarding completion
       const updatedTokenInfo = await this.userService
-        .purchaseTokens(10)
+        .earnTokens({
+          transactionType: 'onboarding_completion',
+          description: 'Welcome bonus tokens',
+          amount: 10,
+        })
         .toPromise();
       if (updatedTokenInfo) {
         this.userService.updateTokenInfo(updatedTokenInfo);

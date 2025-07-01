@@ -4,9 +4,45 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 export interface UserTokenInfo {
-  remainingTokens: number;
-  maxTokens: number;
-  resetDate?: string;
+  tokenBalance: number;
+  subscriptionTier: string;
+  subscriptionExpiresAt?: string;
+  habitLimit: number;
+  habitsCreated: number;
+  canCreateHabits: boolean;
+  nextTokenRefresh?: string;
+}
+
+export interface SubscriptionStatus {
+  subscriptionTier: string;
+  expiresAt?: string;
+  isActive: boolean;
+  autoRenew: boolean;
+  features: string[];
+  habitLimit: number;
+  tokensIncluded: number;
+}
+
+export interface TokenTransaction {
+  id: string;
+  amount: number;
+  transactionType: string;
+  description: string;
+  createdAt: string;
+}
+
+export interface SpendTokenRequest {
+  transactionType: string;
+  description?: string;
+  relatedEntityId?: string;
+  amount: number;
+}
+
+export interface EarnTokenRequest {
+  transactionType: string;
+  description?: string;
+  relatedEntityId?: string;
+  amount: number;
 }
 
 @Injectable({
@@ -24,7 +60,16 @@ export class UserService {
    * Get current user's token information
    */
   getTokenInfo(): Observable<UserTokenInfo> {
-    return this.http.get<UserTokenInfo>(`${this.apiUrl}/tokens`);
+    return this.http.get<UserTokenInfo>(`${this.apiUrl}/token-balance`);
+  }
+
+  /**
+   * Get subscription status
+   */
+  getSubscriptionStatus(): Observable<SubscriptionStatus> {
+    return this.http.get<SubscriptionStatus>(
+      `${this.apiUrl}/subscription/status`
+    );
   }
 
   /**
@@ -32,7 +77,15 @@ export class UserService {
    */
   hasTokensAvailable(): boolean {
     const current = this.tokenInfo.value;
-    return current ? current.remainingTokens > 0 : false;
+    return current ? current.tokenBalance > 0 : false;
+  }
+
+  /**
+   * Check if user can create habits
+   */
+  canCreateHabits(): boolean {
+    const current = this.tokenInfo.value;
+    return current ? current.canCreateHabits : false;
   }
 
   /**
@@ -43,18 +96,46 @@ export class UserService {
   }
 
   /**
-   * Consume a token for AI usage
+   * Spend tokens for various actions
    */
-  consumeToken(): Observable<UserTokenInfo> {
-    return this.http.post<UserTokenInfo>(`${this.apiUrl}/consume-token`, {});
+  spendTokens(request: SpendTokenRequest): Observable<UserTokenInfo> {
+    return this.http.post<UserTokenInfo>(`${this.apiUrl}/spend-token`, request);
   }
 
   /**
-   * Purchase more tokens (placeholder for future paywall)
+   * Earn tokens for various actions
    */
-  purchaseTokens(amount: number): Observable<UserTokenInfo> {
-    return this.http.post<UserTokenInfo>(`${this.apiUrl}/purchase-tokens`, {
-      amount,
+  earnTokens(request: EarnTokenRequest): Observable<UserTokenInfo> {
+    return this.http.post<UserTokenInfo>(`${this.apiUrl}/earn-token`, request);
+  }
+
+  /**
+   * Get token transaction history
+   */
+  getTokenHistory(
+    page: number = 1,
+    pageSize: number = 20
+  ): Observable<TokenTransaction[]> {
+    return this.http.get<TokenTransaction[]>(
+      `${this.apiUrl}/token-history?page=${page}&pageSize=${pageSize}`
+    );
+  }
+
+  /**
+   * Get referral code
+   */
+  getReferralCode(): Observable<{ referralCode: string }> {
+    return this.http.get<{ referralCode: string }>(
+      `${this.apiUrl}/referral-code`
+    );
+  }
+
+  /**
+   * Apply referral code
+   */
+  applyReferralCode(referralCode: string): Observable<UserTokenInfo> {
+    return this.http.post<UserTokenInfo>(`${this.apiUrl}/apply-referral`, {
+      referralCode,
     });
   }
 
@@ -70,11 +151,11 @@ export class UserService {
         console.error('Failed to load token info:', error);
         // Set default tokens for development
         this.tokenInfo.next({
-          remainingTokens: 5,
-          maxTokens: 10,
-          resetDate: new Date(
-            Date.now() + 30 * 24 * 60 * 60 * 1000
-          ).toISOString(), // 30 days from now
+          tokenBalance: 5,
+          subscriptionTier: 'free',
+          habitLimit: 5,
+          habitsCreated: 0,
+          canCreateHabits: true,
         });
       },
     });
@@ -85,5 +166,12 @@ export class UserService {
    */
   updateTokenInfo(tokenInfo: UserTokenInfo): void {
     this.tokenInfo.next(tokenInfo);
+  }
+
+  /**
+   * Refresh token info from server
+   */
+  refreshTokenInfo(): void {
+    this.loadTokenInfo();
   }
 }

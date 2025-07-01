@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import {
   HabitWithProgressDTO,
@@ -12,6 +12,7 @@ import {
   OnboardingRequest,
   OnboardingSuggestion,
 } from '../models/onboarding.model';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +20,7 @@ import {
 export class HabitsService {
   private apiUrl = `${environment.apiUrl}/habits`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private userService: UserService) {}
 
   /**
    * ✅ Fetch all habits for statistics & tracking
@@ -69,7 +70,31 @@ export class HabitsService {
     id?: string,
     decrease: boolean = false
   ): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/${id}/complete`, { decrease });
+    return this.http
+      .post<void>(`${this.apiUrl}/${id}/complete`, { decrease })
+      .pipe(
+        tap(() => {
+          // Award tokens for habit completion (not for decreases)
+          if (!decrease) {
+            this.userService
+              .earnTokens({
+                transactionType: 'habit_completion',
+                description: 'Completed daily habit',
+                amount: 1,
+                relatedEntityId: id,
+              })
+              .subscribe({
+                next: (tokenInfo) => {
+                  this.userService.updateTokenInfo(tokenInfo);
+                },
+                error: (error) => {
+                  console.log('Token earning failed:', error);
+                  // Don't block habit completion if token earning fails
+                },
+              });
+          }
+        })
+      );
   }
 
   archiveHabit(id: string): Observable<void> {

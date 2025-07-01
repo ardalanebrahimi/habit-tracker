@@ -1,7 +1,10 @@
 <div class="wizard-container">
   <!-- Page Header with Progress -->
   <div class="page-header">
-    <h1 class="page-title">{{ pageTitle }}</h1>
+    <div class="header-content">
+      <h1 class="page-title">{{ pageTitle }}</h1>
+      <app-token-balance [compact]="true"></app-token-balance>
+    </div>
     <div *ngIf="!isLoading && !errorMessage" class="progress-indicator">
       <div class="progress-steps">
         <div
@@ -75,14 +78,21 @@
             type="button"
             class="ai-button primary"
             (click)="openAiModal()"
+            [class.disabled]="!canUseAi()"
           >
             <span class="ai-button-icon">✨</span>
             Use AI Assistant
+            <span *ngIf="!canUseAi()" class="token-requirement">(1 🪙)</span>
           </button>
           <a class="ai-button secondary" routerLink="/onboarding">
             <span class="ai-button-icon">🚀</span>
             Get Personalized Journey
           </a>
+        </div>
+        <div *ngIf="tokenInfo" class="token-info">
+          <span class="token-balance"
+            >🪙 {{ getTokenCount() }} tokens available</span
+          >
         </div>
       </div>
     </div>
@@ -624,3 +634,6 @@
     </div>
   </div>
 </div>
+
+<!-- Paywall Modal -->
+<app-paywall-modal></app-paywall-modal>

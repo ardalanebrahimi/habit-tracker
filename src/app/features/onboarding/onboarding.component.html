@@ -10,7 +10,7 @@
     <div class="token-indicator" *ngIf="tokenInfo && !showPaywall">
       <div class="token-icon">🎫</div>
       <span class="token-count"
-        >{{ tokenInfo.remainingTokens }} AI suggestions remaining</span
+        >{{ tokenInfo.tokenBalance }} AI suggestions remaining</span
       >
     </div>
 
@@ -121,12 +121,12 @@
       <div class="token-info">
         <div class="token-stat">
           <span class="stat-label">Current Tokens:</span>
-          <span class="stat-value">{{ tokenInfo?.remainingTokens || 0 }}</span>
+          <span class="stat-value">{{ tokenInfo?.tokenBalance || 0 }}</span>
         </div>
         <div class="token-stat">
           <span class="stat-label">Tokens Reset:</span>
           <span class="stat-value">{{
-            (tokenInfo?.resetDate | date : "shortDate") || "Unknown"
+            (tokenInfo?.nextTokenRefresh | date : "shortDate") || "Unknown"
           }}</span>
         </div>
       </div>

@@ -4,6 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { CheeringService } from '../../services/cheering.service';
 import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
+import { UserService } from '../../services/user.service';
+import { PaywallService } from '../../services/paywall.service';
+import { PaywallModalComponent } from '../../components/paywall-modal/paywall-modal.component';
 import { HabitWithProgressDTO } from '../../models/habit-with-progress-dto.model';
 import {
   CheerRequest,
@@ -14,7 +17,7 @@ import {
 @Component({
   selector: 'app-cheer-button',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, PaywallModalComponent],
   styleUrls: ['./cheer-button.component.scss'],
   template: `
     <div class="cheer-container" *ngIf="canShowCheerButton">
@@ -144,8 +147,16 @@ import {
                 maxlength="100"
                 (input)="onCustomMessageChange()"
               />
-              <div class="input-char-count">
-                {{ customMessage.length || 0 }}/100
+              <div class="input-footer">
+                <div class="input-char-count">
+                  {{ customMessage.length || 0 }}/100
+                </div>
+                <div
+                  class="token-indicator"
+                  *ngIf="customMessage.trim().length > 0"
+                >
+                  🪙 1 token
+                </div>
               </div>
             </div>
           </div>
@@ -192,6 +203,9 @@ import {
       *ngIf="showCheerModal"
       (click)="closeCheerModal()"
     ></div>
+
+    <!-- Paywall Modal -->
+    <app-paywall-modal></app-paywall-modal>
   `,
   host: {
     '(document:click)': 'onDocumentClick($event)',
@@ -213,7 +227,9 @@ export class CheerButtonComponent implements OnInit {
   constructor(
     private cheeringService: CheeringService,
     private authService: AuthService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private userService: UserService,
+    private paywallService: PaywallService
   ) {}
   ngOnInit(): void {
     // For now, we'll use the userName as the current user identifier
@@ -270,6 +286,18 @@ export class CheerButtonComponent implements OnInit {
   async sendCheer(): Promise<void> {
     if (!this.canSendCheer || this.isSubmitting) return;
 
+    // Check if custom message requires tokens
+    const isCustomMessage = this.customMessage.trim().length > 0;
+    if (isCustomMessage) {
+      const canProceed = await this.paywallService.checkActionPermission(
+        'custom_cheer',
+        1
+      );
+      if (!canProceed) {
+        return; // Paywall was shown
+      }
+    }
+
     this.isSubmitting = true;
 
     const cheerRequest: CheerRequest = {
@@ -278,7 +306,19 @@ export class CheerButtonComponent implements OnInit {
       message: this.finalMessage,
       emoji: this.selectedEmoji,
     };
+
     try {
+      // Spend token for custom message
+      if (isCustomMessage) {
+        await this.userService
+          .spendTokens({
+            transactionType: 'custom_cheer',
+            description: 'Custom cheer message',
+            amount: 1,
+          })
+          .toPromise();
+      }
+
       await this.cheeringService.sendCheer(cheerRequest).toPromise();
       this.toastService.showSuccess(
         'Cheer Sent!',
