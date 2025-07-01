@@ -1,53 +1,79 @@
+// 🏠 Today Screen - My Habits & Friends' Habits
 .today {
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
 
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+
+  // 🧭 Enhanced Pill Navigation
   .pill-navigation {
     display: flex;
     justify-content: center;
-    margin-bottom: 30px;
+    margin-bottom: 32px;
 
     .pill-container {
       display: flex;
-      background: #f8f9fa;
-      border-radius: 25px;
-      padding: 4px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      border-radius: 28px;
+      padding: 6px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e2e8f0;
 
       .pill-segment {
         display: flex;
         align-items: center;
-        gap: 8px;
-        padding: 12px 20px;
+        gap: 10px;
+        padding: 14px 24px;
         border: none;
-        border-radius: 20px;
+        border-radius: 22px;
         background: transparent;
-        color: #6c757d;
-        font-weight: 500;
+        color: #64748b;
+        font-weight: 600;
         font-size: 14px;
         cursor: pointer;
-        transition: all 0.3s ease;
-        min-width: 100px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        min-width: 120px;
         justify-content: center;
+        position: relative;
 
         .pill-icon {
-          font-size: 16px;
+          font-size: 18px;
+          transition: transform 0.3s ease;
         }
 
         .pill-text {
-          font-weight: 600;
+          font-weight: 700;
         }
 
-        &:hover {
-          background: rgba(0, 123, 255, 0.1);
-          color: #007bff;
+        &:hover:not(.active) {
+          background: rgba(59, 130, 246, 0.08);
+          color: #3b82f6;
+          transform: translateY(-1px);
+
+          .pill-icon {
+            transform: scale(1.1);
+          }
         }
 
-        &.active {
-          background: #007bff;
+        // 🧍 My Habits Active State
+        &.active[data-view="myHabits"] {
+          background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
           color: white;
-          box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+          box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
+
+          .pill-icon {
+            filter: brightness(0) invert(1);
+          }
+        }
+
+        // 👥 Friends' Habits Active State
+        &.active[data-view="friends"] {
+          background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+          color: white;
+          box-shadow: 0 4px 16px rgba(124, 58, 237, 0.4);
 
           .pill-icon {
             filter: brightness(0) invert(1);
@@ -59,74 +85,198 @@
 
   // Habit cards handle their own styling now
 
+  // 🎉 Completion Message
   .done-message {
     text-align: center;
     margin: 40px 0;
     padding: 32px;
-    background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
-    border-radius: 16px;
-    color: #2c5530;
+    background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+    border-radius: 20px;
+    color: #15803d;
+    border: 1px solid #a3e635;
+    box-shadow: 0 8px 24px rgba(34, 197, 94, 0.15);
 
     p {
       font-size: 18px;
-      font-weight: 600;
+      font-weight: 700;
       margin: 0 0 8px 0;
-      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.7);
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
     }
 
     .add-more-section {
       margin-top: 24px;
       padding: 20px;
-      background: rgba(255, 255, 255, 0.3);
-      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
 
       p {
         font-size: 16px;
         margin-bottom: 16px;
-        color: #2c5530;
+        color: #15803d;
+        font-weight: 600;
       }
 
       .btn-outline {
         background: transparent;
-        border: 2px solid #2c5530;
-        color: #2c5530;
+        border: 2px solid #15803d;
+        color: #15803d;
         padding: 12px 20px;
-        border-radius: 8px;
+        border-radius: 12px;
         font-size: 14px;
-        font-weight: 600;
+        font-weight: 700;
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         text-decoration: none;
         display: inline-flex;
         align-items: center;
         gap: 8px;
 
         &:hover {
-          background: #2c5530;
+          background: #15803d;
           color: white;
-          transform: translateY(-1px);
-          box-shadow: 0 4px 12px rgba(44, 85, 48, 0.3);
+          transform: translateY(-2px);
+          box-shadow: 0 8px 24px rgba(21, 128, 61, 0.3);
+        }
+
+        &:active {
+          transform: translateY(0);
         }
       }
     }
   }
 
+  // 👥 Friends' Habits Section
   .friends-habits {
+    position: relative;
+
+    // Add subtle background to distinguish from My Habits
+    &::before {
+      content: "";
+      position: absolute;
+      top: -12px;
+      left: -20px;
+      right: -20px;
+      bottom: -12px;
+      background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+      border-radius: 20px;
+      border: 1px solid #e9d5ff;
+      z-index: -1;
+
+      @media (max-width: 768px) {
+        left: -16px;
+        right: -16px;
+      }
+    }
+
     .loading {
       text-align: center;
-      padding: 20px;
-      color: #666;
+      padding: 24px;
+      color: #7c3aed;
+      font-style: italic;
+      font-weight: 500;
+
+      &::before {
+        content: "👥";
+        display: block;
+        font-size: 32px;
+        margin-bottom: 8px;
+        animation: pulse 2s infinite;
+      }
     }
 
     .no-habits {
       text-align: center;
-      padding: 20px;
-      background: #f8f9fa;
-      border-radius: 8px;
-      color: #666;
+      padding: 32px 24px;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 16px;
+      color: #7c3aed;
       margin-bottom: 20px;
+      border: 1px solid #c4b5fd;
+      backdrop-filter: blur(10px);
+
+      p {
+        margin: 0;
+        font-weight: 600;
+
+        &::before {
+          content: "👤";
+          display: block;
+          font-size: 48px;
+          margin-bottom: 12px;
+          opacity: 0.7;
+        }
+      }
     }
   }
+
+  // 🎛️ Toggle Switch (All/Remaining)
+  .toggle-switch {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    border: 1px solid #e2e8f0;
+
+    span {
+      font-weight: 600;
+      color: #475569;
+      font-size: 14px;
+    }
+  }
+
+  // 🎯 Switch Component
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 32px;
+
+    input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #cbd5e0;
+      transition: 0.3s;
+      border-radius: 32px;
+
+      &:before {
+        position: absolute;
+        content: "";
+        height: 24px;
+        width: 24px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: 0.3s;
+        border-radius: 50%;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+    }
+
+    input:checked + .slider {
+      background-color: #3b82f6;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(28px);
+    }
+  }
+
+  // 📱 Habit List Container
 
   .habit-list {
     max-height: 400px; // Set a fixed height
@@ -581,5 +731,18 @@
       bottom: 100px;
       right: 16px;
     }
+  }
+}
+
+// 🎨 Animations
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05);
   }
 }

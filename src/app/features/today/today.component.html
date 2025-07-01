@@ -6,6 +6,7 @@
         class="pill-segment"
         [class.active]="currentView === 'myHabits'"
         (click)="setView('myHabits')"
+        data-view="myHabits"
       >
         <span class="pill-icon">🏷</span>
         <span class="pill-text">My</span>
@@ -14,6 +15,7 @@
         class="pill-segment"
         [class.active]="currentView === 'friends'"
         (click)="setView('friends')"
+        data-view="friends"
       >
         <span class="pill-icon">🤝</span>
         <span class="pill-text">Friends</span>

@@ -27,6 +27,7 @@ import { MilestoneDefinition } from '../../models/milestone.model';
 export class HabitCardComponent {
   @Input() habit!: HabitWithProgressDTO;
   @Input() isReadOnly = false;
+  @Input() isExploreContext = false; // New input to determine card context
   @Output() habitChanged = new EventEmitter<void>();
 
   // Milestone celebration properties
@@ -190,5 +191,33 @@ export class HabitCardComponent {
   getFriendInitial(): string {
     if (!this.habit.userName) return '?';
     return this.habit.userName.charAt(0).toUpperCase();
+  }
+
+  getHabitEmoji(): string {
+    // Extract emoji from habit name if it starts with one
+    const emojiRegex =
+      /^[\u{1F600}-\u{1F64F}]|^[\u{1F300}-\u{1F5FF}]|^[\u{1F680}-\u{1F6FF}]|^[\u{1F1E0}-\u{1F1FF}]|^[\u{2600}-\u{26FF}]|^[\u{2700}-\u{27BF}]/u;
+    const match = this.habit.name.match(emojiRegex);
+    return match ? match[0] : '';
+  }
+
+  copyHabit(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (!this.habit.id) return;
+
+    this.habitsService.copyHabit(this.habit.id).subscribe({
+      next: () => {
+        // Emit event to notify parent component
+        this.habitChanged.emit();
+
+        // Could add a toast notification here in the future
+        console.log('Habit copied successfully!');
+      },
+      error: (error) => {
+        console.error('Error copying habit:', error);
+      },
+    });
   }
 }

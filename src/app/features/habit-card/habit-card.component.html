@@ -1,23 +1,60 @@
 <div
   class="habit-card"
-  [class.friend-habit]="!habit.isOwnedHabit"
+  [class.my-habit]="habit.isOwnedHabit"
+  [class.friend-habit]="!habit.isOwnedHabit && !isExploreContext"
+  [class.explore-habit]="isExploreContext"
   [class.binary-habit]="habit.goalType === 'binary'"
   [class.numeric-habit]="habit.goalType === 'numeric'"
 >
-  <!-- Friend's info for non-owned habits -->
-  <div *ngIf="!habit.isOwnedHabit" class="friend-header">
-    <div class="friend-avatar">
-      <span class="avatar-icon">{{ getFriendInitial() }}</span>
+  <!-- Context Header: Friend or Public Badge -->
+  <div *ngIf="!habit.isOwnedHabit" class="context-header">
+    <!-- Friend's info for non-owned habits -->
+    <div *ngIf="!isExploreContext" class="friend-info">
+      <div class="friend-avatar">
+        <span class="avatar-text">{{ getFriendInitial() }}</span>
+      </div>
+      <a [routerLink]="['/profile', habit.userId]" class="friend-name">
+        {{ habit.userName }}
+      </a>
     </div>
-    <a [routerLink]="['/profile', habit.userId]" class="friend-name">
-      {{ habit.userName }}
-    </a>
+
+    <!-- Explore context with creator info -->
+    <div *ngIf="isExploreContext" class="explore-info">
+      <div class="creator-avatar">
+        <span class="creator-initial">{{ getFriendInitial() }}</span>
+      </div>
+      <div class="creator-details">
+        <a [routerLink]="['/profile', habit.userId]" class="creator-name">
+          {{ habit.userName }}
+        </a>
+        <span class="public-badge">
+          <svg class="globe-icon" viewBox="0 0 24 24" fill="none">
+            <circle
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <path
+              d="M12 2C14 12 14 12 12 22M2 12h20M8 6s3 0 4 6M16 18s-3 0-4-6"
+              stroke="currentColor"
+              stroke-width="1.5"
+            />
+          </svg>
+          Public
+        </span>
+      </div>
+    </div>
   </div>
 
-  <!-- Compact Main Header Row -->
-  <div class="habit-main-row">
-    <!-- Binary habit completion button -->
-    <div *ngIf="habit.goalType === 'binary'" class="completion-control">
+  <!-- Main Content Row -->
+  <div class="main-content">
+    <!-- Primary Action: Complete Button (My Habits) -->
+    <div
+      *ngIf="habit.isOwnedHabit && habit.goalType === 'binary'"
+      class="primary-action"
+    >
       <button
         class="complete-btn"
         [class.completed]="isHabitDoneToday()"
@@ -40,14 +77,17 @@
           />
         </svg>
         <span class="btn-text">{{
-          isHabitDoneToday() ? "Done" : "Complete"
+          isHabitDoneToday() ? "Done" : "Mark Complete"
         }}</span>
       </button>
     </div>
 
-    <!-- Habit name and details -->
+    <!-- Habit Information -->
     <div class="habit-info" [routerLink]="['/habit', habit.id]">
       <h3 class="habit-name">
+        <span class="habit-emoji" *ngIf="getHabitEmoji()">{{
+          getHabitEmoji()
+        }}</span>
         {{ habit.name }}
         <svg
           *ngIf="habit.isOwnedHabit && habit.isPrivate"
@@ -72,7 +112,7 @@
         </svg>
       </h3>
 
-      <!-- Numeric progress inline -->
+      <!-- Progress Summary -->
       <div *ngIf="habit.goalType === 'numeric'" class="progress-summary">
         <span class="progress-text"
           >{{ habit.currentValue || 0 }} / {{ habit.targetValue }}
@@ -89,12 +129,15 @@
       </div>
     </div>
 
-    <!-- Compact actions row -->
-    <div class="compact-actions">
-      <!-- Streak badge -->
+    <!-- Action Section -->
+    <div class="action-section">
+      <!-- Streak Badge -->
       <div
         class="streak-badge"
         *ngIf="habit.streak !== undefined && habit.streak > 0"
+        [class.high-streak]="habit.streak >= 30"
+        [class.medium-streak]="habit.streak >= 7 && habit.streak < 30"
+        [class.low-streak]="habit.streak < 7"
       >
         <svg class="streak-icon" viewBox="0 0 24 24" fill="none">
           <path
@@ -106,23 +149,55 @@
         <span class="streak-period">{{ getStreakPeriod() }}</span>
       </div>
 
-      <!-- Quick actions -->
+      <!-- Quick Actions -->
       <div class="quick-actions">
+        <!-- My Habits: Quick Share -->
         <app-habit-quick-share
           [habit]="habit"
           *ngIf="habit.isOwnedHabit"
         ></app-habit-quick-share>
+
+        <!-- Friends' Habits: Cheer Button -->
         <app-cheer-button
           [habit]="habit"
           (cheerSent)="onCheerSent()"
-          *ngIf="!habit.isOwnedHabit"
+          *ngIf="!habit.isOwnedHabit && !isExploreContext"
         ></app-cheer-button>
+
+        <!-- Explore: Copy/Try Button -->
+        <button
+          *ngIf="isExploreContext"
+          class="explore-action-btn"
+          (click)="copyHabit($event)"
+          title="Copy this habit"
+        >
+          <svg class="copy-icon" viewBox="0 0 24 24" fill="none">
+            <rect
+              x="9"
+              y="9"
+              width="13"
+              height="13"
+              rx="2"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <path
+              d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+          </svg>
+          Try This
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- Numeric habit controls -->
-  <div *ngIf="habit.goalType === 'numeric'" class="numeric-controls-row">
+  <!-- Numeric Progress Controls (My Habits Only) -->
+  <div
+    *ngIf="habit.goalType === 'numeric' && habit.isOwnedHabit"
+    class="numeric-controls-section"
+  >
     <div class="progress-bar-container">
       <div class="progress-track">
         <div
@@ -135,7 +210,7 @@
       </div>
     </div>
 
-    <div *ngIf="!isReadOnly" class="numeric-controls">
+    <div *ngIf="!isReadOnly" class="progress-controls">
       <button
         class="control-btn decrement"
         (click)="decrementProgress()"
@@ -151,6 +226,7 @@
           />
         </svg>
       </button>
+      <span class="current-value">{{ habit.currentValue || 0 }}</span>
       <button
         class="control-btn increment"
         (click)="incrementProgress()"
@@ -168,12 +244,14 @@
     </div>
   </div>
 
-  <!-- Cheer Display for own habits (collapsed by default) -->
-  <app-cheer-display
-    *ngIf="habit.isOwnedHabit && habit.id"
-    [habitId]="habit.id"
-    class="cheer-display"
-  ></app-cheer-display>
+  <!-- Cheers Section (My Habits) -->
+  <div *ngIf="habit.isOwnedHabit" class="cheers-section">
+    <app-cheer-display
+      *ngIf="habit.id"
+      [habitId]="habit.id"
+      class="cheer-display"
+    ></app-cheer-display>
+  </div>
 
   <!-- Milestone Celebration -->
   <app-milestone-celebration

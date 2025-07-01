@@ -1,52 +1,135 @@
+// 🔍 Explore Screen Styles
 .explore {
   padding: 20px;
   min-height: 100vh;
-  background: linear-gradient(135deg, #8a8a8a 0%, #d292a9 100%);
+  background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%);
+
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
 }
 
 .page-header {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 32px;
+  padding: 24px 0;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 
   h2 {
-    font-size: 24px;
-    font-weight: 600;
-    color: #2c3e50;
+    font-size: 28px;
+    font-weight: 700;
+    color: #92400e;
     margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
   }
 
   p {
-    color: #6c757d;
-    font-size: 14px;
+    color: #a16207;
+    font-size: 16px;
     margin: 0;
+    font-weight: 500;
   }
 }
 
 .error-message {
-  background: #f8d7da;
-  color: #721c24;
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 20px;
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #991b1b;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 24px;
   text-align: center;
+  border: 1px solid #fca5a5;
+  font-weight: 500;
 }
 
 .habits-container {
   max-height: calc(100vh - 200px);
   overflow-y: auto;
-  padding-bottom: 100px; /* Space for FAB */
+  padding-bottom: 100px;
+
+  // Custom scrollbar
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(146, 64, 14, 0.3);
+    border-radius: 3px;
+
+    &:hover {
+      background: rgba(146, 64, 14, 0.5);
+    }
+  }
 }
 
 .habit-item {
-  margin-bottom: 16px;
-  animation: fadeInUp 0.3s ease-out;
+  margin-bottom: 20px;
+  animation: fadeInUp 0.4s ease-out;
+  animation-fill-mode: both;
+
+  // Stagger animation for multiple items
+  &:nth-child(2) {
+    animation-delay: 0.1s;
+  }
+  &:nth-child(3) {
+    animation-delay: 0.2s;
+  }
+  &:nth-child(4) {
+    animation-delay: 0.3s;
+  }
+  &:nth-child(5) {
+    animation-delay: 0.4s;
+  }
 }
 
 .loading-spinner {
   text-align: center;
-  padding: 20px;
-  color: #6c757d;
+  padding: 24px;
+  color: #a16207;
   font-style: italic;
+  font-weight: 500;
+
+  p {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    &::before {
+      content: "⏳";
+      animation: spin 2s linear infinite;
+    }
+  }
+}
+
+.no-habits {
+  text-align: center;
+  padding: 48px 24px;
+  color: #a16207;
+
+  p {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0;
+
+    &::before {
+      content: "🌍";
+      display: block;
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+  }
 }
 
 .no-habits {
@@ -60,29 +143,7 @@
   }
 }
 
-.fab {
-  position: fixed;
-  bottom: 80px;
-  right: 20px;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: #007bff;
-  color: white;
-  border: none;
-  font-size: 24px;
-  font-weight: bold;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 1000;
-
-  &:hover {
-    background: #0056b3;
-    transform: scale(1.1);
-  }
-}
-
+// 🎨 Animations
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -91,6 +152,56 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// 🎯 FAB Styles (if needed)
+.fab {
+  position: fixed;
+  bottom: 90px; // Increased to avoid navbar overlap
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 24px;
+  font-weight: 300;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1000;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 24px rgba(245, 158, 11, 0.5);
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  @media (max-width: 768px) {
+    bottom: 85px; // Adjusted for mobile navbar
+    right: 20px;
+    width: 52px;
+    height: 52px;
+    font-size: 22px;
   }
 }
 
