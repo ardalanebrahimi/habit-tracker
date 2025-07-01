@@ -217,6 +217,34 @@ export class HabitDetailsComponent implements OnInit {
     });
   }
 
+  calculateCompletionRate(): number {
+    if (!this.habit?.recentLogs || this.habit.recentLogs.length === 0) {
+      return 0;
+    }
+
+    const last30Days = this.habit.recentLogs.slice(-30);
+    const completedDays = last30Days.filter(log => {
+      if (this.habit?.goalType === 'binary') {
+        return log.value >= 1;
+      } else {
+        return log.value >= (log.target || this.habit?.targetValue || 1);
+      }
+    }).length;
+
+    return Math.round((completedDays / last30Days.length) * 100);
+  }
+
+  getDaysRemaining(): number {
+    if (!this.habit?.endDate) return 0;
+    
+    const endDate = new Date(this.habit.endDate);
+    const today = new Date();
+    const timeDiff = endDate.getTime() - today.getTime();
+    const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    
+    return Math.max(0, daysDiff);
+  }
+
   editHabit(): void {
     if (this.habit?.id) {
       this.router.navigate(['/edit-habit', this.habit.id]);

@@ -1,180 +1,224 @@
 <div class="habit-details">
   <!-- Loading State -->
-  <div *ngIf="isLoading" class="loading">Loading...</div>
+  <div *ngIf="isLoading" class="loading">
+    <div class="loading-spinner"></div>
+    <p>Loading habit details...</p>
+  </div>
 
   <!-- Error Message -->
   <div *ngIf="errorMessage" class="error-message">
+    <span class="error-icon">⚠️</span>
     {{ errorMessage }}
   </div>
 
   <!-- Habit Details -->
   <div *ngIf="habit && !isLoading" class="content">
-    <div class="top-actions">
-      <button class="back-btn" routerLink="/habits">←</button>
-      <div class="action-buttons">
-        <!-- Copy button for non-owned, public habits -->
-        <button
-          *ngIf="!habit.isOwnedHabit && !habit.isPrivate"
-          class="btn icon-btn copy-btn"
-          (click)="copyHabit()"
-          title="Copy habit"
-        >
-          📋
-        </button>
-        <!-- Existing action buttons for owned habits -->
-        <ng-container *ngIf="habit.isOwnedHabit">
-          <button
-            class="btn icon-btn check-btn"
-            (click)="toggleCheckRequestModal()"
-            title="Ask friends to check"
-          >
-            👥
-          </button>
-          <button
-            class="btn icon-btn edit-btn"
-            (click)="editHabit()"
-            title="Edit"
-          >
-            ✏️
-          </button>
-          <button
-            class="btn icon-btn delete-btn"
-            (click)="deleteHabit()"
-            title="Delete"
-          >
-            🗑️
-          </button>
-        </ng-container>
-      </div>
-    </div>
-
+    <!-- Header with Actions -->
     <div class="page-header">
-      <h2>
-        {{ habit.name }}
-        <span
-          *ngIf="habit.isOwnedHabit && habit.isPrivate"
-          class="privacy-badge private"
-          >🔒 Private</span
-        >
-        <span
-          *ngIf="habit.isOwnedHabit && !habit.isPrivate"
-          class="privacy-badge public"
-          >🌍 Public</span
-        >
-      </h2>
-    </div>
-
-    <!-- Basic Info -->
-    <div class="info-section">
-      <h3>Basic Information</h3>
-      <div class="info-grid">
-        <div class="info-item">
-          <span class="label">Frequency:</span>
-          <span class="value">{{ habit.frequency }}</span>
-        </div>
-        <div class="info-item">
-          <span class="label">Type:</span>
-          <span class="value">{{ habit.goalType }}</span>
-        </div>
-        <div class="info-item" *ngIf="habit.goalType === 'numeric'">
-          <span class="label">Target Value:</span>
-          <span class="value">{{ habit.targetValue }}</span>
-        </div>
+      <div class="header-left">
+        <button class="back-btn" routerLink="/habits" title="Back to habits">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
       </div>
-    </div>
-
-    <!-- Progress -->
-    <div class="progress-section">
-      <h3>Progress</h3>
-      <div class="info-grid">
-        <div class="info-item">
-          <span class="label">Current Streak:</span>
-          <span class="value streak"
-            >🔥 {{ habit.streak }}
-            {{
-              habit.frequency === "daily"
-                ? "days"
-                : habit.frequency === "weekly"
-                ? "weeks"
-                : "months"
-            }}</span
-          >
-        </div>
-        <div class="info-item" *ngIf="habit.goalType === 'numeric'">
-          <span class="label">Current Progress:</span>
-          <span class="value"
-            >{{ habit.currentValue || 0 }} / {{ habit.targetValue }}</span
-          >
-          <div class="progress-bar-container">
-            <div
-              class="progress-bar"
-              [style.width.%]="
-                ((habit.currentValue || 0) / (habit.targetValue || 1)) * 100
-              "
-            ></div>
-          </div>
-        </div>
-        <div class="info-item">
-          <span class="label">Status:</span>
-          <span class="value" [class.completed]="habit.isCompleted">
-            {{ habit.isCompleted ? "Completed" : "Not Completed" }}
+      
+      <div class="header-center">
+        <h1 class="habit-name">{{ habit.name }}</h1>
+        <div class="header-badges">
+          <span *ngIf="habit.isOwnedHabit && habit.isPrivate" class="privacy-badge private">
+            🔒 Private
+          </span>
+          <span *ngIf="habit.isOwnedHabit && !habit.isPrivate" class="privacy-badge public">
+            🌍 Public
           </span>
         </div>
       </div>
 
+      <div class="header-right">
+        <!-- Action buttons for owned habits -->
+        <div class="action-buttons" *ngIf="habit.isOwnedHabit">
+          <button class="action-btn secondary" (click)="toggleCheckRequestModal()" title="Ask friends to check">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M23 21V19C23 18.1645 22.7155 17.3541 22.2094 16.7018C21.7033 16.0494 20.9872 15.5901 20.178 15.3916" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M16 3.13C16.8604 3.35114 17.623 3.85495 18.1449 4.56331C18.6667 5.27167 18.9177 6.14591 18.8568 7.03581C18.7959 7.92571 18.4251 8.76403 17.8 9.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button class="action-btn primary" (click)="editHabit()" title="Edit habit">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M18.5 2.50023C18.8978 2.10243 19.4374 1.87891 20 1.87891C20.5626 1.87891 21.1022 2.10243 21.5 2.50023C21.8978 2.89804 22.1213 3.43762 22.1213 4.00023C22.1213 4.56284 21.8978 5.10243 21.5 5.50023L12 15.0002L8 16.0002L9 12.0002L18.5 2.50023Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button class="action-btn danger" (click)="deleteHabit()" title="Delete habit">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M3 6H5H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Copy button for non-owned, public habits -->
+        <div class="action-buttons" *ngIf="!habit.isOwnedHabit && !habit.isPrivate">
+          <button class="action-btn primary" (click)="copyHabit()" title="Copy habit">
+            <svg viewBox="0 0 24 24" fill="none">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M5 15H4C3.46957 15 2.96086 14.7893 2.58579 14.4142C2.21071 14.0391 2 13.5304 2 13V4C2 3.46957 2.21071 2.96086 2.58579 2.58579C2.96086 2.21071 3.46957 2 4 2H13C13.5304 2 14.0391 2.21071 14.4142 2.58579C14.7893 2.96086 15 3.46957 15 4V5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Habit Overview Card -->
+    <div class="habit-overview">
+      <div class="overview-content">
+        <div class="habit-info">
+          <p class="description" *ngIf="habit.description">{{ habit.description }}</p>
+          <div class="habit-meta">
+            <span class="frequency-badge">{{ habit.frequency | titlecase }}</span>
+            <span class="type-badge" [class.numeric]="habit.goalType === 'numeric'" [class.binary]="habit.goalType === 'binary'">
+              {{ habit.goalType === 'binary' ? 'Yes/No Goal' : 'Target: ' + habit.targetValue }}
+            </span>
+            <span class="status-badge" [class.completed]="habit.isCompleted">
+              {{ habit.isCompleted ? '✅ Completed Today' : '⏳ In Progress' }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Analytics Dashboard -->
+    <div class="analytics-dashboard">
+      <div class="dashboard-header">
+        <h2>📊 Analytics & Progress</h2>
+        <p>Track your consistency and progress over time</p>
+      </div>
+
+      <!-- Key Stats Row -->
+      <div class="stats-row">
+        <div class="stat-card primary">
+          <div class="stat-icon">🔥</div>
+          <div class="stat-content">
+            <div class="stat-value">{{ habit.streak }}</div>
+            <div class="stat-label">Current Streak</div>
+            <div class="stat-unit">{{ habit.frequency === 'daily' ? 'days' : habit.frequency === 'weekly' ? 'weeks' : 'months' }}</div>
+          </div>
+        </div>
+        
+        <div class="stat-card" *ngIf="habit.goalType === 'numeric'">
+          <div class="stat-icon">�</div>
+          <div class="stat-content">
+            <div class="stat-value">{{ habit.currentValue || 0 }}</div>
+            <div class="stat-label">Today's Progress</div>
+            <div class="stat-unit">of {{ habit.targetValue }} target</div>
+          </div>
+        </div>
+        
+        <div class="stat-card success">
+          <div class="stat-icon">🎯</div>
+          <div class="stat-content">
+            <div class="stat-value">{{ calculateCompletionRate() }}%</div>
+            <div class="stat-label">Completion Rate</div>
+            <div class="stat-unit">last 30 days</div>
+          </div>
+        </div>
+        
+        <div class="stat-card info" *ngIf="habit.endDate">
+          <div class="stat-icon">📅</div>
+          <div class="stat-content">
+            <div class="stat-value">{{ getDaysRemaining() }}</div>
+            <div class="stat-label">Days Remaining</div>
+            <div class="stat-unit">until {{ habit.endDate | date:'MMM d' }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Heat Map Section -->
+      <div class="heat-map-section">
+        <div class="section-header">
+          <h3>🗓️ 84-Day Activity Overview</h3>
+          <p>GitHub-style heat map showing your consistency patterns</p>
+        </div>
+        <app-habit-heat-map
+          *ngIf="habit && heatMapLogs"
+          [habitLogs]="heatMapLogs"
+          [habitFrequency]="habit.frequency"
+          [targetValue]="habit.targetValue || 1"
+          [goalType]="habit.goalType"
+        ></app-habit-heat-map>
+      </div>
+
+      <!-- Recent Activity Chart -->
+      <div class="activity-chart" *ngIf="chartData.length > 0">
+        <div class="section-header">
+          <h3>📈 Recent Activity Trend</h3>
+          <p>Your habit completion over the last 7 {{ habit.frequency === "daily" ? "days" : habit.frequency === "weekly" ? "weeks" : "months" }}</p>
+        </div>
+        
+        <div class="chart-container">
+          <div class="chart">
+            <div class="chart-bars">
+              <div class="bar-container" *ngFor="let data of chartData; let i = index">
+                <div class="bar-value" *ngIf="data.value > 0">{{ data.value }}</div>
+                <div class="bar" 
+                     [style.height.%]="data.percentage"
+                     [class.completed]="data.percentage >= 100"
+                     [title]="data.day + ': ' + data.value + (habit.goalType === 'numeric' ? '/' + (habit.targetValue || 1) : '')">
+                </div>
+                <div class="bar-label">{{ data.day }}</div>
+              </div>
+            </div>
+            <div class="chart-legend">
+              <small>Hover over bars for detailed information</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Social Features -->
+    <div class="social-section" *ngIf="habit.isOwnedHabit || !habit.isOwnedHabit">
       <!-- Cheer Section for Friends' Habits -->
-      <div
-        class="cheer-section"
-        *ngIf="!habit.isOwnedHabit && habit.isCompleted"
-      >
-        <h4>Show Your Support</h4>
-        <app-cheer-button
-          [habit]="habit"
-          (cheerSent)="onCheerSent()"
-        ></app-cheer-button>
+      <div class="cheer-section" *ngIf="!habit.isOwnedHabit && habit.isCompleted">
+        <div class="section-header">
+          <h3>Show Your Support</h3>
+          <p>Encourage your friend by sending a cheer!</p>
+        </div>
+        <app-cheer-button [habit]="habit" (cheerSent)="onCheerSent()"></app-cheer-button>
       </div>
 
       <!-- Cheers Received Section -->
-      <div
-        class="cheers-received-section"
-        *ngIf="habit.isOwnedHabit && habit.id"
-      >
-        <h4>Cheers Received</h4>
+      <div class="cheers-section" *ngIf="habit.isOwnedHabit && habit.id">
+        <div class="section-header">
+          <h3>Cheers Received</h3>
+          <p>See who's supporting your progress</p>
+        </div>
         <app-cheer-display [habitId]="habit.id"></app-cheer-display>
       </div>
 
       <!-- Share Section -->
       <div class="share-section" *ngIf="habit.isOwnedHabit && !habit.isPrivate">
-        <h4>Share Your Progress</h4>
-        <app-habit-share
-          [habit]="habit"
-          (shareCompleted)="onShareCompleted($event)"
-        >
-        </app-habit-share>
+        <div class="section-header">
+          <h3>Share Your Progress</h3>
+          <p>Let others know about your habit journey</p>
+        </div>
+        <app-habit-share [habit]="habit" (shareCompleted)="onShareCompleted($event)"></app-habit-share>
       </div>
     </div>
 
-    <!-- Heat Map Visualization -->
-    <app-habit-heat-map
-      *ngIf="habit && heatMapLogs"
-      [habitLogs]="heatMapLogs"
-      [habitFrequency]="habit.frequency"
-      [targetValue]="habit.targetValue || 1"
-      [goalType]="habit.goalType"
-    ></app-habit-heat-map>
-
-    <!-- History -->
-    <div class="history-section">
-      <h3>
-        History (Last 7
-        {{
-          habit.frequency === "daily"
-            ? "Days"
-            : habit.frequency === "weekly"
-            ? "Weeks"
-            : "Months"
-        }})
-      </h3>
+    <!-- Recent Activity Chart -->
+    <div class="activity-chart" *ngIf="chartData.length > 0">
+      <div class="section-header">
+        <h3>
+          Recent Activity (Last 7
+          {{ habit.frequency === "daily" ? "Days" : habit.frequency === "weekly" ? "Weeks" : "Months" }})
+        </h3>
+        <p>Your habit completion over the recent period</p>
+      </div>
+      
       <div class="chart-container">
         <div class="chart">
           <div class="chart-bars">
@@ -188,39 +232,54 @@
       </div>
     </div>
 
+    <!-- Action Buttons -->
     <div class="bottom-actions" *ngIf="habit.isOwnedHabit">
-      <button class="btn archive-btn" (click)="archiveHabit()">
-        📦 Archive Habit
+      <button class="archive-btn" (click)="archiveHabit()">
+        <svg viewBox="0 0 24 24" fill="none">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="10" y1="14" x2="14" y2="14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Archive Habit
       </button>
     </div>
   </div>
 
   <!-- Check Request Modal -->
-  <div *ngIf="showCheckRequestModal" class="modal-overlay">
-    <div class="modal-content">
-      <h3>Ask Friends to Check Your Habit</h3>
-      <div class="connections-list">
-        <div *ngFor="let connection of connections" class="connection-item">
-          <label>
+  <div *ngIf="showCheckRequestModal" class="modal-overlay" (click)="toggleCheckRequestModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Ask Friends to Check Your Habit</h3>
+        <button class="modal-close" (click)="toggleCheckRequestModal()">
+          <svg viewBox="0 0 24 24" fill="none">
+            <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+      
+      <div class="modal-body">
+        <p>Select friends who can help you stay accountable with this habit:</p>
+        <div class="connections-list">
+          <label *ngFor="let connection of connections" class="connection-item">
             <input
               type="checkbox"
               [checked]="selectedConnections.includes(connection.id)"
               (change)="toggleConnectionSelection(connection.id)"
             />
-            {{ connection.userName }}
+            <span class="connection-name">{{ connection.userName }}</span>
           </label>
         </div>
       </div>
+      
       <div class="modal-actions">
-        <button class="btn cancel-btn" (click)="toggleCheckRequestModal()">
-          Cancel
-        </button>
-        <button
-          class="btn send-btn"
-          (click)="sendCheckRequest()"
+        <button class="btn secondary" (click)="toggleCheckRequestModal()">Cancel</button>
+        <button 
+          class="btn primary" 
+          (click)="sendCheckRequest()" 
           [disabled]="selectedConnections.length === 0"
         >
-          Send Request
+          Send Request ({{ selectedConnections.length }})
         </button>
       </div>
     </div>
