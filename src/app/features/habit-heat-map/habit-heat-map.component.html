@@ -3,14 +3,17 @@
     <span class="heat-map-icon">📊</span>
     Consistency (Last 84 Days)
   </h4>
-  
+
   <div class="heat-map-container">
     <!-- Month labels -->
-    <div class="month-labels" [style.grid-template-columns]="'repeat(' + weeks.length + ', 1fr)'">
-      <div 
-        *ngFor="let month of monthLabels; let i = index" 
+    <div
+      class="month-labels"
+      [style.grid-template-columns]="'repeat(' + weeks.length + ', 1fr)'"
+    >
+      <div
+        *ngFor="let month of monthLabels; let i = index"
         class="month-label"
-        [style.grid-column]="(i * 2 + 1) + ' / span 2'"
+        [style.grid-column]="i * 2 + 1 + ' / span 2'"
       >
         {{ month }}
       </div>
@@ -18,7 +21,7 @@
 
     <!-- Day labels -->
     <div class="day-labels">
-      <div 
+      <div
         *ngFor="let day of dayLabels; let i = index"
         class="day-label"
         [class.weekend]="i === 0 || i === 6"
@@ -28,8 +31,8 @@
     </div>
 
     <!-- Heat map grid -->
-    <div 
-      class="heat-map-grid" 
+    <div
+      class="heat-map-grid"
       [style.grid-template-columns]="'repeat(' + weeks.length + ', 12px)'"
     >
       <ng-container *ngFor="let week of weeks; let weekIndex = index">
@@ -43,8 +46,7 @@
           [title]="getTooltipText(day)"
           [style.grid-column]="weekIndex + 1"
           [style.grid-row]="day.date.getDay() + 1"
-        >
-        </div>
+        ></div>
       </ng-container>
     </div>
   </div>

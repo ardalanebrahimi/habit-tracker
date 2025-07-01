@@ -3,7 +3,10 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { HabitsService } from '../../services/habits.service';
 import { ConnectionsService } from '../../services/connections.service';
-import { HabitWithProgressDTO, HabitLogDTO } from '../../models/habit-with-progress-dto.model';
+import {
+  HabitWithProgressDTO,
+  HabitLogDTO,
+} from '../../models/habit-with-progress-dto.model';
 import { HabitShareComponent } from '../habit-share/habit-share.component';
 import { CheerButtonComponent } from '../cheer-button/cheer-button.component';
 import { CheerDisplayComponent } from '../cheer-display/cheer-display.component';
@@ -223,7 +226,7 @@ export class HabitDetailsComponent implements OnInit {
     }
 
     const last30Days = this.habit.recentLogs.slice(-30);
-    const completedDays = last30Days.filter(log => {
+    const completedDays = last30Days.filter((log) => {
       if (this.habit?.goalType === 'binary') {
         return log.value >= 1;
       } else {
@@ -236,12 +239,12 @@ export class HabitDetailsComponent implements OnInit {
 
   getDaysRemaining(): number {
     if (!this.habit?.endDate) return 0;
-    
+
     const endDate = new Date(this.habit.endDate);
     const today = new Date();
     const timeDiff = endDate.getTime() - today.getTime();
     const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
-    
+
     return Math.max(0, daysDiff);
   }
 

@@ -192,32 +192,6 @@
     }
   }
 
-          &:hover {
-            background: #2563eb;
-          }
-        }
-
-        &.secondary {
-          background: #f1f5f9;
-          color: #475569;
-
-          &:hover {
-            background: #e2e8f0;
-          }
-        }
-
-        &.danger {
-          background: #ef4444;
-          color: white;
-
-          &:hover {
-            background: #dc2626;
-          }
-        }
-      }
-    }
-  }
-
   // Habit overview card
   .habit-overview {
     background: white;
@@ -453,7 +427,7 @@
           .chart-legend {
             text-align: center;
             margin-top: 12px;
-            
+
             small {
               color: #64748b;
               font-size: 12px;

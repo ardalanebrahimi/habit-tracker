@@ -2,7 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { HabitWithProgressDTO, HabitLogDTO } from '../models/habit-with-progress-dto.model';
+import {
+  HabitWithProgressDTO,
+  HabitLogDTO,
+} from '../models/habit-with-progress-dto.model';
 import { CreateHabitDTO } from '../models/create-habit-dto.model';
 import { AiHabitSuggestionRequest } from '../models/ai-habit-suggestion.model';
 import {
