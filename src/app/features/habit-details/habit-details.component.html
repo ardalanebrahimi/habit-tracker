@@ -372,7 +372,7 @@
         *ngIf="!habit.isOwnedHabit && habit.isCompleted"
       >
         <div class="section-header">
-          <h3>Show Your Support</h3>
+          <h3>🎉 Show Your Support</h3>
           <p>Encourage your friend by sending a cheer!</p>
         </div>
         <app-cheer-button
@@ -384,7 +384,7 @@
       <!-- Cheers Received Section -->
       <div class="cheers-section" *ngIf="habit.isOwnedHabit && habit.id">
         <div class="section-header">
-          <h3>Cheers Received</h3>
+          <h3>🎊 Cheers Received</h3>
           <p>See who's supporting your progress</p>
         </div>
         <app-cheer-display [habitId]="habit.id"></app-cheer-display>
@@ -393,7 +393,7 @@
       <!-- Share Section -->
       <div class="share-section" *ngIf="habit.isOwnedHabit && !habit.isPrivate">
         <div class="section-header">
-          <h3>Share Your Progress</h3>
+          <h3>📢 Share Your Progress</h3>
           <p>Let others know about your habit journey</p>
         </div>
         <app-habit-share
