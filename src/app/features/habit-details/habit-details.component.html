@@ -154,6 +154,15 @@
       </div>
     </div>
 
+    <!-- Heat Map Visualization -->
+    <app-habit-heat-map
+      *ngIf="habit && heatMapLogs"
+      [habitLogs]="heatMapLogs"
+      [habitFrequency]="habit.frequency"
+      [targetValue]="habit.targetValue || 1"
+      [goalType]="habit.goalType"
+    ></app-habit-heat-map>
+
     <!-- History -->
     <div class="history-section">
       <h3>

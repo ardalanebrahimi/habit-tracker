@@ -1,0 +1,75 @@
+<div class="habit-heat-map">
+  <h4 class="heat-map-title">
+    <span class="heat-map-icon">📊</span>
+    Consistency (Last 84 Days)
+  </h4>
+  
+  <div class="heat-map-container">
+    <!-- Month labels -->
+    <div class="month-labels" [style.grid-template-columns]="'repeat(' + weeks.length + ', 1fr)'">
+      <div 
+        *ngFor="let month of monthLabels; let i = index" 
+        class="month-label"
+        [style.grid-column]="(i * 2 + 1) + ' / span 2'"
+      >
+        {{ month }}
+      </div>
+    </div>
+
+    <!-- Day labels -->
+    <div class="day-labels">
+      <div 
+        *ngFor="let day of dayLabels; let i = index"
+        class="day-label"
+        [class.weekend]="i === 0 || i === 6"
+      >
+        {{ day }}
+      </div>
+    </div>
+
+    <!-- Heat map grid -->
+    <div 
+      class="heat-map-grid" 
+      [style.grid-template-columns]="'repeat(' + weeks.length + ', 12px)'"
+    >
+      <ng-container *ngFor="let week of weeks; let weekIndex = index">
+        <div
+          *ngFor="let day of week; let dayIndex = index"
+          class="heat-map-cell"
+          [class.today]="day.isToday"
+          [class.has-data]="day.value > 0"
+          [attr.data-intensity]="day.intensity"
+          [attr.data-tooltip]="getTooltipText(day)"
+          [title]="getTooltipText(day)"
+          [style.grid-column]="weekIndex + 1"
+          [style.grid-row]="day.date.getDay() + 1"
+        >
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="heat-map-legend">
+    <span class="legend-label">Less</span>
+    <div class="legend-squares">
+      <div class="legend-square" data-intensity="0"></div>
+      <div class="legend-square" data-intensity="1"></div>
+      <div class="legend-square" data-intensity="2"></div>
+      <div class="legend-square" data-intensity="3"></div>
+      <div class="legend-square" data-intensity="4"></div>
+    </div>
+    <span class="legend-label">More</span>
+  </div>
+
+  <div class="heat-map-stats">
+    <div class="stat-item">
+      <span class="stat-label">Total Days:</span>
+      <span class="stat-value">{{ completedDaysCount }}/84</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">Consistency:</span>
+      <span class="stat-value">{{ consistencyPercentage }}%</span>
+    </div>
+  </div>
+</div>

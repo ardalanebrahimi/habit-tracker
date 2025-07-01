@@ -1,0 +1,306 @@
+.habit-heat-map {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+
+  .heat-map-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 16px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #2d3748;
+
+    .heat-map-icon {
+      font-size: 18px;
+    }
+  }
+
+  .heat-map-container {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 8px;
+    overflow: auto;
+    min-width: 100%;
+    padding: 4px 0;
+
+    .month-labels {
+      grid-column: 2;
+      display: grid;
+      gap: 1px;
+      margin-bottom: 4px;
+
+      .month-label {
+        font-size: 10px;
+        color: #718096;
+        font-weight: 500;
+        text-align: left;
+        padding-left: 2px;
+      }
+    }
+
+    .day-labels {
+      grid-column: 1;
+      grid-row: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      align-self: start;
+      margin-top: 2px;
+
+      .day-label {
+        height: 10px;
+        font-size: 9px;
+        color: #a0aec0;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        text-align: right;
+        padding-right: 4px;
+        min-width: 26px;
+
+        &.weekend {
+          color: #718096;
+          font-weight: 600;
+        }
+      }
+    }
+
+    .heat-map-grid {
+      grid-column: 2;
+      grid-row: 2;
+      display: grid;
+      gap: 2px;
+      grid-template-rows: repeat(7, 12px);
+      justify-items: center;
+      align-items: center;
+
+      .heat-map-cell {
+        width: 10px;
+        height: 10px;
+        border-radius: 2px;
+        background-color: #edf2f7;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        position: relative;
+
+        &:hover {
+          transform: scale(1.2);
+          z-index: 10;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        &.today {
+          border: 2px solid #4299e1;
+          border-radius: 3px;
+        }
+
+        // Intensity levels - GitHub-style green scheme
+        &[data-intensity="0"] {
+          background-color: #ebedf0;
+        }
+
+        &[data-intensity="1"] {
+          background-color: #c6e48b;
+        }
+
+        &[data-intensity="2"] {
+          background-color: #7bc96f;
+        }
+
+        &[data-intensity="3"] {
+          background-color: #239a3b;
+        }
+
+        &[data-intensity="4"] {
+          background-color: #196127;
+        }
+      }
+    }
+  }
+
+  .heat-map-legend {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 16px;
+    font-size: 11px;
+    color: #718096;
+
+    .legend-label {
+      font-weight: 500;
+    }
+
+    .legend-squares {
+      display: flex;
+      gap: 2px;
+
+      .legend-square {
+        width: 10px;
+        height: 10px;
+        border-radius: 2px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+
+        &[data-intensity="0"] {
+          background-color: #ebedf0;
+        }
+
+        &[data-intensity="1"] {
+          background-color: #c6e48b;
+        }
+
+        &[data-intensity="2"] {
+          background-color: #7bc96f;
+        }
+
+        &[data-intensity="3"] {
+          background-color: #239a3b;
+        }
+
+        &[data-intensity="4"] {
+          background-color: #196127;
+        }
+      }
+    }
+  }
+
+  .heat-map-stats {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #e2e8f0;
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+
+      .stat-label {
+        color: #718096;
+        font-weight: 500;
+      }
+
+      .stat-value {
+        color: #2d3748;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+// Mobile responsiveness
+@media (max-width: 768px) {
+  .habit-heat-map {
+    padding: 16px;
+
+    .heat-map-title {
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    .heat-map-container {
+      overflow-x: auto;
+      
+      .heat-map-grid .heat-map-cell {
+        width: 8px;
+        height: 8px;
+      }
+
+      .legend-squares .legend-square {
+        width: 8px;
+        height: 8px;
+      }
+    }
+
+    .heat-map-stats {
+      flex-direction: column;
+      gap: 8px;
+      align-items: center;
+    }
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .habit-heat-map {
+    background: #2d3748;
+    color: #e2e8f0;
+
+    .heat-map-title {
+      color: #e2e8f0;
+    }
+
+    .heat-map-container {
+      .month-label {
+        color: #a0aec0;
+      }
+
+      .day-labels .day-label {
+        color: #718096;
+
+        &.weekend {
+          color: #a0aec0;
+        }
+      }
+
+      .heat-map-grid .heat-map-cell {
+        &[data-intensity="0"] {
+          background-color: #4a5568;
+        }
+
+        &.today {
+          border-color: #63b3ed;
+        }
+      }
+    }
+
+    .heat-map-legend {
+      color: #a0aec0;
+
+      .legend-squares .legend-square {
+        &[data-intensity="0"] {
+          background-color: #4a5568;
+        }
+      }
+    }
+
+    .heat-map-stats {
+      border-top-color: #4a5568;
+
+      .stat-item {
+        .stat-label {
+          color: #a0aec0;
+        }
+
+        .stat-value {
+          color: #e2e8f0;
+        }
+      }
+    }
+  }
+}
+
+// Animation on load
+.habit-heat-map {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { HabitWithProgressDTO } from '../models/habit-with-progress-dto.model';
+import { HabitWithProgressDTO, HabitLogDTO } from '../models/habit-with-progress-dto.model';
 import { CreateHabitDTO } from '../models/create-habit-dto.model';
 import { AiHabitSuggestionRequest } from '../models/ai-habit-suggestion.model';
 import {
@@ -130,8 +130,32 @@ export class HabitsService {
     answers: OnboardingRequest
   ): Observable<OnboardingSuggestion[]> {
     return this.http.post<OnboardingSuggestion[]>(
-      `${environment.apiUrl}/ai/onboard-suggest`,
+      `${environment.apiUrl}/ai/onboarding-suggestions`,
       answers
     );
+  }
+
+  /**
+   * Get habit logs for a specific date range (default: last 84 days)
+   * @param habitId The ID of the habit
+   * @param startDate Start date for logs (optional)
+   * @param endDate End date for logs (optional)
+   */
+  getHabitLogs(
+    habitId: string,
+    startDate?: Date,
+    endDate?: Date
+  ): Observable<HabitLogDTO[]> {
+    let params = new HttpParams();
+    if (startDate) {
+      params = params.set('startDate', startDate.toISOString());
+    }
+    if (endDate) {
+      params = params.set('endDate', endDate.toISOString());
+    }
+
+    return this.http.get<HabitLogDTO[]>(`${this.apiUrl}/${habitId}/logs`, {
+      params,
+    });
   }
 }

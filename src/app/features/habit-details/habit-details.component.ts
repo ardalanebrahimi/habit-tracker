@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { HabitsService } from '../../services/habits.service';
 import { ConnectionsService } from '../../services/connections.service';
-import { HabitWithProgressDTO } from '../../models/habit-with-progress-dto.model';
+import { HabitWithProgressDTO, HabitLogDTO } from '../../models/habit-with-progress-dto.model';
 import { HabitShareComponent } from '../habit-share/habit-share.component';
 import { CheerButtonComponent } from '../cheer-button/cheer-button.component';
 import { CheerDisplayComponent } from '../cheer-display/cheer-display.component';
+import { HabitHeatMapComponent } from '../habit-heat-map/habit-heat-map.component';
 
 interface ChartDataPoint {
   day: string;
@@ -23,6 +24,7 @@ interface ChartDataPoint {
     HabitShareComponent,
     CheerButtonComponent,
     CheerDisplayComponent,
+    HabitHeatMapComponent,
   ],
   templateUrl: './habit-details.component.html',
   styleUrls: ['./habit-details.component.scss'],
@@ -32,6 +34,7 @@ export class HabitDetailsComponent implements OnInit {
   isLoading = true;
   errorMessage: string | null = null;
   chartData: ChartDataPoint[] = [];
+  heatMapLogs: HabitLogDTO[] = [];
   connections: any[] = [];
   showCheckRequestModal = false;
   selectedConnections: string[] = [];
@@ -61,6 +64,7 @@ export class HabitDetailsComponent implements OnInit {
         this.habit = habit;
         this.isLoading = false;
         this.updateChartData();
+        this.loadHeatMapData(habitId);
       },
       error: (err) => {
         this.errorMessage = 'Failed to load habit details';
@@ -77,6 +81,24 @@ export class HabitDetailsComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error loading connections:', err);
+      },
+    });
+  }
+
+  private loadHeatMapData(habitId: string): void {
+    // Load logs for the last 84 days
+    const endDate = new Date();
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - 84);
+
+    this.habitsService.getHabitLogs(habitId, startDate, endDate).subscribe({
+      next: (logs) => {
+        this.heatMapLogs = logs;
+      },
+      error: (err) => {
+        console.error('Error loading heat map data:', err);
+        // Don't show error to user for heat map - it's supplementary
+        this.heatMapLogs = [];
       },
     });
   }
