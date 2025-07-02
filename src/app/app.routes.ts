@@ -13,6 +13,7 @@ import { UserProfileComponent } from './features/user-profile/user-profile.compo
 import { MyProfileComponent } from './features/my-profile/my-profile.component';
 import { ExploreComponent } from './features/explore/explore.component';
 import { OnboardingComponent } from './features/onboarding/onboarding.component';
+import { SubscriptionManagementComponent } from './features/subscription-management/subscription-management.component';
 import { AuthService } from './services/auth.service';
 import { inject } from '@angular/core';
 
@@ -31,6 +32,7 @@ export const routes: Routes = [
   { path: 'archived-habits', component: ArchivedHabitsComponent },
   { path: 'connections', component: ConnectionsComponent },
   { path: 'notifications', component: NotificationsComponent },
+  { path: 'subscription', component: SubscriptionManagementComponent },
   { path: 'myprofile', component: MyProfileComponent },
   { path: 'profile/:id', component: UserProfileComponent },
 

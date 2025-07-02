@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { UserService, SubscriptionStatus, TokenTransaction } from '../../services/user.service';
 import { BillingService, SubscriptionPlan } from '../../services/billing.service';
-import { TokenBalanceComponent } from '../token-balance/token-balance.component';
+import { TokenBalanceComponent } from '../../components/token-balance/token-balance.component';
 
 @Component({
   selector: 'app-subscription-management',
@@ -25,10 +25,10 @@ import { TokenBalanceComponent } from '../token-balance/token-balance.component'
               {{ getDisplayName(subscriptionStatus?.subscriptionTier || 'free') }}
             </div>
             <div class="plan-details" *ngIf="subscriptionStatus?.isActive">
-              <p *ngIf="subscriptionStatus.expiresAt">
-                Expires: {{ subscriptionStatus.expiresAt | date:'medium' }}
+              <p *ngIf="subscriptionStatus?.expiresAt">
+                Expires: {{ subscriptionStatus?.expiresAt | date:'medium' }}
               </p>
-              <p>Auto-renew: {{ subscriptionStatus.autoRenew ? 'Yes' : 'No' }}</p>
+              <p>Auto-renew: {{ subscriptionStatus?.autoRenew ? 'Yes' : 'No' }}</p>
             </div>
             <div class="plan-features">
               <div class="feature" *ngFor="let feature of subscriptionStatus?.features">
@@ -60,7 +60,7 @@ import { TokenBalanceComponent } from '../token-balance/token-balance.component'
             <div class="plan-header">
               <h4>{{ plan.displayName }}</h4>
               <div class="plan-price">
-                <span class="price">${{ plan.price }}</span>
+                <span class="price">{{ plan.price | currency }}</span>
                 <span class="period">{{ plan.durationMonths === 1 ? '/month' : '/year' }}</span>
               </div>
               <div class="savings" *ngIf="plan.planName === 'premium_yearly'">
@@ -104,11 +104,11 @@ import { TokenBalanceComponent } from '../token-balance/token-balance.component'
             </div>
             
             <div class="pack-price">
-              ${{ pack.price }}
+              {{ pack.price | currency }}
             </div>
             
             <div class="pack-value">
-              ${{ (pack.price / pack.tokens).toFixed(3) }} per token
+              {{ (pack.price / pack.tokens) | currency:'USD':'symbol':'1.3-3' }} per token
             </div>
             
             <button class="btn-secondary" (click)="purchaseTokenPack(pack.id)">

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UserService, UserTokenInfo } from '../../services/user.service';
 
@@ -14,7 +14,9 @@ import { UserService, UserTokenInfo } from '../../services/user.service';
       class="token-balance"
       [class.compact]="compact"
       [class.low-balance]="isLowBalance"
+      [class.clickable]="!compact"
       [title]="getTooltipText()"
+      (click)="onTokenBalanceClick()"
     >
       <div class="token-icon">🪙</div>
       <div class="token-info" *ngIf="!compact">
@@ -47,6 +49,15 @@ import { UserService, UserTokenInfo } from '../../services/user.service';
       .token-balance:hover {
         background: #f3f4f6;
         border-color: #d1d5db;
+      }
+
+      .token-balance.clickable {
+        cursor: pointer;
+      }
+
+      .token-balance.clickable:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       }
 
       .token-balance.compact {
@@ -127,7 +138,7 @@ export class TokenBalanceComponent implements OnInit, OnDestroy {
   tokenInfo: UserTokenInfo | null = null;
   private subscription?: Subscription;
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private router: Router) {}
 
   ngOnInit(): void {
     this.subscription = this.userService
@@ -176,5 +187,11 @@ export class TokenBalanceComponent implements OnInit, OnDestroy {
       '\n\nTokens are used for:\n• Creating habits (after free limit)\n• AI suggestions\n• Custom cheer messages';
 
     return tooltip;
+  }
+
+  onTokenBalanceClick(): void {
+    if (!this.compact) {
+      this.router.navigate(['/subscription']);
+    }
   }
 }
