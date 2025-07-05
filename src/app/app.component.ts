@@ -2,6 +2,7 @@
 import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from './services/auth.service';
+import { BillingService } from './services/billing.service';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { LoadingService } from './services/loading.service';
@@ -26,13 +27,23 @@ export class AppComponent implements OnInit {
     private router: Router,
     private loadingService: LoadingService,
     private cdr: ChangeDetectorRef,
-    private navigationService: NavigationService
+    private navigationService: NavigationService,
+    private billingService: BillingService
   ) {
     this.isLoading$ = this.loadingService.isLoading.asObservable();
   }
 
   ngOnInit(): void {
     this.initializeBackButtonHandling();
+    this.initializeBilling();
+  }
+
+  private async initializeBilling(): Promise<void> {
+    try {
+      await this.billingService.initializeBilling();
+    } catch (error) {
+      console.error('Failed to initialize billing:', error);
+    }
   }
 
   ngAfterViewInit() {

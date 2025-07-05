@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
+import { Capacitor } from '@capacitor/core';
 import { environment } from '../../environments/environment';
-import { UserTokenInfo, SubscriptionStatus } from './user.service';
+import { UserService, UserTokenInfo, SubscriptionStatus } from './user.service';
+import { GooglePlayBillingService } from './google-play-billing.service';
 
 export interface SubscriptionPlan {
   id: string;
@@ -37,8 +39,26 @@ export interface TokenPurchaseRequest {
 })
 export class BillingService {
   private apiUrl = `${environment.apiUrl}/payments`;
+  private isNative = Capacitor.isNativePlatform();
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private userService: UserService,
+    private googlePlayBilling: GooglePlayBillingService
+  ) {}
+
+  /**
+   * Initialize Google Play Billing
+   */
+  async initializeBilling(): Promise<void> {
+    try {
+      await this.googlePlayBilling.initialize();
+      console.log('Billing service initialized successfully');
+    } catch (error) {
+      console.error('Failed to initialize billing:', error);
+      throw error;
+    }
+  }
 
   /**
    * Get available subscription plans
@@ -106,21 +126,122 @@ export class BillingService {
   }
 
   /**
-   * Purchase tokens through Google Play (to be implemented with Capacitor plugin)
+   * Purchase tokens through Google Play or web simulation
    */
   async purchaseTokens(productId: string): Promise<void> {
-    // TODO: Implement Google Play billing with Capacitor
-    // This would integrate with @capacitor-community/in-app-purchases
-    console.log('Token purchase requested for:', productId);
-    throw new Error('Google Play billing not yet implemented');
+    const tokenPacks = this.getTokenPackInfo();
+    const packInfo = tokenPacks[productId];
+
+    if (!packInfo) {
+      throw new Error('Invalid token pack selected');
+    }
+
+    try {
+      if (!this.googlePlayBilling.isAvailable()) {
+        await this.googlePlayBilling.initialize();
+      }
+
+      // Launch purchase flow
+      const purchaseResult = await this.googlePlayBilling.launchPurchaseFlow(
+        productId,
+        'inapp'
+      );
+
+      if (
+        purchaseResult.responseCode === 0 &&
+        purchaseResult.purchases &&
+        purchaseResult.purchases.length > 0
+      ) {
+        const purchase = purchaseResult.purchases[0];
+
+        // Verify purchase with backend
+        const verificationRequest: TokenPurchaseRequest = {
+          purchaseToken: purchase.purchaseToken,
+          productId: purchase.productId,
+          orderId: purchase.orderId,
+          tokenAmount: packInfo.tokens,
+          price: packInfo.price,
+        };
+
+        const result = await this.verifyTokenPurchase(
+          verificationRequest
+        ).toPromise();
+
+        // Update local token info
+        this.userService.updateTokenInfo(result!);
+
+        // Consume the purchase (tokens are consumable)
+        await this.googlePlayBilling.consumePurchase(purchase.purchaseToken);
+
+        console.log(`Successfully purchased ${packInfo.tokens} tokens`);
+        alert(
+          `🎉 Success! You purchased ${packInfo.tokens} tokens for $${packInfo.price}`
+        );
+      } else if (purchaseResult.responseCode === 1) {
+        // User canceled
+        throw new Error('Purchase cancelled by user');
+      } else {
+        throw new Error('Purchase failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Token purchase failed:', error);
+      throw error;
+    }
   }
 
   /**
-   * Subscribe through Google Play (to be implemented with Capacitor plugin)
+   * Subscribe through Google Play or web simulation
    */
   async subscribe(planId: string): Promise<void> {
-    // TODO: Implement Google Play billing with Capacitor
-    console.log('Subscription requested for:', planId);
-    throw new Error('Google Play billing not yet implemented');
+    try {
+      if (!this.googlePlayBilling.isAvailable()) {
+        await this.googlePlayBilling.initialize();
+      }
+
+      // Launch subscription flow
+      const purchaseResult = await this.googlePlayBilling.launchPurchaseFlow(
+        planId,
+        'subs'
+      );
+
+      if (
+        purchaseResult.responseCode === 0 &&
+        purchaseResult.purchases &&
+        purchaseResult.purchases.length > 0
+      ) {
+        const purchase = purchaseResult.purchases[0];
+
+        // Verify subscription with backend
+        const verificationRequest: PurchaseVerificationRequest = {
+          purchaseToken: purchase.purchaseToken,
+          productId: purchase.productId,
+          orderId: purchase.orderId,
+          purchaseType: 'Subscription',
+        };
+
+        await this.verifySubscription(verificationRequest).toPromise();
+
+        // Acknowledge the subscription
+        await this.googlePlayBilling.acknowledgePurchase(
+          purchase.purchaseToken
+        );
+
+        console.log(`Successfully subscribed to plan: ${planId}`);
+        alert(
+          `🎉 Success! You've subscribed to the premium plan. Enjoy unlimited habits and monthly tokens!`
+        );
+
+        // Reload to reflect changes
+        window.location.reload();
+      } else if (purchaseResult.responseCode === 1) {
+        // User canceled
+        throw new Error('Subscription cancelled by user');
+      } else {
+        throw new Error('Subscription failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Subscription failed:', error);
+      throw error;
+    }
   }
 }
