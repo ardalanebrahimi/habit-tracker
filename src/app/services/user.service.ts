@@ -53,6 +53,13 @@ export class UserService {
   private tokenInfo = new BehaviorSubject<UserTokenInfo | null>(null);
 
   constructor(private http: HttpClient) {
+    // Don't load token info immediately - wait for authentication
+  }
+
+  /**
+   * Initialize user data (call after authentication)
+   */
+  initializeUserData(): void {
     this.loadTokenInfo();
   }
 

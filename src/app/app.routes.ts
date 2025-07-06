@@ -14,27 +14,66 @@ import { MyProfileComponent } from './features/my-profile/my-profile.component';
 import { ExploreComponent } from './features/explore/explore.component';
 import { OnboardingComponent } from './features/onboarding/onboarding.component';
 import { SubscriptionManagementComponent } from './features/subscription-management/subscription-management.component';
-import { AuthService } from './services/auth.service';
-import { inject } from '@angular/core';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'today', pathMatch: 'full' },
-  { path: 'today', component: TodayComponent },
-  { path: 'explore', component: ExploreComponent },
-  { path: 'habits', component: AllHabitsComponent },
-  { path: 'stats', component: StatsComponent },
-  { path: 'onboarding', component: OnboardingComponent },
-  { path: 'add-habit', component: HabitFormComponent },
-  { path: 'edit-habit/:id', component: HabitFormComponent },
-  { path: 'habit/:id', component: HabitDetailsComponent },
+  { path: 'today', component: TodayComponent, canActivate: [AuthGuard] },
+  { path: 'explore', component: ExploreComponent, canActivate: [AuthGuard] },
+  { path: 'habits', component: AllHabitsComponent, canActivate: [AuthGuard] },
+  { path: 'stats', component: StatsComponent, canActivate: [AuthGuard] },
+  {
+    path: 'onboarding',
+    component: OnboardingComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'add-habit',
+    component: HabitFormComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'edit-habit/:id',
+    component: HabitFormComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'habit/:id',
+    component: HabitDetailsComponent,
+    canActivate: [AuthGuard],
+  },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'archived-habits', component: ArchivedHabitsComponent },
-  { path: 'connections', component: ConnectionsComponent },
-  { path: 'notifications', component: NotificationsComponent },
-  { path: 'subscription', component: SubscriptionManagementComponent },
-  { path: 'myprofile', component: MyProfileComponent },
-  { path: 'profile/:id', component: UserProfileComponent },
+  {
+    path: 'archived-habits',
+    component: ArchivedHabitsComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'connections',
+    component: ConnectionsComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'notifications',
+    component: NotificationsComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'subscription',
+    component: SubscriptionManagementComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'myprofile',
+    component: MyProfileComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'profile/:id',
+    component: UserProfileComponent,
+    canActivate: [AuthGuard],
+  },
 
   { path: '**', redirectTo: 'login' },
 ];

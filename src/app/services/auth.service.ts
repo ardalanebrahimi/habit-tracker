@@ -24,7 +24,35 @@ export class AuthService {
   private accessToken: string | null = null; // Store access token in memory
   private isAuthenticated = new BehaviorSubject<boolean>(false);
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) {
+    this.initializeAuthState();
+  }
+
+  /**
+   * Initialize auth state on app startup - check for existing tokens
+   */
+  private initializeAuthState(): void {
+    const refreshToken = localStorage.getItem('refreshToken');
+    const userName = localStorage.getItem('userName');
+
+    if (refreshToken && userName) {
+      // User has tokens, mark as authenticated temporarily
+      // The auth guard will handle token validation
+      this.isAuthenticated.next(true);
+    } else {
+      // No tokens, user is not authenticated
+      this.isAuthenticated.next(false);
+    }
+  }
+
+  /**
+   * Check if user has valid tokens
+   */
+  hasValidTokens(): boolean {
+    const refreshToken = localStorage.getItem('refreshToken');
+    const userName = localStorage.getItem('userName');
+    return !!(refreshToken && userName);
+  }
 
   register(user: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/register`, user);

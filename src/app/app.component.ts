@@ -21,6 +21,7 @@ import { NavigationService } from './services/navigation.service';
 })
 export class AppComponent implements OnInit {
   isLoading$: Observable<boolean>;
+  isAuthenticated$: Observable<boolean>;
 
   constructor(
     public authService: AuthService,
@@ -31,11 +32,17 @@ export class AppComponent implements OnInit {
     private billingService: BillingService
   ) {
     this.isLoading$ = this.loadingService.isLoading.asObservable();
+    this.isAuthenticated$ = this.authService.isLoggedIn();
   }
 
   ngOnInit(): void {
     this.initializeBackButtonHandling();
     this.initializeBilling();
+  }
+
+  private initializeApp(): void {
+    // Auth guard will handle authentication redirects
+    // No need to do it here to avoid conflicts
   }
 
   private async initializeBilling(): Promise<void> {

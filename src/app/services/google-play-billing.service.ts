@@ -109,24 +109,36 @@ export class GooglePlayBillingService {
     productId: string,
     type: 'inapp' | 'subs'
   ): Promise<PurchaseResult> {
+    console.log('🚀 launchPurchaseFlow called:', {
+      productId,
+      type,
+      isNative: this.isNative,
+    });
+
     if (!this.isNative) {
+      console.log('📱 Running in web mode - showing mock purchase');
       // Return mock purchase for web development
       return this.getMockPurchase(productId, type);
     }
 
     if (!this.isInitialized) {
+      console.log('❌ Billing service not initialized');
       throw new Error('Billing service not initialized');
     }
 
+    console.log(
+      '📞 Calling native CapacitorGooglePlayBilling.launchBillingFlow...'
+    );
     try {
       const result = await CapacitorGooglePlayBilling.launchBillingFlow({
         sku: productId,
         skuType: type,
       });
 
+      console.log('✅ Native purchase result:', result);
       return result;
     } catch (error) {
-      console.error('Purchase flow failed:', error);
+      console.error('❌ Purchase flow failed:', error);
       throw error;
     }
   }

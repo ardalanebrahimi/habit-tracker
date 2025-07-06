@@ -572,15 +572,40 @@ export class SubscriptionManagementComponent implements OnInit {
   }
 
   async purchaseTokenPack(packId: string): Promise<void> {
+    console.log('🛒 Purchase token pack clicked:', packId);
+
     try {
-      await this.billingService.purchaseTokens(packId);
+      console.log('📞 Calling billingService.purchaseTokens...');
+      const result = await this.billingService.purchaseTokens(packId);
+      console.log('✅ Purchase result:', result);
+
       // Refresh data after successful purchase
       this.loadSubscriptionStatus();
       this.loadTokenHistory();
       this.userService.refreshTokenInfo();
     } catch (error) {
-      console.error('Token purchase error:', error);
-      if (error instanceof Error) {
+      console.error('❌ Token purchase error:', error);
+
+      // More detailed error handling
+      if (error && typeof error === 'object' && 'responseCode' in error) {
+        const responseCode = (error as any).responseCode;
+        console.log('🔍 Response code:', responseCode);
+
+        switch (responseCode) {
+          case 1:
+            alert(
+              'Purchase was canceled. No worries, you can try again anytime!'
+            );
+            break;
+          case 7:
+            alert('You already own this item.');
+            break;
+          default:
+            alert(
+              `Purchase failed with code ${responseCode}. Please try again.`
+            );
+        }
+      } else if (error instanceof Error) {
         alert(`Token purchase failed: ${error.message}`);
       } else {
         alert('Token purchase failed. Please try again later.');

@@ -1,5 +1,5 @@
-<!-- Navigation Bar (only shown when logged in) -->
-<app-navbar *ngIf="authService.getToken()"></app-navbar>
+<!-- Navigation Bar (shown when authenticated) -->
+<app-navbar *ngIf="isAuthenticated$ | async"></app-navbar>
 
 <div class="app-container">
   <!-- Content Container -->
