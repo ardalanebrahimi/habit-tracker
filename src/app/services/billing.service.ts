@@ -4,7 +4,7 @@ import { Observable, from } from 'rxjs';
 import { Capacitor } from '@capacitor/core';
 import { environment } from '../../environments/environment';
 import { UserService, UserTokenInfo, SubscriptionStatus } from './user.service';
-import { GooglePlayBillingService } from './google-play-billing.service';
+import { PurchaseService, PurchaseInfo } from './purchase.service';
 
 export interface SubscriptionPlan {
   id: string;
@@ -44,15 +44,25 @@ export class BillingService {
   constructor(
     private http: HttpClient,
     private userService: UserService,
-    private googlePlayBilling: GooglePlayBillingService
-  ) {}
+    private purchaseService: PurchaseService
+  ) {
+    console.log('🛒 [BillingService] Constructor - isNative:', this.isNative);
+    console.log(
+      '🛒 [BillingService] Constructor - Capacitor.isNativePlatform():',
+      Capacitor.isNativePlatform()
+    );
+    console.log(
+      '🛒 [BillingService] Constructor - Platform info:',
+      Capacitor.getPlatform()
+    );
+  }
 
   /**
-   * Initialize Google Play Billing
+   * Initialize Purchase Service
    */
   async initializeBilling(): Promise<void> {
     try {
-      await this.googlePlayBilling.initialize();
+      await this.purchaseService.initialize();
       console.log('Billing service initialized successfully');
     } catch (error) {
       console.error('Failed to initialize billing:', error);
@@ -104,16 +114,6 @@ export class BillingService {
   }
 
   /**
-   * Restore purchases (for app reinstalls)
-   */
-  restorePurchases(): Observable<SubscriptionStatus> {
-    return this.http.post<SubscriptionStatus>(
-      `${this.apiUrl}/restore-purchases`,
-      {}
-    );
-  }
-
-  /**
    * Get token pack information
    */
   getTokenPackInfo(): { [key: string]: { tokens: number; price: number } } {
@@ -126,9 +126,14 @@ export class BillingService {
   }
 
   /**
-   * Purchase tokens through Google Play or web simulation
+   * Purchase tokens through Purchase Service
    */
   async purchaseTokens(productId: string): Promise<void> {
+    console.log(
+      `🛒 [BillingService] purchaseTokens called for product: ${productId}`
+    );
+    console.log(`🛒 [BillingService] isNative: ${this.isNative}`);
+
     const tokenPacks = this.getTokenPackInfo();
     const packInfo = tokenPacks[productId];
 
@@ -137,32 +142,71 @@ export class BillingService {
     }
 
     try {
-      if (!this.googlePlayBilling.isAvailable()) {
-        await this.googlePlayBilling.initialize();
+      if (!this.purchaseService.isAvailable()) {
+        console.log(
+          `[BillingService] Purchase service not available, initializing...`
+        );
+        // Initialize purchase service if not available
+        await this.purchaseService.initialize();
       }
 
       // Launch purchase flow
-      const purchaseResult = await this.googlePlayBilling.launchPurchaseFlow(
-        productId,
-        'inapp'
+      console.log(
+        `🛒 [BillingService] Launching purchase flow for ${productId}`
+      );
+      const purchaseResult = await this.purchaseService.purchaseProduct(
+        productId
       );
 
-      if (
-        purchaseResult.responseCode === 0 &&
-        purchaseResult.purchases &&
-        purchaseResult.purchases.length > 0
-      ) {
-        const purchase = purchaseResult.purchases[0];
+      console.log(`🛒 [BillingService] Purchase result:`, purchaseResult);
 
-        // Verify purchase with backend
+      if (purchaseResult.state === 'APPROVED') {
+        // In web/development mode, simulate success without backend verification
+        const isCurrentlyNative = Capacitor.isNativePlatform();
+        const platform = Capacitor.getPlatform();
+
+        console.log(
+          `🛒 [BillingService] Purchase approved - Platform: ${platform}`
+        );
+        console.log(
+          `🛒 [BillingService] Purchase approved - isNative: ${this.isNative}`
+        );
+        console.log(
+          `🛒 [BillingService] Purchase approved - isCurrentlyNative: ${isCurrentlyNative}`
+        );
+
+        if (!this.isNative || platform === 'web') {
+          console.log(
+            `🎉 [DEV MODE] Simulated purchase of ${packInfo.tokens} tokens for $${packInfo.price}`
+          );
+          console.log(
+            `🎉 [DEV MODE] Skipping backend verification in web mode`
+          );
+
+          // Simulate token update (you can update this to match your user service structure)
+          // For now, just show success message
+          alert(
+            `🎉 [Development Mode] Successfully simulated purchase of ${packInfo.tokens} tokens for $${packInfo.price}!\n\nIn production, this would be verified with Google Play.`
+          );
+          return;
+        }
+
+        // In native mode, verify purchase with backend
+        console.log(
+          `🛒 [BillingService] Native mode - verifying purchase with backend`
+        );
         const verificationRequest: TokenPurchaseRequest = {
-          purchaseToken: purchase.purchaseToken,
-          productId: purchase.productId,
-          orderId: purchase.orderId,
+          purchaseToken: purchaseResult.purchaseToken,
+          productId: purchaseResult.productId,
+          orderId: purchaseResult.transactionId,
           tokenAmount: packInfo.tokens,
           price: packInfo.price,
         };
 
+        console.log(
+          `🛒 [BillingService] Sending verification request:`,
+          verificationRequest
+        );
         const result = await this.verifyTokenPurchase(
           verificationRequest
         ).toPromise();
@@ -170,61 +214,82 @@ export class BillingService {
         // Update local token info
         this.userService.updateTokenInfo(result!);
 
-        // Consume the purchase (tokens are consumable)
-        await this.googlePlayBilling.consumePurchase(purchase.purchaseToken);
-
         console.log(`Successfully purchased ${packInfo.tokens} tokens`);
         alert(
           `🎉 Success! You purchased ${packInfo.tokens} tokens for $${packInfo.price}`
         );
-      } else if (purchaseResult.responseCode === 1) {
-        // User canceled
-        throw new Error('Purchase cancelled by user');
       } else {
         throw new Error('Purchase failed. Please try again.');
       }
     } catch (error) {
       console.error('Token purchase failed:', error);
+      if (error instanceof Error && error.message.includes('cancelled')) {
+        throw new Error('Purchase cancelled by user');
+      }
       throw error;
     }
   }
 
   /**
-   * Subscribe through Google Play or web simulation
+   * Subscribe through Purchase Service
    */
   async subscribe(planId: string): Promise<void> {
+    console.log(`🛒 [BillingService] subscribe called for plan: ${planId}`);
+    console.log(`🛒 [BillingService] isNative: ${this.isNative}`);
+
     try {
-      if (!this.googlePlayBilling.isAvailable()) {
-        await this.googlePlayBilling.initialize();
+      if (!this.purchaseService.isAvailable()) {
+        await this.purchaseService.initialize();
       }
 
       // Launch subscription flow
-      const purchaseResult = await this.googlePlayBilling.launchPurchaseFlow(
-        planId,
-        'subs'
+      console.log(
+        `🛒 [BillingService] Launching subscription flow for ${planId}`
       );
+      const purchaseResult = await this.purchaseService.purchaseProduct(planId);
 
-      if (
-        purchaseResult.responseCode === 0 &&
-        purchaseResult.purchases &&
-        purchaseResult.purchases.length > 0
-      ) {
-        const purchase = purchaseResult.purchases[0];
+      console.log(`🛒 [BillingService] Subscription result:`, purchaseResult);
 
-        // Verify subscription with backend
+      if (purchaseResult.state === 'APPROVED') {
+        // In web/development mode, simulate success without backend verification
+        const isCurrentlyNative = Capacitor.isNativePlatform();
+        const platform = Capacitor.getPlatform();
+
+        console.log(
+          `🛒 [BillingService] Subscription approved - Platform: ${platform}`
+        );
+        console.log(
+          `🛒 [BillingService] Subscription approved - isNative: ${this.isNative}`
+        );
+        console.log(
+          `🛒 [BillingService] Subscription approved - isCurrentlyNative: ${isCurrentlyNative}`
+        );
+
+        if (!this.isNative || platform === 'web') {
+          console.log(
+            `🎉 [DEV MODE] Simulated subscription to plan: ${planId}`
+          );
+          console.log(
+            `🎉 [DEV MODE] Skipping backend verification in web mode`
+          );
+          alert(
+            `🎉 [Development Mode] Successfully simulated subscription to ${planId}!\n\nIn production, this would be verified with Google Play and you'd get unlimited habits and monthly tokens.`
+          );
+          return;
+        }
+
+        // In native mode, verify subscription with backend
+        console.log(
+          `🛒 [BillingService] Native mode - verifying subscription with backend`
+        );
         const verificationRequest: PurchaseVerificationRequest = {
-          purchaseToken: purchase.purchaseToken,
-          productId: purchase.productId,
-          orderId: purchase.orderId,
+          purchaseToken: purchaseResult.purchaseToken,
+          productId: purchaseResult.productId,
+          orderId: purchaseResult.transactionId,
           purchaseType: 'Subscription',
         };
 
         await this.verifySubscription(verificationRequest).toPromise();
-
-        // Acknowledge the subscription
-        await this.googlePlayBilling.acknowledgePurchase(
-          purchase.purchaseToken
-        );
 
         console.log(`Successfully subscribed to plan: ${planId}`);
         alert(
@@ -233,14 +298,14 @@ export class BillingService {
 
         // Reload to reflect changes
         window.location.reload();
-      } else if (purchaseResult.responseCode === 1) {
-        // User canceled
-        throw new Error('Subscription cancelled by user');
       } else {
         throw new Error('Subscription failed. Please try again.');
       }
     } catch (error) {
       console.error('Subscription failed:', error);
+      if (error instanceof Error && error.message.includes('cancelled')) {
+        throw new Error('Subscription cancelled by user');
+      }
       throw error;
     }
   }
