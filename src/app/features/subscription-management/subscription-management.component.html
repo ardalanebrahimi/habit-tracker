@@ -1,0 +1,171 @@
+<div class="subscription-management">
+  <div class="header">
+    <h2>Subscription & Tokens</h2>
+    <app-token-balance></app-token-balance>
+  </div>
+
+  <!-- Current Subscription Status -->
+  <div class="subscription-status">
+    <h3>Current Plan</h3>
+    <div class="status-card" [class.premium]="subscriptionStatus?.isActive">
+      <div class="status-info">
+        <div class="plan-name">
+          {{ getDisplayName(subscriptionStatus?.subscriptionTier || "free") }}
+        </div>
+        <div class="plan-details" *ngIf="subscriptionStatus?.isActive">
+          <p *ngIf="subscriptionStatus?.expiresAt">
+            Expires: {{ subscriptionStatus?.expiresAt | date : "medium" }}
+          </p>
+          <p>Auto-renew: {{ subscriptionStatus?.autoRenew ? "Yes" : "No" }}</p>
+        </div>
+        <div class="plan-features">
+          <div
+            class="feature"
+            *ngFor="let feature of subscriptionStatus?.features"
+          >
+            ✓ {{ feature }}
+          </div>
+        </div>
+      </div>
+      <div class="status-actions" *ngIf="subscriptionStatus?.isActive">
+        <button class="btn-secondary" (click)="cancelSubscription()">
+          Cancel Subscription
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Available Plans -->
+  <div class="available-plans" *ngIf="!subscriptionStatus?.isActive">
+    <h3>Upgrade to Premium</h3>
+    <div class="plans-grid">
+      <div
+        *ngFor="let plan of subscriptionPlans"
+        class="plan-card"
+        [class.recommended]="plan.planName === 'premium_yearly'"
+      >
+        <div class="plan-badge" *ngIf="plan.planName === 'premium_yearly'">
+          🎉 Best Value
+        </div>
+
+        <div class="plan-header">
+          <h4>{{ plan.displayName }}</h4>
+          <div class="plan-price">
+            <span class="price">{{ plan.price | currency }}</span>
+            <span class="period">{{
+              plan.durationMonths === 1 ? "/month" : "/year"
+            }}</span>
+          </div>
+          <div class="savings" *ngIf="plan.planName === 'premium_yearly'">
+            Save 58%
+          </div>
+        </div>
+
+        <div class="plan-features">
+          <div class="feature" *ngFor="let feature of plan.features">
+            ✓ {{ feature }}
+          </div>
+        </div>
+
+        <button class="btn-primary" (click)="subscribeToPlan(plan)">
+          Choose {{ plan.displayName }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Token Packs -->
+  <div class="token-packs">
+    <h3>Buy Tokens</h3>
+    <p class="token-description">
+      Need more tokens? Purchase token packs for instant access to premium
+      features.
+    </p>
+
+    <div class="packs-grid">
+      <div
+        *ngFor="let pack of getTokenPacks()"
+        class="pack-card"
+        [class.popular]="pack.id === 'tokens_50'"
+      >
+        <div class="pack-badge" *ngIf="pack.id === 'tokens_50'">💰 Popular</div>
+
+        <div class="pack-tokens">
+          <span class="token-amount">{{ pack.tokens }}</span>
+          <span class="token-label">tokens</span>
+        </div>
+
+        <div class="pack-price">
+          {{ pack.price | currency }}
+        </div>
+
+        <div class="pack-value">
+          {{ pack.price / pack.tokens | currency : "USD" : "symbol" : "1.3-3" }}
+          per token
+        </div>
+
+        <button class="btn-secondary" (click)="purchaseTokenPack(pack.id)">
+          Buy Now
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Token History -->
+  <div class="token-history">
+    <h3>Token History</h3>
+    <div class="history-list" *ngIf="tokenHistory.length > 0; else noHistory">
+      <div
+        *ngFor="let transaction of tokenHistory"
+        class="history-item"
+        [class.earn]="transaction.amount > 0"
+        [class.spend]="transaction.amount < 0"
+      >
+        <div class="transaction-info">
+          <div class="transaction-description">
+            {{ transaction.description }}
+          </div>
+          <div class="transaction-date">
+            {{ transaction.createdAt | date : "short" }}
+          </div>
+        </div>
+
+        <div class="transaction-amount">
+          <span class="amount" [class.positive]="transaction.amount > 0">
+            {{ transaction.amount > 0 ? "+" : "" }}{{ transaction.amount }}
+          </span>
+          <span class="token-icon">🪙</span>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #noHistory>
+      <div class="no-history">
+        <p>No token transactions yet.</p>
+        <p>Start using tokens by creating habits or using AI features!</p>
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- Referral Section -->
+  <div class="referral-section">
+    <h3>Invite Friends, Earn Tokens</h3>
+    <div class="referral-card">
+      <div class="referral-info">
+        <p>
+          Share your referral code and earn <strong>2 tokens</strong> for each
+          friend who joins!
+        </p>
+        <div class="referral-code" *ngIf="referralCode">
+          <label>Your referral code:</label>
+          <div class="code-display">
+            <span class="code">{{ referralCode }}</span>
+            <button class="copy-btn" (click)="copyReferralCode()">
+              📋 Copy
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

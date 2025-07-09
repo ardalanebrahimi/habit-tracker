@@ -6,7 +6,7 @@ import { HabitFormComponent } from './features/habit-form/habit-form.component';
 import { HabitDetailsComponent } from './features/habit-details/habit-details.component';
 import { LoginComponent } from './features/auth/login/login.component';
 import { RegisterComponent } from './features/auth/register/register.component';
-import { ArchivedHabitsComponent } from './features/archived-habits.component/archived-habits.component';
+import { ArchivedHabitsComponent } from './features/archived-habits/archived-habits.component';
 import { ConnectionsComponent } from './features/connections/connections.component';
 import { NotificationsComponent } from './features/notifications/notifications.component';
 import { UserProfileComponent } from './features/user-profile/user-profile.component';
