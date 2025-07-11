@@ -1,16 +1,24 @@
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
 .auth-container {
-  max-width: 350px;
-  margin: 80px auto;
-  padding: 20px;
-  border-radius: 10px;
+  max-width: 420px;
+  margin: auto;
+  padding: 32px;
+  border-radius: 14px;
   background: #ffffff;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
   text-align: center;
 }
 
 h2 {
-  margin-bottom: 20px;
-  color: #333;
+  margin-bottom: 28px;
+  color: #222;
+  font-size: 2rem;
 }
 
 form {
@@ -30,7 +38,7 @@ label {
 input {
   width: 100%;
   padding: 10px;
-  font-size: 14px;
+  font-size: 1.1rem;
   border: 1px solid #ddd;
   border-radius: 5px;
   outline: none;
@@ -45,7 +53,7 @@ input:focus {
 button {
   width: 100%;
   padding: 10px;
-  font-size: 16px;
+  font-size: 1.1rem;
   font-weight: 600;
   color: white;
   background: #4caf50;
