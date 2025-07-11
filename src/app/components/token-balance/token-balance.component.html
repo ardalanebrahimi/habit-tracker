@@ -1,0 +1,21 @@
+<div
+  *ngIf="shouldShow"
+  class="token-balance"
+  [class.compact]="compact"
+  [class.low-balance]="isLowBalance"
+  [class.clickable]="!compact"
+  [title]="getTooltipText()"
+  (click)="onTokenBalanceClick()"
+>
+  <div class="token-icon">🪙</div>
+  <div class="token-info" *ngIf="!compact">
+    <div class="token-count">{{ tokenInfo?.tokenBalance || 0 }}</div>
+    <div class="token-label">tokens</div>
+  </div>
+  <div class="token-count-compact" *ngIf="compact">
+    {{ tokenInfo?.tokenBalance || 0 }}
+  </div>
+
+  <!-- Warning indicator for low balance -->
+  <div class="warning-indicator" *ngIf="isLowBalance && !compact">⚠️</div>
+</div>

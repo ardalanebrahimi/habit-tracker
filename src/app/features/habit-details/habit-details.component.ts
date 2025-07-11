@@ -302,8 +302,7 @@ export class HabitDetailsComponent implements OnInit {
   }
 
   onShareCompleted(shareType: string): void {
-    console.log(`Shared ${shareType} for habit: ${this.habit?.name}`);
-    // Optional: Show a toast notification or update UI
+    throw new Error('Method not implemented.');
   }
 
   onCheerSent(): void {

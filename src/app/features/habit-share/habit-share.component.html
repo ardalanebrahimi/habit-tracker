@@ -1,0 +1,48 @@
+<div class="share-container">
+  <!-- Share Progress Button -->
+  <button
+    class="share-btn progress-share"
+    (click)="shareProgress()"
+    title="Share your progress"
+    [disabled]="isSharing"
+  >
+    <span class="icon">📊</span>
+    <span class="text">Share Progress</span>
+  </button>
+
+  <!-- Share Streak Button (only if streak > 0) -->
+  <button
+    *ngIf="habit.streak > 0"
+    class="share-btn streak-share"
+    (click)="shareStreak()"
+    title="Share your streak"
+    [disabled]="isSharing"
+  >
+    <span class="icon">🔥</span>
+    <span class="text">Share Streak</span>
+  </button>
+
+  <!-- Share Completion Button (only if completed today) -->
+  <button
+    *ngIf="habit.isCompleted"
+    class="share-btn completion-share"
+    (click)="shareCompletion()"
+    title="Share today's completion"
+    [disabled]="isSharing"
+  >
+    <span class="icon">✅</span>
+    <span class="text">Share Achievement</span>
+  </button>
+
+  <!-- Share Milestone Button (only if milestone reached) -->
+  <button
+    *ngIf="isMilestone"
+    class="share-btn milestone-share"
+    (click)="shareMilestone()"
+    title="Share milestone achievement"
+    [disabled]="isSharing"
+  >
+    <span class="icon">🏆</span>
+    <span class="text">Share Milestone</span>
+  </button>
+</div>

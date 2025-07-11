@@ -25,10 +25,6 @@ function testDirectUsage() {
 
   // This should work without any type errors
   const createHabitRequest: CreateHabitDTO = habitData;
-
-  console.log('✅ Direct usage test passed');
-  console.log('Habit data:', createHabitRequest);
-  console.log('AI extras:', {});
 }
 
 // Test display formatting
@@ -42,10 +38,6 @@ function testDisplayFormatting() {
       ? 'Yes/No (Binary)'
       : 'Count/Measure (Numeric)';
   };
-
-  console.log('✅ Display formatting test');
-  console.log('Frequency:', formatFrequency(mockAiResponse.frequency));
-  console.log('Goal Type:', formatGoalType(mockAiResponse.goalType));
 }
 
 // Run tests

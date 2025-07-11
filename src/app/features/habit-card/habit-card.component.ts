@@ -211,9 +211,6 @@ export class HabitCardComponent {
       next: () => {
         // Emit event to notify parent component
         this.habitChanged.emit();
-
-        // Could add a toast notification here in the future
-        console.log('Habit copied successfully!');
       },
       error: (error) => {
         console.error('Error copying habit:', error);

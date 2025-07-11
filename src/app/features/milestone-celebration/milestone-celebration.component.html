@@ -1,0 +1,33 @@
+<div
+  class="celebration-overlay"
+  *ngIf="showCelebration"
+  (click)="closeCelebration()"
+>
+  <div class="celebration-modal" (click)="$event.stopPropagation()">
+    <div class="celebration-content">
+      <div class="celebration-icon">🎉</div>
+      <h2>Milestone Achieved!</h2>
+      <p class="milestone-text">
+        Congratulations! You've reached <strong>{{ milestone }}</strong>
+        {{ getFrequencyText() }} of <strong>{{ habit.name }}</strong
+        >!
+      </p>
+      <div class="streak-display">
+        🔥 {{ habit.streak }} {{ getFrequencyText() }} streak!
+      </div>
+
+      <div class="celebration-actions">
+        <button
+          class="btn share-btn"
+          (click)="shareMilestone()"
+          [disabled]="isSharing"
+        >
+          📤 Share Achievement
+        </button>
+        <button class="btn continue-btn" (click)="closeCelebration()">
+          Continue
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -88,8 +88,9 @@ export class HabitsService {
                   this.userService.updateTokenInfo(tokenInfo);
                 },
                 error: (error) => {
-                  console.log('Token earning failed:', error);
-                  // Don't block habit completion if token earning fails
+                  throw new Error(
+                    `Failed to award tokens for habit completion: ${error.message}`
+                  );
                 },
               });
           }

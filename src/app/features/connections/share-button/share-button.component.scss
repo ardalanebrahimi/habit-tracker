@@ -1,0 +1,15 @@
+.share-button {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  width: 100%;
+  margin-top: 10px;
+
+  &:hover {
+    background: #218838;
+  }
+}

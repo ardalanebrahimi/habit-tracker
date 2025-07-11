@@ -1,0 +1,98 @@
+<div
+  *ngIf="paywallConfig"
+  class="paywall-overlay"
+  (click)="onOverlayClick($event)"
+>
+  <div class="paywall-modal" (click)="$event.stopPropagation()">
+    <div class="paywall-header">
+      <h3>{{ paywallConfig.title }}</h3>
+      <button class="close-button" (click)="cancel()">×</button>
+    </div>
+
+    <div class="paywall-content">
+      <p class="paywall-message">{{ paywallConfig.message }}</p>
+
+      <!-- Token Balance Display -->
+      <div class="token-balance" *ngIf="tokenInfo">
+        <div class="balance-item">
+          <span class="balance-label">Your tokens:</span>
+          <span class="balance-value">{{ tokenInfo.tokenBalance }}</span>
+        </div>
+        <div class="balance-item" *ngIf="tokenInfo.subscriptionTier !== 'free'">
+          <span class="balance-label">Plan:</span>
+          <span class="balance-value premium">{{
+            getSubscriptionDisplayName(tokenInfo.subscriptionTier)
+          }}</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="paywall-actions">
+        <!-- Spend Tokens Option -->
+        <button
+          *ngIf="canSpendTokens()"
+          class="action-button primary"
+          (click)="spendTokens()"
+        >
+          <span class="button-icon">🪙</span>
+          <div class="button-content">
+            <div class="button-title">
+              Use {{ paywallConfig.tokenCost }} Token{{
+                paywallConfig.tokenCost > 1 ? "s" : ""
+              }}
+            </div>
+            <div class="button-subtitle">Continue with current action</div>
+          </div>
+        </button>
+
+        <!-- Upgrade Option -->
+        <button class="action-button upgrade" (click)="showUpgradeOptions()">
+          <span class="button-icon">⭐</span>
+          <div class="button-content">
+            <div class="button-title">Upgrade to Premium</div>
+            <div class="button-subtitle">Unlimited habits + monthly tokens</div>
+          </div>
+        </button>
+
+        <!-- Buy Tokens Option -->
+        <button class="action-button secondary" (click)="showTokenStore()">
+          <span class="button-icon">🛒</span>
+          <div class="button-content">
+            <div class="button-title">Buy Tokens</div>
+            <div class="button-subtitle">Starting from $0.99</div>
+          </div>
+        </button>
+
+        <!-- Alternative Actions -->
+        <div
+          *ngIf="paywallConfig.showAlternatives && paywallConfig.alternatives"
+          class="alternatives"
+        >
+          <div class="alternatives-divider">
+            <span>or</span>
+          </div>
+          <button
+            *ngFor="let alt of paywallConfig.alternatives"
+            class="action-button alternative"
+            (click)="selectAlternative()"
+          >
+            <div class="button-content">
+              <div class="button-title">{{ alt.title }}</div>
+              <div class="button-subtitle">{{ alt.description }}</div>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Earn Tokens Hint -->
+      <div class="earn-tokens-hint">
+        <p><strong>💡 Tip:</strong> Earn free tokens by:</p>
+        <ul>
+          <li>Completing daily habits (streak bonuses)</li>
+          <li>Inviting friends</li>
+          <li>Daily login rewards</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,84 @@
+.share-container {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 12px 0;
+}
+
+.share-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  min-width: fit-content;
+}
+
+.share-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.progress-share {
+  background: #17a2b8;
+  color: white;
+}
+
+.progress-share:hover:not(:disabled) {
+  background: #138496;
+  transform: translateY(-1px);
+}
+
+.streak-share {
+  background: #fd7e14;
+  color: white;
+}
+
+.streak-share:hover:not(:disabled) {
+  background: #e8690b;
+  transform: translateY(-1px);
+}
+
+.completion-share {
+  background: #28a745;
+  color: white;
+}
+
+.completion-share:hover:not(:disabled) {
+  background: #218838;
+  transform: translateY(-1px);
+}
+
+.milestone-share {
+  background: #ffc107;
+  color: #212529;
+}
+
+.milestone-share:hover:not(:disabled) {
+  background: #e0a800;
+  transform: translateY(-1px);
+}
+
+.icon {
+  font-size: 16px;
+}
+
+.text {
+  font-size: 13px;
+}
+
+@media (max-width: 480px) {
+  .share-container {
+    flex-direction: column;
+  }
+
+  .share-btn {
+    justify-content: center;
+    width: 100%;
+  }
+}

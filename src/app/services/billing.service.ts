@@ -45,17 +45,7 @@ export class BillingService {
     private http: HttpClient,
     private userService: UserService,
     private purchaseService: PurchaseService
-  ) {
-    console.log('🛒 [BillingService] Constructor - isNative:', this.isNative);
-    console.log(
-      '🛒 [BillingService] Constructor - Capacitor.isNativePlatform():',
-      Capacitor.isNativePlatform()
-    );
-    console.log(
-      '🛒 [BillingService] Constructor - Platform info:',
-      Capacitor.getPlatform()
-    );
-  }
+  ) {}
 
   /**
    * Initialize Purchase Service
@@ -63,7 +53,6 @@ export class BillingService {
   async initializeBilling(): Promise<void> {
     try {
       await this.purchaseService.initialize();
-      console.log('Billing service initialized successfully');
     } catch (error) {
       console.error('Failed to initialize billing:', error);
       throw error;
@@ -128,12 +117,7 @@ export class BillingService {
   /**
    * Purchase tokens through Purchase Service
    */
-  async purchaseTokens(productId: string): Promise<void> {
-    console.log(
-      `🛒 [BillingService] purchaseTokens called for product: ${productId}`
-    );
-    console.log(`🛒 [BillingService] isNative: ${this.isNative}`);
-
+  async purchaseTokens(productId: string): Promise<any> {
     const tokenPacks = this.getTokenPackInfo();
     const packInfo = tokenPacks[productId];
 
@@ -143,58 +127,31 @@ export class BillingService {
 
     try {
       if (!this.purchaseService.isAvailable()) {
-        console.log(
-          `[BillingService] Purchase service not available, initializing...`
-        );
         // Initialize purchase service if not available
         await this.purchaseService.initialize();
       }
 
       // Launch purchase flow
-      console.log(
-        `🛒 [BillingService] Launching purchase flow for ${productId}`
-      );
       const purchaseResult = await this.purchaseService.purchaseProduct(
         productId
       );
-
-      console.log(`🛒 [BillingService] Purchase result:`, purchaseResult);
 
       if (purchaseResult.state === 'APPROVED') {
         // In web/development mode, simulate success without backend verification
         const isCurrentlyNative = Capacitor.isNativePlatform();
         const platform = Capacitor.getPlatform();
 
-        console.log(
-          `🛒 [BillingService] Purchase approved - Platform: ${platform}`
-        );
-        console.log(
-          `🛒 [BillingService] Purchase approved - isNative: ${this.isNative}`
-        );
-        console.log(
-          `🛒 [BillingService] Purchase approved - isCurrentlyNative: ${isCurrentlyNative}`
-        );
-
         if (!this.isNative || platform === 'web') {
-          console.log(
-            `🎉 [DEV MODE] Simulated purchase of ${packInfo.tokens} tokens for $${packInfo.price}`
-          );
-          console.log(
-            `🎉 [DEV MODE] Skipping backend verification in web mode`
-          );
-
           // Simulate token update (you can update this to match your user service structure)
           // For now, just show success message
           alert(
             `🎉 [Development Mode] Successfully simulated purchase of ${packInfo.tokens} tokens for $${packInfo.price}!\n\nIn production, this would be verified with Google Play.`
           );
-          return;
+
+          return purchaseResult;
         }
 
         // In native mode, verify purchase with backend
-        console.log(
-          `🛒 [BillingService] Native mode - verifying purchase with backend`
-        );
         const verificationRequest: TokenPurchaseRequest = {
           purchaseToken: purchaseResult.purchaseToken,
           productId: purchaseResult.productId,
@@ -203,10 +160,6 @@ export class BillingService {
           price: packInfo.price,
         };
 
-        console.log(
-          `🛒 [BillingService] Sending verification request:`,
-          verificationRequest
-        );
         const result = await this.verifyTokenPurchase(
           verificationRequest
         ).toPromise();
@@ -214,10 +167,11 @@ export class BillingService {
         // Update local token info
         this.userService.updateTokenInfo(result!);
 
-        console.log(`Successfully purchased ${packInfo.tokens} tokens`);
         alert(
           `🎉 Success! You purchased ${packInfo.tokens} tokens for $${packInfo.price}`
         );
+
+        return purchaseResult;
       } else {
         throw new Error('Purchase failed. Please try again.');
       }
@@ -234,44 +188,20 @@ export class BillingService {
    * Subscribe through Purchase Service
    */
   async subscribe(planId: string): Promise<void> {
-    console.log(`🛒 [BillingService] subscribe called for plan: ${planId}`);
-    console.log(`🛒 [BillingService] isNative: ${this.isNative}`);
-
     try {
       if (!this.purchaseService.isAvailable()) {
         await this.purchaseService.initialize();
       }
 
       // Launch subscription flow
-      console.log(
-        `🛒 [BillingService] Launching subscription flow for ${planId}`
-      );
       const purchaseResult = await this.purchaseService.purchaseProduct(planId);
-
-      console.log(`🛒 [BillingService] Subscription result:`, purchaseResult);
 
       if (purchaseResult.state === 'APPROVED') {
         // In web/development mode, simulate success without backend verification
         const isCurrentlyNative = Capacitor.isNativePlatform();
         const platform = Capacitor.getPlatform();
 
-        console.log(
-          `🛒 [BillingService] Subscription approved - Platform: ${platform}`
-        );
-        console.log(
-          `🛒 [BillingService] Subscription approved - isNative: ${this.isNative}`
-        );
-        console.log(
-          `🛒 [BillingService] Subscription approved - isCurrentlyNative: ${isCurrentlyNative}`
-        );
-
         if (!this.isNative || platform === 'web') {
-          console.log(
-            `🎉 [DEV MODE] Simulated subscription to plan: ${planId}`
-          );
-          console.log(
-            `🎉 [DEV MODE] Skipping backend verification in web mode`
-          );
           alert(
             `🎉 [Development Mode] Successfully simulated subscription to ${planId}!\n\nIn production, this would be verified with Google Play and you'd get unlimited habits and monthly tokens.`
           );
@@ -279,9 +209,6 @@ export class BillingService {
         }
 
         // In native mode, verify subscription with backend
-        console.log(
-          `🛒 [BillingService] Native mode - verifying subscription with backend`
-        );
         const verificationRequest: PurchaseVerificationRequest = {
           purchaseToken: purchaseResult.purchaseToken,
           productId: purchaseResult.productId,
@@ -291,7 +218,6 @@ export class BillingService {
 
         await this.verifySubscription(verificationRequest).toPromise();
 
-        console.log(`Successfully subscribed to plan: ${planId}`);
         alert(
           `🎉 Success! You've subscribed to the premium plan. Enjoy unlimited habits and monthly tokens!`
         );

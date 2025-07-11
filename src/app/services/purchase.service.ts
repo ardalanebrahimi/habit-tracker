@@ -50,7 +50,6 @@ export class PurchaseService {
    */
   async initialize(): Promise<void> {
     if (!this.isNative) {
-      console.log('Purchase Service: Running in web mode');
       this.isInitialized = true;
       return;
     }
@@ -86,7 +85,6 @@ export class PurchaseService {
       // Initialize the store
       await new Promise<void>((resolve, reject) => {
         this.store.ready(() => {
-          console.log('Purchase Service: Store ready');
           this.isInitialized = true;
           resolve();
         });
@@ -186,7 +184,6 @@ export class PurchaseService {
     console.log('Refreshing UI after product update');
   }
   finishPurchase(transaction: any) {
-    console.log('Finishing purchase:', transaction);
     transaction?.finish();
     this.refreshUI();
   }
@@ -202,19 +199,14 @@ export class PurchaseService {
    * Purchase a product
    */
   async purchaseProduct(productId: string): Promise<PurchaseInfo> {
-    console.log(`🛒 Initiating purchase for product: ${productId}`);
-
     if (!this.isInitialized) {
       throw new Error('Purchase service not initialized');
     }
 
     if (!this.isNative) {
-      console.log(`🌐 Running in web mode, using mock purchase`);
       // Mock purchase for web
       return this.mockPurchase(productId);
     }
-
-    console.log(`📱 Running in native mode, using cordova-plugin-purchase`);
 
     return new Promise((resolve, reject) => {
       const product = this.store.get(productId);
@@ -230,8 +222,6 @@ export class PurchaseService {
    * Mock purchase for web development
    */
   private async mockPurchase(productId: string): Promise<PurchaseInfo> {
-    console.log(`🛒 [DEV MODE] Simulating purchase for product: ${productId}`);
-
     // Simulate purchase delay
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -245,7 +235,6 @@ export class PurchaseService {
       state: 'APPROVED' as const,
     };
 
-    console.log(`✅ [DEV MODE] Mock purchase completed:`, result);
     return result;
   }
 }

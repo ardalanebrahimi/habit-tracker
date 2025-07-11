@@ -1,0 +1,94 @@
+.token-balance {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.token-balance:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+.token-balance.clickable {
+  cursor: pointer;
+}
+
+.token-balance.clickable:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.token-balance.compact {
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+.token-balance.low-balance {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  color: #dc2626;
+}
+
+.token-balance.low-balance:hover {
+  background: #fee2e2;
+}
+
+.token-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.token-balance.compact .token-icon {
+  font-size: 14px;
+}
+
+.token-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+}
+
+.token-count {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.token-count-compact {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.token-label {
+  font-size: 11px;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.warning-indicator {
+  font-size: 12px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.token-balance.low-balance .token-count,
+.token-balance.low-balance .token-count-compact {
+  color: #dc2626;
+}

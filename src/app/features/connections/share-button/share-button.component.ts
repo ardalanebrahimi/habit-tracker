@@ -12,28 +12,8 @@ export interface ShareData {
   selector: 'app-share-button',
   standalone: true,
   imports: [CommonModule],
-  template: `
-    <button class="share-button" (click)="onClick()">Share Invite Link</button>
-  `,
-  styles: [
-    `
-      .share-button {
-        background: #28a745;
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-weight: 500;
-        width: 100%;
-        margin-top: 10px;
-
-        &:hover {
-          background: #218838;
-        }
-      }
-    `,
-  ],
+  templateUrl: './share-button.component.html',
+  styleUrls: ['./share-button.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShareButtonComponent {
