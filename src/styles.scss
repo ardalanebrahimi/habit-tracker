@@ -5,6 +5,12 @@
 /* CSS Variables for Theme Consistency */
 :root {
   --nav-h: 56px;
+
+  /* Safe Area Insets for notched devices */
+  --safe-area-inset-top: env(safe-area-inset-top);
+  --safe-area-inset-right: env(safe-area-inset-right);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom);
+  --safe-area-inset-left: env(safe-area-inset-left);
   --bg-primary: #f5f7fa;
   --bg-secondary: #ffffff;
   --bg-surface: #ffffff;
@@ -39,6 +45,21 @@ body {
   line-height: 1.5;
   margin: 0;
   min-height: 100vh;
+
+  /* Safe area padding for mobile devices */
+  padding-top: var(--safe-area-inset-top);
+  padding-left: var(--safe-area-inset-left);
+  padding-right: var(--safe-area-inset-right);
+  padding-bottom: var(--safe-area-inset-bottom);
+}
+
+/* Fallback for devices without safe-area-inset support */
+@supports not (padding: max(0px)) {
+  body {
+    /* Fallback padding for devices without safe area support */
+    padding-top: 24px; /* Status bar height */
+    padding-bottom: 48px; /* Navigation bar height */
+  }
 }
 
 /* Utility Classes */

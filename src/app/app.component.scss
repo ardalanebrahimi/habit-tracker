@@ -2,6 +2,11 @@
   position: relative;
   min-height: 100vh;
   background: linear-gradient(135deg, #5a5a5a 0%, #ffffff 100%);
+
+  /* Ensure content doesn't go under system UI */
+  min-height: calc(
+    100vh - var(--safe-area-inset-top) - var(--safe-area-inset-bottom)
+  );
 }
 
 /* Content container - adds padding for the floating bottom navigation */

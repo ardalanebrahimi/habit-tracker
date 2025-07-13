@@ -4,7 +4,16 @@ const config: CapacitorConfig = {
   appId: 'com.ardiland.habittracker',
   appName: 'habit-tracker',
   webDir: 'dist/habit-tracker/browser',
-  bundledWebRuntime: false,
+  plugins: {
+    App: {
+      launchShowDuration: 0,
+    },
+  },
+  android: {
+    allowMixedContent: true,
+    useLegacyBridge: false,
+    webContentsDebuggingEnabled: false,
+  },
 };
 
 export default config;
