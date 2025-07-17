@@ -43,7 +43,6 @@ export class BillingService {
 
   constructor(
     private http: HttpClient,
-    private userService: UserService,
     private purchaseService: PurchaseService
   ) {}
 

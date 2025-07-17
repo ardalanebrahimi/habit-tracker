@@ -35,6 +35,7 @@ export class SubscriptionManagementComponent implements OnInit {
     this.loadSubscriptionPlans();
     this.loadTokenHistory();
     this.loadReferralCode();
+    this.userService.initializeUserData();
   }
 
   private loadSubscriptionStatus(): void {

@@ -198,7 +198,7 @@ export class PurchaseService {
         // Update local token info
         this.userService.updateTokenInfo(result!);
 
-        alert(`🎉 Success! You purchased ${transaction.productId} tokens`);
+        alert(`🎉 Success! You purchased ${packInfo.tokens} tokens`);
         transaction?.finish();
       })
       .verified((receipt: any) => {
@@ -247,13 +247,13 @@ export class PurchaseService {
       return this.mockPurchase(productId);
     }
 
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       const product = this.store.get(productId);
       if (!product) {
         reject(new Error('Product not found'));
         return;
       }
-      product.getOffer().order();
+      await product.getOffer().order();
     });
   }
 
