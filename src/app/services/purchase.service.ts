@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
 import { environment } from '../../environments/environment';
+import { TokenPurchaseRequest } from './billing.service';
+import { Observable } from 'rxjs';
+import { UserService, UserTokenInfo } from './user.service';
+import { HttpClient } from '@angular/common/http';
 
 // Cordova plugin purchase types
 declare var CdvPurchase: any;
@@ -42,8 +46,9 @@ export class PurchaseService {
   private isNative = Capacitor.isNativePlatform();
   private isInitialized = false;
   private store: any;
+  private apiUrl = `${environment.apiUrl}/payments`;
 
-  constructor() {}
+  constructor(private http: HttpClient, private userService: UserService) {}
 
   /**
    * Initialize the purchase service
@@ -167,8 +172,33 @@ export class PurchaseService {
       .productUpdated((product: any) => {
         console.log('Product updated:', product);
       })
-      .approved((transaction: any) => {
+      .approved(async (transaction: any) => {
         console.log('Transaction approved:', JSON.stringify(transaction));
+        const purchaseResult = transaction?.nativePurchase;
+        if (!purchaseResult) return;
+        console.log('orderId:', purchaseResult.orderId);
+
+        const tokenPacks = this.getTokenPackInfo();
+        const packInfo = tokenPacks[purchaseResult.productId];
+
+        // In native mode, verify purchase with backend
+        const verificationRequest: TokenPurchaseRequest = {
+          purchaseToken: purchaseResult.purchaseToken,
+          productId: purchaseResult.productId,
+          orderId: purchaseResult.orderId ?? transaction.transactionId, // ✅ Add this line
+          tokenAmount: packInfo.tokens,
+          price: packInfo.price,
+        };
+
+        const result = await this.verifyTokenPurchase(
+          verificationRequest
+        ).toPromise();
+
+        console.log('Updating token info:', JSON.stringify(result));
+        // Update local token info
+        this.userService.updateTokenInfo(result!);
+
+        alert(`🎉 Success! You purchased ${transaction.productId} tokens`);
         this.finishPurchase(transaction);
       })
       .verified((receipt: any) => {
@@ -178,6 +208,19 @@ export class PurchaseService {
         console.log('Transaction finished:', JSON.stringify(transaction));
         this.refreshUI();
       });
+  }
+
+  /**
+   * Verify token purchase with Google Play
+   */
+  verifyTokenPurchase(
+    request: TokenPurchaseRequest
+  ): Observable<UserTokenInfo> {
+    console.log('verifyTokenPurchase request:', JSON.stringify(request));
+    return this.http.post<UserTokenInfo>(
+      `${this.apiUrl}/verify-token-purchase`,
+      request
+    );
   }
 
   refreshUI() {
@@ -236,5 +279,17 @@ export class PurchaseService {
     };
 
     return result;
+  }
+
+  /**
+   * Get token pack information
+   */
+  getTokenPackInfo(): { [key: string]: { tokens: number; price: number } } {
+    return {
+      tokens_10: { tokens: 10, price: 0.99 },
+      tokens_25: { tokens: 25, price: 1.99 },
+      tokens_50: { tokens: 50, price: 3.99 },
+      tokens_100: { tokens: 100, price: 6.99 },
+    };
   }
 }

@@ -105,13 +105,8 @@ export class BillingService {
   /**
    * Get token pack information
    */
-  getTokenPackInfo(): { [key: string]: { tokens: number; price: number } } {
-    return {
-      tokens_10: { tokens: 10, price: 0.99 },
-      tokens_25: { tokens: 25, price: 1.99 },
-      tokens_50: { tokens: 50, price: 3.99 },
-      tokens_100: { tokens: 100, price: 6.99 },
-    };
+  getTokenPackInfo() {
+    return this.purchaseService.getTokenPackInfo();
   }
 
   /**
