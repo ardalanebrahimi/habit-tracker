@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, from } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Capacitor } from '@capacitor/core';
 import { environment } from '../../environments/environment';
-import { UserService, UserTokenInfo, SubscriptionStatus } from './user.service';
-import { PurchaseService, PurchaseInfo } from './purchase.service';
+import { UserService, SubscriptionStatus } from './user.service';
+import { PurchaseService } from './purchase.service';
 
 export interface SubscriptionPlan {
   id: string;
@@ -69,18 +69,6 @@ export class BillingService {
   }
 
   /**
-   * Verify token purchase with Google Play
-   */
-  verifyTokenPurchase(
-    request: TokenPurchaseRequest
-  ): Observable<UserTokenInfo> {
-    return this.http.post<UserTokenInfo>(
-      `${this.apiUrl}/verify-token-purchase`,
-      request
-    );
-  }
-
-  /**
    * Verify subscription purchase with Google Play
    */
   verifySubscription(
@@ -127,49 +115,7 @@ export class BillingService {
       }
 
       // Launch purchase flow
-      const purchaseResult = await this.purchaseService.purchaseProduct(
-        productId
-      );
-
-      if (purchaseResult.state === 'APPROVED') {
-        // In web/development mode, simulate success without backend verification
-        const isCurrentlyNative = Capacitor.isNativePlatform();
-        const platform = Capacitor.getPlatform();
-
-        if (!this.isNative || platform === 'web') {
-          // Simulate token update (you can update this to match your user service structure)
-          // For now, just show success message
-          alert(
-            `🎉 [Development Mode] Successfully simulated purchase of ${packInfo.tokens} tokens for $${packInfo.price}!\n\nIn production, this would be verified with Google Play.`
-          );
-
-          return purchaseResult;
-        }
-
-        // In native mode, verify purchase with backend
-        const verificationRequest: TokenPurchaseRequest = {
-          purchaseToken: purchaseResult.purchaseToken,
-          productId: purchaseResult.productId,
-          orderId: purchaseResult.transactionId,
-          tokenAmount: packInfo.tokens,
-          price: packInfo.price,
-        };
-
-        const result = await this.verifyTokenPurchase(
-          verificationRequest
-        ).toPromise();
-
-        // Update local token info
-        this.userService.updateTokenInfo(result!);
-
-        alert(
-          `🎉 Success! You purchased ${packInfo.tokens} tokens for $${packInfo.price}`
-        );
-
-        return purchaseResult;
-      } else {
-        throw new Error('Purchase failed. Please try again.');
-      }
+      await this.purchaseService.purchaseProduct(productId);
     } catch (error) {
       console.error('Token purchase failed:', error);
       if (error instanceof Error && error.message.includes('cancelled')) {

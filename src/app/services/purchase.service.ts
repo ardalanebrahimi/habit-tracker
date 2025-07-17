@@ -199,7 +199,7 @@ export class PurchaseService {
         this.userService.updateTokenInfo(result!);
 
         alert(`🎉 Success! You purchased ${transaction.productId} tokens`);
-        this.finishPurchase(transaction);
+        transaction?.finish();
       })
       .verified((receipt: any) => {
         console.log('Receipt verified:', JSON.stringify(receipt));
@@ -225,10 +225,6 @@ export class PurchaseService {
 
   refreshUI() {
     console.log('Refreshing UI after product update');
-  }
-  finishPurchase(transaction: any) {
-    transaction?.finish();
-    this.refreshUI();
   }
 
   /**
