@@ -17,6 +17,7 @@ export class CheerDisplayComponent implements OnInit {
   cheers: Cheer[] = [];
   showAll = false;
   isLoading = false;
+  isExpanded = false; // New property for expand/collapse functionality
 
   constructor(private cheeringService: CheeringService) {}
 
@@ -45,6 +46,10 @@ export class CheerDisplayComponent implements OnInit {
         this.isLoading = false;
       },
     });
+  }
+
+  toggleExpanded(): void {
+    this.isExpanded = !this.isExpanded;
   }
 
   toggleShowAll(): void {

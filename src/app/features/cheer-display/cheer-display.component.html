@@ -1,41 +1,65 @@
 <div class="cheer-display" *ngIf="cheers.length > 0">
-  <div class="cheer-header">
-    <span class="cheer-icon">🎉</span>
-    <span class="cheer-count"
-      >{{ cheers.length }} cheer{{ cheers.length !== 1 ? "s" : "" }}</span
-    >
+  <!-- Compact Icon Display -->
+  <div
+    class="cheer-icon-compact"
+    [class.expanded]="isExpanded"
+    (click)="toggleExpanded()"
+    [title]="
+      cheers.length + ' cheer' + (cheers.length !== 1 ? 's' : '') + ' received'
+    "
+  >
+    <div class="icon-content">
+      <span class="cheer-emoji-icon">🎉</span>
+      <span class="cheer-count-badge">{{ cheers.length }}</span>
+    </div>
+
+    <!-- Expandable indicator -->
+    <div class="expand-indicator" [class.rotated]="isExpanded">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path
+          d="M6 9L12 15L18 9"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </div>
   </div>
 
-  <div class="cheer-list" [class.expanded]="showAll">
-    <div
-      *ngFor="let cheer of displayedCheers; trackBy: trackByCheer"
-      class="cheer-item"
-    >
-      <div class="cheer-content">
-        <span class="cheer-emoji">{{ cheer.emoji }}</span>
-        <div class="cheer-details">
-          <div class="cheer-message">{{ cheer.message }}</div>
-          <div class="cheer-meta">
-            <span class="cheer-from"
-              >from
-              <a
-                [routerLink]="['/profile', cheer.fromUserId]"
-                class="user-link"
-                >{{ cheer.fromUsername }}</a
-              ></span
-            >
-            <span class="cheer-time">{{ getTimeAgo(cheer.timestamp) }}</span>
+  <!-- Expandable Details -->
+  <div class="cheer-details-section" [class.expanded]="isExpanded">
+    <div class="cheer-list" [class.show-all]="showAll">
+      <div
+        *ngFor="let cheer of displayedCheers; trackBy: trackByCheer"
+        class="cheer-item"
+      >
+        <div class="cheer-content">
+          <span class="cheer-emoji">{{ cheer.emoji }}</span>
+          <div class="cheer-details">
+            <div class="cheer-message">{{ cheer.message }}</div>
+            <div class="cheer-meta">
+              <span class="cheer-from"
+                >from
+                <a
+                  [routerLink]="['/profile', cheer.fromUserId]"
+                  class="user-link"
+                  >{{ cheer.fromUsername }}</a
+                ></span
+              >
+              <span class="cheer-time">{{ getTimeAgo(cheer.timestamp) }}</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <button
-    *ngIf="cheers.length > 3"
-    class="show-more-btn"
-    (click)="toggleShowAll()"
-  >
-    {{ showAll ? "Show less" : "Show all (" + cheers.length + ")" }}
-  </button>
+    <button
+      *ngIf="cheers.length > 3"
+      class="show-more-btn"
+      (click)="toggleShowAll()"
+    >
+      {{ showAll ? "Show less" : "Show all (" + cheers.length + ")" }}
+    </button>
+  </div>
 </div>
