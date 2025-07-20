@@ -85,9 +85,9 @@ export class SharingDialogContentComponent {
 
     try {
       await shareFunction();
-      this.dialogResult.emit({ 
-        action: 'confirm', 
-        data: { shared: true } 
+      this.dialogResult.emit({
+        action: 'confirm',
+        data: { shared: true },
       });
     } catch (error) {
       console.error('Error sharing:', error);
