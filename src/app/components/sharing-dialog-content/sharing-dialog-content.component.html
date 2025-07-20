@@ -1,0 +1,70 @@
+<div class="sharing-content">
+  <div class="share-header">
+    <p class="share-description">Share your progress with others to inspire and motivate!</p>
+  </div>
+
+  <div class="share-options">
+    <button
+      class="share-option completion"
+      (click)="shareCompletion()"
+      *ngIf="habit.isCompleted"
+      [disabled]="isSharing"
+    >
+      <div class="option-icon">✅</div>
+      <div class="option-content">
+        <span class="option-title">Achievement</span>
+        <span class="option-desc">Share your completion</span>
+      </div>
+    </button>
+
+    <button
+      class="share-option streak"
+      (click)="shareStreak()"
+      *ngIf="habit.streak > 0"
+      [disabled]="isSharing"
+    >
+      <div class="option-icon">🔥</div>
+      <div class="option-content">
+        <span class="option-title">Streak</span>
+        <span class="option-desc">{{ habit.streak }} {{ getStreakPeriod() }}</span>
+      </div>
+    </button>
+
+    <button
+      class="share-option progress"
+      (click)="shareProgress()"
+      [disabled]="isSharing"
+    >
+      <div class="option-icon">📊</div>
+      <div class="option-content">
+        <span class="option-title">Progress</span>
+        <span class="option-desc">Share your journey</span>
+      </div>
+    </button>
+
+    <button
+      class="share-option milestone"
+      (click)="shareMilestone()"
+      *ngIf="isMilestone"
+      [disabled]="isSharing"
+    >
+      <div class="option-icon">🏆</div>
+      <div class="option-content">
+        <span class="option-title">Milestone</span>
+        <span class="option-desc">Special achievement!</span>
+      </div>
+    </button>
+  </div>
+
+  <div *ngIf="isSharing" class="sharing-loading">
+    <div class="loading-spinner">⏳</div>
+    <span>Sharing...</span>
+  </div>
+</div>
+
+<!-- Footer Actions -->
+<div class="dialog-footer" slot="footer">
+  <button class="btn btn-secondary" (click)="onCancel()" [disabled]="isSharing">
+    Cancel
+  </button>
+</div>

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SharingService } from '../../services/sharing.service';
+import { AppDialogService } from '../../services/app-dialog.service';
 import { HabitWithProgressDTO } from '../../models/habit-with-progress-dto.model';
 
 @Component({
@@ -13,71 +13,22 @@ import { HabitWithProgressDTO } from '../../models/habit-with-progress-dto.model
 export class HabitQuickShareComponent {
   @Input() habit!: HabitWithProgressDTO;
 
-  showShareMenu = false;
   isSharing = false;
 
-  constructor(private sharingService: SharingService) {}
+  constructor(private appDialogService: AppDialogService) {}
 
-  get isMilestone(): boolean {
-    return this.sharingService.isMilestone(this.habit.streak);
-  }
-
-  getStreakPeriod(): string {
-    switch (this.habit.frequency) {
-      case 'daily':
-        return 'days';
-      case 'weekly':
-        return 'weeks';
-      case 'monthly':
-        return 'months';
-      default:
-        return 'days';
-    }
-  }
-
-  toggleShareMenu(): void {
-    this.showShareMenu = !this.showShareMenu;
-  }
-
-  async shareProgress(): Promise<void> {
-    await this.performShare(() =>
-      this.sharingService.shareHabitProgress(this.habit)
-    );
-  }
-
-  async shareStreak(): Promise<void> {
-    await this.performShare(() =>
-      this.sharingService.shareStreakAchievement(this.habit)
-    );
-  }
-
-  async shareCompletion(): Promise<void> {
-    await this.performShare(() =>
-      this.sharingService.shareHabitCompletion(this.habit)
-    );
-  }
-
-  async shareMilestone(): Promise<void> {
-    const milestone = this.sharingService.getMilestone(this.habit.streak);
-    if (milestone) {
-      await this.performShare(() =>
-        this.sharingService.shareMilestone(this.habit, milestone)
-      );
-    }
-  }
-
-  private async performShare(
-    shareFunction: () => Promise<void>
-  ): Promise<void> {
+  async openSharingDialog(): Promise<void> {
     if (this.isSharing) return;
 
     this.isSharing = true;
-    this.showShareMenu = false;
-
     try {
-      await shareFunction();
+      const result = await this.appDialogService.openSharingDialog(this.habit);
+      if (result.shared) {
+        // Optional: Add any success handling here
+        console.log('Content shared successfully!');
+      }
     } catch (error) {
-      console.error('Error sharing:', error);
+      console.error('Error opening sharing dialog:', error);
     } finally {
       this.isSharing = false;
     }

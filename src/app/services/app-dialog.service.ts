@@ -4,6 +4,10 @@ import {
   CheerDialogContentComponent,
   CheerDialogData,
 } from '../components/cheer-dialog-content/cheer-dialog-content.component';
+import {
+  SharingDialogContentComponent,
+  SharingDialogData,
+} from '../components/sharing-dialog-content/sharing-dialog-content.component';
 import { HabitWithProgressDTO } from '../models/habit-with-progress-dto.model';
 
 @Injectable({
@@ -32,6 +36,29 @@ export class AppDialogService {
 
     return {
       cheerSent: result.action === 'confirm' && result.data?.cheerSent === true,
+    };
+  }
+
+  /**
+   * Opens the sharing dialog for the specified habit
+   * @param habit The habit to share
+   * @returns Promise that resolves when content is shared or dialog is cancelled
+   */
+  async openSharingDialog(
+    habit: HabitWithProgressDTO
+  ): Promise<{ shared?: boolean }> {
+    const result = await this.dialogService.openDialog(
+      SharingDialogContentComponent,
+      {
+        title: 'Share Your Progress 🚀',
+        data: { habit } as SharingDialogData,
+        size: 'medium',
+        closeOnBackdrop: true,
+      }
+    );
+
+    return {
+      shared: result.action === 'confirm' && result.data?.shared === true,
     };
   }
 

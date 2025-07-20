@@ -1,12 +1,16 @@
 <div class="modern-quick-share" *ngIf="habit.isOwnedHabit && !habit.isPrivate">
   <button
     class="modern-share-btn"
-    (click)="toggleShareMenu()"
-    [class.active]="showShareMenu"
+    (click)="openSharingDialog()"
     title="Share this habit"
     [disabled]="isSharing"
   >
-    <svg class="share-icon" viewBox="0 0 24 24" fill="none">
+    <svg 
+      class="share-icon" 
+      viewBox="0 0 24 24" 
+      fill="none"
+      [style.opacity]="isSharing ? '0' : '1'"
+    >
       <path
         d="M4 12V20C4 20.5523 4.44772 21 5 21H19C19.5523 21 20 20.5523 20 20V12"
         stroke="currentColor"
@@ -26,70 +30,6 @@
         stroke-linecap="round"
       />
     </svg>
+    <span *ngIf="isSharing" class="loading-indicator">⏳</span>
   </button>
-
-  <div
-    class="modern-share-menu"
-    *ngIf="showShareMenu"
-    (click)="$event.stopPropagation()"
-  >
-    <div class="share-header">
-      <h5>Share your progress</h5>
-    </div>
-
-    <div class="share-options">
-      <button
-        class="modern-share-option completion"
-        (click)="shareCompletion()"
-        *ngIf="habit.isCompleted"
-        [disabled]="isSharing"
-      >
-        <div class="option-icon">✅</div>
-        <div class="option-content">
-          <span class="option-title">Achievement</span>
-          <span class="option-desc">Share your completion</span>
-        </div>
-      </button>
-
-      <button
-        class="modern-share-option streak"
-        (click)="shareStreak()"
-        *ngIf="habit.streak > 0"
-        [disabled]="isSharing"
-      >
-        <div class="option-icon">🔥</div>
-        <div class="option-content">
-          <span class="option-title">Streak</span>
-          <span class="option-desc"
-            >{{ habit.streak }} {{ getStreakPeriod() }}</span
-          >
-        </div>
-      </button>
-
-      <button
-        class="modern-share-option progress"
-        (click)="shareProgress()"
-        [disabled]="isSharing"
-      >
-        <div class="option-icon">📊</div>
-        <div class="option-content">
-          <span class="option-title">Progress</span>
-          <span class="option-desc">Share your journey</span>
-        </div>
-      </button>
-
-      <button
-        class="modern-share-option milestone"
-        (click)="shareMilestone()"
-        *ngIf="isMilestone"
-        [disabled]="isSharing"
-      >
-        <div class="option-icon">🏆</div>
-        <div class="option-content">
-          <span class="option-title">Milestone</span>
-          <span class="option-desc">Special achievement!</span>
-        </div>
-      </button>
-    </div>
-  </div>
 </div>
