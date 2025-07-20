@@ -9,9 +9,6 @@ import { HabitWithProgressDTO } from '../../models/habit-with-progress-dto.model
   imports: [CommonModule],
   templateUrl: './habit-quick-share.component.html',
   styleUrls: ['./habit-quick-share.component.scss'],
-  host: {
-    '(document:click)': 'onDocumentClick($event)',
-  },
 })
 export class HabitQuickShareComponent {
   @Input() habit!: HabitWithProgressDTO;
@@ -40,10 +37,6 @@ export class HabitQuickShareComponent {
 
   toggleShareMenu(): void {
     this.showShareMenu = !this.showShareMenu;
-  }
-
-  onDocumentClick(event: Event): void {
-    this.showShareMenu = false;
   }
 
   async shareProgress(): Promise<void> {
