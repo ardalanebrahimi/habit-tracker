@@ -1,0 +1,10 @@
+<app-base-dialog
+  *ngIf="dialogState.isOpen && dialogState.config"
+  [isVisible]="dialogState.isOpen"
+  [config]="dialogState.config"
+  [showFooter]="false"
+  (dialogClosed)="onDialogClosed($event)"
+>
+  <!-- Dynamic content container -->
+  <div #dynamicContentContainer></div>
+</app-base-dialog>

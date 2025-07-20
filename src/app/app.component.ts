@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import { LoadingService } from './services/loading.service';
 import { ToastComponent } from './features/toast/toast.component';
 import { NavbarComponent } from './features/navbar/navbar.component';
-import { GlobalCheerDialogComponent } from './components/global-cheer-dialog/global-cheer-dialog.component';
+import { GlobalDialogManagerComponent } from './components/global-dialog-manager/global-dialog-manager.component';
 import { App } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
 import { NavigationService } from './services/navigation.service';
@@ -21,7 +21,7 @@ import { NavigationService } from './services/navigation.service';
     RouterModule,
     ToastComponent,
     NavbarComponent,
-    GlobalCheerDialogComponent,
+    GlobalDialogManagerComponent,
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],

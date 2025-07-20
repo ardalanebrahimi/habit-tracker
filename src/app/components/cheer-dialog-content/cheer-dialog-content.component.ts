@@ -7,23 +7,28 @@ import { ToastService } from '../../services/toast.service';
 import { UserService } from '../../services/user.service';
 import { PaywallService } from '../../services/paywall.service';
 import { HabitWithProgressDTO } from '../../models/habit-with-progress-dto.model';
+import { DialogConfig, DialogResult } from '../../services/dialog.service';
 import {
   CheerRequest,
   CHEER_EMOJIS,
   CHEER_MESSAGES,
 } from '../../models/cheer.model';
 
+export interface CheerDialogData {
+  habit: HabitWithProgressDTO;
+}
+
 @Component({
-  selector: 'app-cheer-dialog',
+  selector: 'app-cheer-dialog-content',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './cheer-dialog.component.html',
-  styleUrls: ['./cheer-dialog.component.scss'],
+  templateUrl: './cheer-dialog-content.component.html',
+  styleUrls: ['./cheer-dialog-content.component.scss'],
 })
-export class CheerDialogComponent implements OnInit {
-  @Input() habit!: HabitWithProgressDTO;
-  @Input() isVisible = false;
-  @Output() dialogClosed = new EventEmitter<{ cheerSent?: boolean }>();
+export class CheerDialogContentComponent implements OnInit {
+  @Input() data?: CheerDialogData;
+  @Input() config?: DialogConfig;
+  @Output() dialogResult = new EventEmitter<DialogResult>();
 
   isSubmitting = false;
   selectedEmoji = '🎉';
@@ -31,7 +36,7 @@ export class CheerDialogComponent implements OnInit {
   customMessage = '';
 
   cheerEmojis = CHEER_EMOJIS;
-  cheerMessages = CHEER_MESSAGES.slice(0, 6); // Show first 6 predefined messages
+  cheerMessages = CHEER_MESSAGES.slice(0, 6);
   currentUserId: string | null = null;
 
   constructor(
@@ -65,23 +70,22 @@ export class CheerDialogComponent implements OnInit {
 
   selectMessage(message: string): void {
     this.selectedMessage = message;
-    this.customMessage = ''; // Clear custom message when selecting predefined
+    this.customMessage = '';
   }
 
   onCustomMessageChange(): void {
     if (this.customMessage.trim()) {
-      this.selectedMessage = ''; // Clear predefined message when typing custom
+      this.selectedMessage = '';
     }
   }
 
   onCancel(): void {
-    this.dialogClosed.emit({});
+    this.dialogResult.emit({ action: 'cancel' });
   }
 
   async sendCheer(): Promise<void> {
-    if (!this.canSendCheer || this.isSubmitting) return;
+    if (!this.canSendCheer || this.isSubmitting || !this.data?.habit) return;
 
-    // Check if custom message requires tokens
     const isCustomMessage = this.customMessage.trim().length > 0;
     if (isCustomMessage) {
       const canProceed = await this.paywallService.checkActionPermission(
@@ -89,21 +93,20 @@ export class CheerDialogComponent implements OnInit {
         1
       );
       if (!canProceed) {
-        return; // Paywall was shown
+        return;
       }
     }
 
     this.isSubmitting = true;
 
     const cheerRequest: CheerRequest = {
-      habitId: this.habit.id!,
-      toUserId: this.habit.userId || '',
+      habitId: this.data.habit.id!,
+      toUserId: this.data.habit.userId || '',
       message: this.finalMessage,
       emoji: this.selectedEmoji,
     };
 
     try {
-      // Spend token for custom message
       if (isCustomMessage) {
         await this.userService
           .spendTokens({
@@ -117,11 +120,11 @@ export class CheerDialogComponent implements OnInit {
       await this.cheeringService.sendCheer(cheerRequest).toPromise();
       this.toastService.showSuccess(
         'Cheer Sent!',
-        `Your encouragement was sent to ${this.habit.userName || 'friend'}! ${
-          this.selectedEmoji
-        }`
+        `Your encouragement was sent to ${
+          this.data.habit.userName || 'friend'
+        }! ${this.selectedEmoji}`
       );
-      this.dialogClosed.emit({ cheerSent: true });
+      this.dialogResult.emit({ action: 'confirm', data: { cheerSent: true } });
     } catch (error) {
       console.error('Error sending cheer:', error);
       this.toastService.showError(

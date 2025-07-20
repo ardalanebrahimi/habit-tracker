@@ -1,0 +1,150 @@
+@use "../../../styles/_shared.scss";
+
+.dialog-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  animation: backdropFadeIn 0.2s ease;
+}
+
+.dialog-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  z-index: 1001;
+  max-height: 90vh;
+  overflow: hidden;
+  animation: modalSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &.dialog-small {
+    width: 90%;
+    max-width: 320px;
+  }
+
+  &.dialog-medium {
+    width: 90%;
+    max-width: 420px;
+  }
+
+  &.dialog-large {
+    width: 90%;
+    max-width: 600px;
+  }
+
+  &.dialog-full {
+    width: 95%;
+    max-width: 800px;
+    max-height: 95vh;
+  }
+}
+
+.dialog-header {
+  @extend %flex-between;
+  align-items: flex-start;
+  padding: 24px;
+  background: linear-gradient(135deg, #f8faff 0%, #e8f2ff 100%);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+
+  .dialog-title-section {
+    flex: 1;
+
+    .dialog-title {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 700;
+      color: #1f2937;
+    }
+  }
+
+  .dialog-close-btn {
+    background: none;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    color: #9ca3af;
+    @extend %flex-center;
+    transition: var(--transition-fast);
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.1);
+      color: #374151;
+    }
+  }
+}
+
+.dialog-content {
+  padding: 24px;
+  overflow-y: auto;
+  max-height: calc(90vh - 200px);
+}
+
+.dialog-footer {
+  padding: 20px 24px;
+  border-top: 1px solid #e5e7eb;
+  background: #f9fafb;
+  @extend %flex-between;
+  gap: 12px;
+}
+
+// Animations
+@keyframes backdropFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+// Responsive
+@media (max-width: 480px) {
+  .dialog-container {
+    width: 95%;
+    max-width: none;
+
+    &.dialog-large,
+    &.dialog-full {
+      width: 95%;
+    }
+  }
+
+  .dialog-header,
+  .dialog-content,
+  .dialog-footer {
+    padding: 16px;
+  }
+
+  .dialog-footer {
+    flex-direction: column;
+
+    &.dialog-footer-stacked > * {
+      width: 100%;
+    }
+  }
+}

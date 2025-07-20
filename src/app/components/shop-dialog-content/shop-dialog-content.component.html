@@ -1,0 +1,71 @@
+<div class="shop-content">
+  <!-- User Token Balance -->
+  <div class="token-balance-card" *ngIf="data?.userTokens !== undefined">
+    <div class="balance-info">
+      <span class="balance-label">Your Tokens:</span>
+      <span class="balance-value">🪙 {{ data?.userTokens }}</span>
+    </div>
+  </div>
+
+  <!-- Shop Items Grid -->
+  <div class="shop-grid" *ngIf="data?.items?.length">
+    <div
+      *ngFor="let item of data?.items"
+      class="shop-item"
+      [class.affordable]="canAfford(item)"
+      [class.selected]="selectedItem?.id === item.id"
+      (click)="selectItem(item)"
+    >
+      <div class="item-header">
+        <div class="item-icon" *ngIf="item.icon">{{ item.icon }}</div>
+        <div class="item-badge" *ngIf="item.badge">{{ item.badge }}</div>
+      </div>
+
+      <div class="item-content">
+        <h4 class="item-name">{{ item.name }}</h4>
+        <p class="item-description">{{ item.description }}</p>
+
+        <div class="item-price">
+          <span class="price-amount">{{ item.price }}</span>
+          <span class="price-currency">
+            {{ item.currency === "tokens" ? "🪙 tokens" : "$" }}
+          </span>
+        </div>
+      </div>
+
+      <div class="item-actions">
+        <button
+          class="btn btn-purchase"
+          [class.btn-selected]="selectedItem?.id === item.id"
+          [disabled]="!canAfford(item)"
+          (click)="selectItem(item)"
+        >
+          {{ selectedItem?.id === item.id ? "Selected" : "Select" }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="!data?.items?.length">
+    <div class="empty-icon">🛒</div>
+    <h3>No Items Available</h3>
+    <p>Check back later for new items!</p>
+  </div>
+</div>
+
+<!-- Footer Actions -->
+<div class="shop-footer" slot="footer">
+  <button class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+  <button
+    class="btn btn-primary"
+    [disabled]="!selectedItem || !canAfford(selectedItem)"
+    (click)="onPurchase()"
+  >
+    <span *ngIf="selectedItem">
+      Purchase for {{ selectedItem.price }}
+      {{ selectedItem.currency === "tokens" ? "🪙" : "$" }}
+    </span>
+    <span *ngIf="!selectedItem">Select an Item</span>
+  </button>
+</div>

@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
-import { CheerDialogService } from '../../services/cheer-dialog.service';
+import { AppDialogService } from '../../services/app-dialog.service';
 import { HabitWithProgressDTO } from '../../models/habit-with-progress-dto.model';
 
 @Component({
@@ -20,7 +20,7 @@ export class CheerButtonComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private cheerDialogService: CheerDialogService
+    private appDialogService: AppDialogService
   ) {}
 
   ngOnInit(): void {
@@ -41,7 +41,7 @@ export class CheerButtonComponent implements OnInit {
 
     this.isSubmitting = true;
     try {
-      const result = await this.cheerDialogService.openCheerDialog(this.habit);
+      const result = await this.appDialogService.openCheerDialog(this.habit);
       if (result.cheerSent) {
         this.cheerSent.emit();
       }

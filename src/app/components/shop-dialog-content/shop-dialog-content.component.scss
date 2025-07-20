@@ -1,0 +1,240 @@
+@use "../../../styles/_shared.scss";
+
+.shop-content {
+  min-height: 200px;
+}
+
+.token-balance-card {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  margin-bottom: 24px;
+  border: 1px solid #bae6fd;
+
+  .balance-info {
+    @extend %flex-between;
+    align-items: center;
+
+    .balance-label {
+      font-weight: 600;
+      color: #0369a1;
+    }
+
+    .balance-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: #0c4a6e;
+    }
+  }
+}
+
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.shop-item {
+  border: 2px solid #e5e7eb;
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  background: white;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  position: relative;
+
+  &:hover {
+    border-color: #d1d5db;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  &.affordable {
+    &:hover {
+      border-color: var(--primary-color);
+    }
+
+    &.selected {
+      border-color: var(--primary-color);
+      background: #f8faff;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+    }
+  }
+
+  &:not(.affordable) {
+    opacity: 0.6;
+    cursor: not-allowed;
+
+    &:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+
+  .item-header {
+    @extend %flex-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+
+    .item-icon {
+      font-size: 32px;
+    }
+
+    .item-badge {
+      background: var(--success-color);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+  }
+
+  .item-content {
+    margin-bottom: 16px;
+
+    .item-name {
+      margin: 0 0 8px 0;
+      font-size: 16px;
+      font-weight: 700;
+      color: #1f2937;
+    }
+
+    .item-description {
+      margin: 0 0 12px 0;
+      font-size: 14px;
+      color: #6b7280;
+      line-height: 1.4;
+    }
+
+    .item-price {
+      @extend %flex-start;
+      gap: 4px;
+      font-weight: 600;
+
+      .price-amount {
+        font-size: 18px;
+        color: #1f2937;
+      }
+
+      .price-currency {
+        font-size: 14px;
+        color: #6b7280;
+      }
+    }
+  }
+
+  .item-actions {
+    .btn-purchase {
+      width: 100%;
+      padding: 10px 16px;
+      border: 2px solid var(--primary-color);
+      background: white;
+      color: var(--primary-color);
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition-fast);
+
+      &:hover:not(:disabled) {
+        background: var(--primary-color);
+        color: white;
+      }
+
+      &.btn-selected {
+        background: var(--primary-color);
+        color: white;
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        border-color: #d1d5db;
+        color: #9ca3af;
+
+        &:hover {
+          background: white;
+          color: #9ca3af;
+        }
+      }
+    }
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+
+  .empty-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    margin: 0 0 8px 0;
+    color: #374151;
+    font-weight: 600;
+  }
+
+  p {
+    margin: 0;
+    color: #6b7280;
+  }
+}
+
+.shop-footer {
+  @extend %flex-between;
+  gap: 12px;
+
+  .btn {
+    @extend %btn-base;
+    padding: 12px 24px;
+    border-radius: var(--radius-lg);
+    font-weight: 600;
+    transition: var(--transition-fast);
+    border: none;
+    cursor: pointer;
+
+    &.btn-secondary {
+      background: #f3f4f6;
+      color: #374151;
+
+      &:hover {
+        background: #e5e7eb;
+      }
+    }
+
+    &.btn-primary {
+      background: var(--primary-color);
+      color: white;
+      flex: 1;
+
+      &:hover:not(:disabled) {
+        background: var(--primary-hover);
+        transform: translateY(-1px);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+      }
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 480px) {
+  .shop-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .shop-footer {
+    flex-direction: column;
+
+    .btn {
+      width: 100%;
+    }
+  }
+}
