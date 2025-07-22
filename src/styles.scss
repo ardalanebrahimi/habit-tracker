@@ -19,14 +19,14 @@
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
 
-  /* Navigation theme colors */
-  --nav-primary: #4f46e5;
-  --nav-primary-hover: #4338ca;
-  --nav-text: #6b7280;
-  --nav-text-active: #4f46e5;
+  /* Navigation theme colors - New Theme */
+  --nav-primary: var(--primary-color, #f59e0b);
+  --nav-primary-hover: var(--primary-hover, #d97706);
+  --nav-text: var(--text-muted, #64748b);
+  --nav-text-active: var(--primary-color, #f59e0b);
   --nav-bg: rgba(255, 255, 255, 0.95);
   --nav-bg-dark: rgba(17, 24, 39, 0.95);
-  --nav-border: rgba(255, 255, 255, 0.2);
+  --nav-border: var(--border-light, rgba(226, 232, 240, 0.8));
   --nav-border-dark: rgba(55, 65, 81, 0.3);
 }
 

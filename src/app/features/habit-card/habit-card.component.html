@@ -157,12 +157,29 @@
           *ngIf="habit.isOwnedHabit"
         ></app-habit-quick-share>
 
-        <!-- Friends' Habits: Cheer Button -->
-        <app-cheer-button
-          [habit]="habit"
-          (cheerSent)="onCheerSent()"
-          *ngIf="!habit.isOwnedHabit && !isExploreContext"
-        ></app-cheer-button>
+        <!-- Friends' Habits: Cheer Button + Try This -->
+        <ng-container *ngIf="!habit.isOwnedHabit && !isExploreContext">
+          <app-cheer-button
+            [habit]="habit"
+            (cheerSent)="onCheerSent()"
+          ></app-cheer-button>
+
+          <button
+            class="try-this-btn"
+            (click)="copyHabit($event)"
+            title="Try this habit yourself"
+          >
+            <svg class="try-icon" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M12 5V19M5 12H19"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+            Try This
+          </button>
+        </ng-container>
 
         <!-- Explore: Copy/Try Button -->
         <button

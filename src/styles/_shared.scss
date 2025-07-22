@@ -1,21 +1,43 @@
 // Shared styles to reduce component SCSS file sizes
 
-// Enhanced Design System Variables
+// Enhanced Design System Variables - New Theme
 :root {
-  // 🎨 Color Palette
-  --border-light: #e5e7eb;
-  --border-medium: #d1d5db;
-  --bg-light: #f9fafb;
+  // 🎨 New Color Palette - White, Gold, Light Blue, Light Green, Light Silver
+  --border-light: #e2e8f0;
+  --border-medium: #cbd5e1;
+  --bg-light: #f8fafc;
+  --bg-silver: #f1f5f9;
   --bg-white: #ffffff;
-  --text-primary: #111827;
-  --text-secondary: #374151; // Improved contrast
-  --text-muted: #6b7280;
-  --text-light: #9ca3af;
+  --text-primary: #334155;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --text-light: #94a3b8;
 
-  // 🎯 Brand Colors
-  --primary-color: #4f46e5;
-  --primary-hover: #3730a3;
-  --primary-light: #6366f1;
+  // 🎯 New Brand Colors - Gold/Amber Theme
+  --primary-color: #f59e0b; // Gold/Amber
+  --primary-hover: #d97706;
+  --primary-light: #fbbf24;
+  --primary-bg: #fef3c7;
+
+  // Light Blue Theme
+  --blue-color: #3b82f6;
+  --blue-hover: #2563eb;
+  --blue-light: #60a5fa;
+  --blue-bg: #dbeafe;
+
+  // Light Green Theme
+  --green-color: #10b981;
+  --green-hover: #059669;
+  --green-light: #34d399;
+  --green-bg: #d1fae5;
+
+  // Supporting Colors
+  --silver-color: #64748b;
+  --silver-hover: #475569;
+  --silver-light: #94a3b8;
+  --silver-bg: #f1f5f9;
+
+  // Legacy support
   --success-color: #10b981;
   --success-hover: #059669;
   --success-light: #34d399;
@@ -27,11 +49,26 @@
   --purple-hover: #6d28d9;
   --purple-light: #8b5cf6;
 
-  // 🌟 Gradients
+  // 🌟 New Gradients
   --gradient-primary: linear-gradient(
     135deg,
     var(--primary-color) 0%,
     var(--primary-hover) 100%
+  );
+  --gradient-blue: linear-gradient(
+    135deg,
+    var(--blue-color) 0%,
+    var(--blue-hover) 100%
+  );
+  --gradient-green: linear-gradient(
+    135deg,
+    var(--green-color) 0%,
+    var(--green-hover) 100%
+  );
+  --gradient-silver: linear-gradient(
+    135deg,
+    var(--silver-color) 0%,
+    var(--silver-hover) 100%
   );
   --gradient-success: linear-gradient(
     135deg,
@@ -290,4 +327,104 @@
   to {
     opacity: 1;
   }
+}
+
+// 🎨 New Theme Button Styles
+%btn-gold {
+  @extend %btn-base;
+  background: var(--gradient-primary);
+  color: white;
+  box-shadow: var(--shadow-sm);
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, var(--primary-hover) 0%, #92400e 100%);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+%btn-blue {
+  @extend %btn-base;
+  background: var(--gradient-blue);
+  color: white;
+  box-shadow: var(--shadow-sm);
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, var(--blue-hover) 0%, #1e40af 100%);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+%btn-green {
+  @extend %btn-base;
+  background: var(--gradient-green);
+  color: white;
+  box-shadow: var(--shadow-sm);
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, var(--green-hover) 0%, #047857 100%);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+%btn-silver {
+  @extend %btn-base;
+  background: var(--silver-bg);
+  color: var(--silver-color);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+
+  &:hover:not(:disabled) {
+    background: var(--gradient-silver);
+    color: white;
+    box-shadow: var(--shadow-md);
+  }
+}
+
+// 🏷️ New Theme Badge Styles
+%badge-blue {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: var(--blue-bg);
+  color: var(--blue-color);
+  border-radius: var(--radius-lg);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+%badge-green {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: var(--green-bg);
+  color: var(--green-color);
+  border-radius: var(--radius-lg);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+%badge-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: var(--primary-bg);
+  color: var(--primary-color);
+  border-radius: var(--radius-lg);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+%badge-silver {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: var(--silver-bg);
+  color: var(--silver-color);
+  border-radius: var(--radius-lg);
+  font-size: 12px;
+  font-weight: 600;
 }

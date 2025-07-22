@@ -33,13 +33,13 @@
     overflow: hidden;
 
     &:hover {
-      background: rgba(79, 70, 229, 0.08);
+      background: rgba(245, 158, 11, 0.08);
       transform: translateY(-1px);
     }
 
     &.active {
       color: var(--nav-text-active);
-      background: rgba(79, 70, 229, 0.1);
+      background: rgba(245, 158, 11, 0.1);
       transform: scale(1.05);
 
       .icon {
@@ -153,19 +153,19 @@
       color: #9ca3af;
 
       &:hover {
-        background: rgba(79, 70, 229, 0.15);
+        background: rgba(245, 158, 11, 0.15);
       }
 
       &.active {
-        color: #818cf8;
-        background: rgba(79, 70, 229, 0.2);
+        color: #fbbf24;
+        background: rgba(245, 158, 11, 0.2);
 
         .icon {
-          color: #818cf8;
+          color: #fbbf24;
         }
 
         .label {
-          color: #818cf8;
+          color: #fbbf24;
         }
       }
     }

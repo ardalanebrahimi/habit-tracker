@@ -1,33 +1,54 @@
+@use "../../../styles/_shared.scss";
+
+// 🧍 Profile Discovery - New Silver Theme
 .profile-discovery {
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
+  background: linear-gradient(
+    135deg,
+    var(--bg-silver) 0%,
+    rgba(248, 250, 252, 0.8) 100%
+  );
+  min-height: 100vh;
 
   .page-header {
     text-align: center;
     margin-bottom: 32px;
+    padding: 24px 0;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
 
     h2 {
       margin: 0 0 8px 0;
-      color: var(--ion-color-dark);
+      color: var(--text-primary);
       font-size: 28px;
-      font-weight: 600;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
     }
 
     p {
-      color: var(--ion-color-medium);
+      color: var(--text-secondary);
       font-size: 16px;
       margin: 0;
+      font-weight: 500;
     }
   }
 
   .error-message {
-    color: var(--ion-color-danger);
-    background: rgba(var(--ion-color-danger-rgb), 0.1);
-    border-radius: 8px;
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    color: #991b1b;
+    border-radius: var(--radius-lg);
     padding: 16px;
     margin: 20px 0;
     text-align: center;
+    border: 1px solid #fca5a5;
+    font-weight: 500;
   }
 
   .profiles-container {
@@ -43,23 +64,24 @@
   }
 
   .profile-card {
-    background: var(--ion-color-light);
-    border-radius: 12px;
+    background: var(--bg-white);
+    border-radius: var(--radius-xl);
     padding: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: var(--transition-base);
     text-decoration: none;
     color: inherit;
 
     &:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+      box-shadow: var(--shadow-md);
+      border-color: var(--border-medium);
     }
 
     .profile-header {
-      display: flex;
-      align-items: center;
+      @extend %flex-start;
       gap: 16px;
       margin-bottom: 16px;
 
@@ -67,14 +89,14 @@
         width: 50px;
         height: 50px;
         border-radius: 50%;
-        background: var(--ion-color-primary);
+        background: var(--gradient-gold);
         color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        @extend %flex-center;
         font-size: 20px;
-        font-weight: bold;
+        font-weight: 700;
         flex-shrink: 0;
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
       }
 
       .profile-info {
@@ -83,19 +105,20 @@
         h3 {
           margin: 0 0 8px 0;
           font-size: 18px;
-          color: var(--ion-color-dark);
+          color: var(--text-primary);
+          font-weight: 600;
         }
 
         .profile-stats {
-          display: flex;
+          @extend %flex-start;
           gap: 16px;
           font-size: 12px;
-          color: var(--ion-color-medium);
+          color: var(--text-secondary);
 
           span {
-            display: flex;
-            align-items: center;
+            @extend %flex-start;
             gap: 4px;
+            font-weight: 500;
           }
         }
       }
@@ -107,7 +130,7 @@
       h4 {
         margin: 0 0 12px 0;
         font-size: 14px;
-        color: var(--ion-color-medium);
+        color: var(--text-muted);
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.5px;
@@ -115,31 +138,38 @@
 
       .habit-list {
         .habit-item {
-          display: flex;
-          justify-content: space-between;
+          @extend %flex-between;
           align-items: center;
-          padding: 8px 12px;
-          background: white;
-          border-radius: 8px;
+          padding: 10px 14px;
+          background: var(--bg-silver);
+          border-radius: var(--radius-md);
           margin-bottom: 8px;
-          border: 1px solid var(--ion-color-light-shade);
+          border: 1px solid var(--border-light);
+          transition: var(--transition-fast);
+
+          &:hover {
+            background: var(--bg-white);
+            border-color: var(--primary-color);
+            transform: translateX(2px);
+          }
 
           .habit-info {
-            display: flex;
-            align-items: center;
+            @extend %flex-start;
             gap: 8px;
             flex: 1;
 
             .habit-name {
               font-size: 14px;
-              color: var(--ion-color-dark);
+              color: var(--text-primary);
               font-weight: 500;
             }
 
             .habit-streak {
-              font-size: 12px;
-              color: var(--ion-color-warning);
-              font-weight: 500;
+              @extend %badge-blue;
+              font-size: 11px;
+              padding: 2px 6px;
+              border-radius: var(--radius-sm);
+              font-weight: 600;
             }
           }
 
@@ -147,7 +177,7 @@
             font-size: 16px;
 
             &.completed {
-              color: var(--ion-color-success);
+              color: var(--green-color);
             }
           }
         }
@@ -156,43 +186,51 @@
       .more-habits {
         text-align: center;
         font-size: 12px;
-        color: var(--ion-color-medium);
+        color: var(--text-muted);
         font-style: italic;
         margin-top: 8px;
+        font-weight: 500;
       }
     }
 
     .no-habits {
       text-align: center;
-      color: var(--ion-color-medium);
+      color: var(--text-muted);
       font-style: italic;
       padding: 20px 0;
 
       p {
         margin: 0;
         font-size: 14px;
+
+        &::before {
+          content: "📋";
+          display: block;
+          font-size: 32px;
+          margin-bottom: 8px;
+        }
       }
     }
 
     .card-footer {
-      border-top: 1px solid var(--ion-color-light-shade);
+      border-top: 1px solid var(--border-light);
       padding-top: 16px;
       margin-top: 16px;
 
       .view-profile-btn {
+        @extend %btn-gold;
         width: 100%;
-        background: var(--ion-color-primary);
-        color: white;
-        border: none;
         padding: 12px;
-        border-radius: 8px;
+        border-radius: var(--radius-md);
         font-size: 14px;
-        font-weight: 500;
+        font-weight: 600;
         cursor: pointer;
-        transition: background 0.2s ease;
+        transition: var(--transition-base);
 
         &:hover {
-          background: var(--ion-color-primary-shade);
+          background: var(--gradient-gold);
+          transform: translateY(-1px);
+          box-shadow: var(--shadow-md);
         }
       }
     }
@@ -203,19 +241,62 @@
   .no-results {
     text-align: center;
     padding: 32px;
-    color: var(--ion-color-medium);
+    color: var(--text-secondary);
     font-size: 16px;
+    font-weight: 500;
+
+    &::before {
+      content: "👥";
+      display: block;
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
   }
 
   .loading-spinner {
-    color: var(--ion-color-primary);
+    color: var(--primary-color);
+
+    &::before {
+      content: "⏳";
+      animation: bounce 1.5s ease-in-out infinite;
+    }
   }
 }
 
-// Mobile responsive
+// 🎨 Animations
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-6px);
+  }
+  60% {
+    transform: translateY(-3px);
+  }
+}
+
+// 📱 Mobile responsive
 @media (max-width: 768px) {
   .profile-discovery {
     padding: 16px;
+
+    .page-header {
+      padding: 20px 0;
+      margin-bottom: 24px;
+
+      h2 {
+        font-size: 24px;
+      }
+
+      p {
+        font-size: 14px;
+      }
+    }
 
     .profiles-grid {
       grid-template-columns: 1fr;
@@ -236,6 +317,23 @@
 
         .profile-info h3 {
           font-size: 16px;
+        }
+
+        .profile-stats {
+          gap: 12px;
+          font-size: 11px;
+        }
+      }
+
+      .habits-preview .habit-list .habit-item {
+        padding: 8px 12px;
+
+        .habit-info .habit-name {
+          font-size: 13px;
+        }
+
+        .habit-status {
+          font-size: 14px;
         }
       }
     }

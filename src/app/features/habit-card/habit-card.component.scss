@@ -1,66 +1,74 @@
 @use "../../../styles/_shared.scss";
 
-// 🎨 Modern Habit Card Design System
+// 🎨 Modern Habit Card Design System - New Theme
 .habit-card {
-  background: #ffffff;
-  border-radius: 16px;
+  background: var(--bg-silver);
+  border-radius: var(--radius-xl);
   padding: 20px;
   margin-bottom: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  border: 1px solid #e5e7eb;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
+  transition: var(--transition-base);
   position: relative;
   overflow: hidden;
 
   // Card elevation on hover
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-    border-color: #d1d5db;
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-medium);
   }
 
   // 🧍 My Habits Style
   &.my-habit {
-    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    background: var(--bg-silver);
     border-left: 4px solid var(--primary-color);
 
     &:hover {
       border-left-color: var(--primary-hover);
-      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      background: linear-gradient(135deg, var(--bg-silver) 0%, #fef3c7 100%);
     }
   }
 
   // 👥 Friends' Habits Style
   &.friend-habit {
-    background: linear-gradient(135deg, #fef7ff 0%, #f3e8ff 100%);
-    border-left: 4px solid var(--purple-primary);
+    background: var(--bg-silver);
+    border-left: 4px solid var(--blue-color);
 
     &:hover {
-      border-left-color: var(--purple-hover);
-      background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+      border-left-color: var(--blue-hover);
+      background: linear-gradient(
+        135deg,
+        var(--bg-silver) 0%,
+        var(--blue-bg) 100%
+      );
     }
   }
 
   // 🔍 Explore Habits Style
   &.explore-habit {
-    background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%);
-    border-left: 4px solid var(--warning-color);
+    background: var(--bg-silver);
+    border-left: 4px solid var(--green-color);
     position: relative;
 
     // Better contrast for explore context
     .habit-name {
-      color: #92400e !important;
+      color: var(--text-primary) !important;
       font-weight: 600;
     }
 
     .progress-text,
     .progress-percentage {
-      color: #a16207 !important;
+      color: var(--green-color) !important;
     }
 
     &:hover {
-      border-left-color: #d97706;
-      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border-left-color: var(--green-hover);
+      background: linear-gradient(
+        135deg,
+        var(--bg-silver) 0%,
+        var(--green-bg) 100%
+      );
     }
 
     // Subtle overlay for public visibility indication
@@ -74,7 +82,7 @@
       background: linear-gradient(
         45deg,
         transparent 40%,
-        rgba(245, 158, 11, 0.1) 50%
+        rgba(16, 185, 129, 0.1) 50%
       );
       pointer-events: none;
     }
@@ -96,31 +104,27 @@
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background: linear-gradient(
-      135deg,
-      var(--purple-primary) 0%,
-      var(--purple-hover) 100%
-    );
+    background: var(--gradient-blue);
     @extend %flex-center;
-    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
 
     .avatar-text {
       color: white;
       font-weight: 700;
       font-size: 14px;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     }
   }
 
   .friend-name {
     font-weight: 600;
     font-size: 14px;
-    color: var(--purple-primary);
+    color: var(--blue-color);
     text-decoration: none;
     transition: color 0.2s ease;
 
     &:hover {
-      color: var(--purple-hover);
+      color: var(--blue-hover);
     }
   }
 }
@@ -133,7 +137,7 @@
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--warning-color) 0%, #d97706 100%);
+    background: var(--gradient-green);
     @extend %flex-center;
 
     .creator-initial {
@@ -182,19 +186,19 @@
   align-items: flex-start;
 }
 
-// ✅ Primary Action (Complete Button)
+// ✅ Primary Action (Complete Button) - New Gold Theme
 .primary-action {
   flex-shrink: 0;
 
   .complete-btn {
-    @extend %btn-secondary;
+    @extend %btn-gold;
     gap: 8px;
     min-width: 110px;
     padding: 10px 16px;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     font-weight: 700;
     font-size: 13px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: var(--transition-base);
 
     .check-icon {
       width: 18px;
@@ -202,23 +206,18 @@
     }
 
     &:hover:not(:disabled) {
-      border-color: var(--success-color);
-      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-      color: var(--success-color);
       transform: scale(1.03);
+      box-shadow: var(--shadow-md);
     }
 
     &.completed {
-      @extend %btn-success;
+      @extend %btn-green;
       box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
       animation: completionPulse 0.6s ease-out;
 
       &:hover {
-        background: linear-gradient(
-          135deg,
-          var(--success-hover) 0%,
-          #047857 100%
-        );
+        background: var(--gradient-green);
+        transform: scale(1.03);
       }
     }
   }
@@ -310,25 +309,22 @@
   align-items: flex-start;
 }
 
-// 🔥 Streak Badge
+// 🔥 Streak Badge - New Blue Theme
 .streak-badge {
-  display: flex;
-  align-items: center;
+  @extend %badge-blue;
   gap: 4px;
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-  color: #78350f;
   padding: 6px 10px;
-  border-radius: 16px;
+  border-radius: var(--radius-xl);
   font-size: 11px;
   font-weight: 700;
-  box-shadow: 0 2px 8px rgba(251, 191, 36, 0.3);
-  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+  transition: var(--transition-base);
   min-width: fit-content;
 
   .streak-icon {
     width: 14px;
     height: 14px;
-    color: #f59e0b;
+    color: var(--blue-color);
   }
 
   .streak-count {
@@ -342,7 +338,7 @@
 
   // Dynamic streak colors
   &.low-streak {
-    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    @extend %badge-blue;
   }
 
   &.medium-streak {
@@ -372,16 +368,32 @@
   gap: 8px;
 }
 
-.explore-action-btn {
-  @extend %btn-secondary;
+.try-this-btn {
+  @extend %btn-blue;
   gap: 6px;
   padding: 8px 12px;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   font-size: 12px;
   font-weight: 600;
-  border: 2px solid #f59e0b;
-  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-  color: #92400e;
+
+  .try-icon {
+    width: 14px;
+    height: 14px;
+  }
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+.explore-action-btn {
+  @extend %btn-green;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  font-weight: 600;
 
   .copy-icon {
     width: 14px;
@@ -389,10 +401,8 @@
   }
 
   &:hover:not(:disabled) {
-    background: linear-gradient(135deg, #fde68a 0%, #fcd34d 100%);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
-    border-color: #d97706;
+    box-shadow: var(--shadow-md);
   }
 }
 
@@ -474,13 +484,13 @@
     .control-btn {
       width: 40px;
       height: 40px;
-      border: 2px solid #d1d5db;
+      border: 2px solid var(--border-light);
       border-radius: 50%;
-      background: #ffffff;
+      background: var(--bg-white);
       color: var(--text-secondary);
       cursor: pointer;
       @extend %flex-center;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: var(--transition-base);
 
       svg {
         width: 18px;
@@ -488,7 +498,7 @@
       }
 
       &:hover:not(:disabled) {
-        background: #f9fafb;
+        background: var(--bg-silver);
         border-color: var(--primary-color);
         color: var(--primary-color);
         transform: scale(1.1);
@@ -511,9 +521,9 @@
       }
 
       &.increment:hover:not(:disabled) {
-        background: #f0fdf4;
-        border-color: #bbf7d0;
-        color: #16a34a;
+        background: var(--green-bg);
+        border-color: var(--green-color);
+        color: var(--green-color);
       }
     }
 
